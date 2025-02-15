@@ -21,6 +21,10 @@
   $listing = false;
   $cont = fread($fh, filesize($txt));
   fclose($fh);
+  
+  $log = "data/$user.log";
+  $fh = fopen($log, "r");
+  
   // $txt = mb_convert_encoding($txt, 'UTF-8', 'ISO-8859-1');
   $lines = explode("\n", $cont);
   $id = 100;
