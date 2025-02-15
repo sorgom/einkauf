@@ -3,37 +3,50 @@
 <head>
 <title>einkauf</title>
 <meta charset="UTF-8">
-<style>
-* { font-family:Arial, sans-serif; }
-p { margin-left: 1em; vertical-align: top; }
-input[type=checkbox] { width: 2em; height: 2em; display: inline-block; }
-input[type=checkbox]:checked { background-color: #0F0; }
-</style>
+<link rel=stylesheet href="site.css">
+<script src="site.js"></script>
 </head>
 <body>
 <H3><a href=input.php>Eingabe</a></H3>
+<div class=handy>
 <?php
-  $file = "data/FF00E1A4.txt";
-  $fh = fopen($file, "r");
+  $user = "FF00E1A4";
+  $txt = "data/$user.txt";
+  $log = "data/$user.log";
+  $fh = fopen($txt, "r");
   if (!$fh) {
       header('Location: input.php');
       exit;
   }
   $listing = false;
-  $txt = fread($fh, filesize($file));
+  $cont = fread($fh, filesize($txt));
   fclose($fh);
   // $txt = mb_convert_encoding($txt, 'UTF-8', 'ISO-8859-1');
-  $lines = explode("\n", $txt);
+  $lines = explode("\n", $cont);
+  $id = 100;
+  $hr = false;
   foreach ($lines as $line) {
+      $line = trim($line);
+      ++$id;
       $isshop = preg_match("/^# (.*)/", $line, $match);
       if ($isshop) {
-        echo "<hr/><h2>$match[1]</h2>\n";
+        echo "<h2>$match[1]</h2>\n";
         $listing = true;
+        $hr = true;
       } 
-      else if ($listing && preg_match("/\S/", $line)) 
+      else if ($listing)
       {
-          echo "<p><input type=checkbox> $line</p>";
+          if (empty($line) && !$hr) {
+              echo "<hr/>\n";
+              $hr = true;
+          }
+          else
+          {
+              echo "<p><input type=checkbox id=$id onclick='note(this)'> <label for=$id>$line</label></p>";
+              $hr = false;
+          }
       }
   }
 ?>
+</div>
 </body></html>
