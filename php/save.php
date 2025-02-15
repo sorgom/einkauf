@@ -1,17 +1,18 @@
 <?php
+$user = "FF00E1A4";
 if (isset($_POST['skip'])) {
     header('Location: /');
     exit;
 }
-$file = "data/FF00E1A4.txt";
+$txt = "data/$user.txt";
+$log = "data/$user.json";
 $data = trim($_POST['data']);
 if (empty($data)) {
     header('Location: input.php');
     exit;
 }
-$fh = fopen($file, "w") or die("Unable to open $file");
-fwrite($fh, $_POST['data']);
-fclose($fh);
+file_put_contents($txt, $data);
+unlink($log);
 header('Location: /');
 exit;
 ?>

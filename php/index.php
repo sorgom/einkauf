@@ -4,7 +4,7 @@
 <title>einkauf</title>
 <meta charset="UTF-8">
 <link rel=stylesheet href="site.css">
-<script src="site.js"></script>
+<script src=site.js></script>
 </head>
 <body>
 <H3><a href=input.php>Eingabe</a></H3>
@@ -12,26 +12,24 @@
 <?php
   $user = "FF00E1A4";
   $txt = "data/$user.txt";
-  $log = "data/$user.log";
-  $fh = fopen($txt, "r");
-  if (!$fh) {
+  $log = "data/$user.json";
+  if (!file_exists($txt)) {
       header('Location: input.php');
       exit;
   }
-  $listing = false;
-  $cont = fread($fh, filesize($txt));
-  fclose($fh);
-  
-  $log = "data/$user.log";
-  $fh = fopen($log, "r");
-  
-  // $txt = mb_convert_encoding($txt, 'UTF-8', 'ISO-8859-1');
+  $cont = file_get_contents($txt);
+  $checks = array();
+  if (file_exists($log)) {
+      $checks = json_decode(file_get_contents($log), true);
+  }
+
+ 
   $lines = explode("\n", $cont);
-  $id = 100;
+  $id = 0;
   $hr = false;
+  $listing = false;
   foreach ($lines as $line) {
       $line = trim($line);
-      ++$id;
       $isshop = preg_match("/^# (.*)/", $line, $match);
       if ($isshop) {
         echo "<h2>$match[1]</h2>\n";
@@ -46,7 +44,9 @@
           }
           else
           {
-              echo "<p><input type=checkbox id=$id onclick='note(this)'> <label for=$id>$line</label></p>";
+              ++$id;
+              $checked = isset($checks[$id]) ? " checked" : "";
+              echo "<p><input type=checkbox id=$id onclick='checkme(this)' $checked> <label for=$id>$line</label></p>\n";
               $hr = false;
           }
       }

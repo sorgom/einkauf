@@ -3,6 +3,7 @@
 tmp
 temp
 logs
+php/data/*.*
 
 /vendor/*
 /config/app.php
