@@ -11,10 +11,12 @@
 <body>
 <h3>Hallo</h3>
 <p>Kopiere dir diesen Link:</p>
-<p id=url class=copy>http://<?php echo $_SERVER['HTTP_HOST']; echo "?$usr"?></p><br>
-<input type=submit value=Kopieren class="bt ok" onclick="cc('url');enable('ok')">
-<form action=reg.php method=post>
+<input type=text value="http://<?php echo $_SERVER['HTTP_HOST']; echo "?$usr"?>" 
+size=50 readonly autofocus onFocus="this.select();this.setSelectionRange(0, 99999);"><br>
+<form action=input.php method=post>
     <?php usrtag(); ?>
-    <input type=submit value=Registrieren name=ok class="bt ok" id=ok disabled>
+    <input type=hidden name=isnew value=1>
+    <input type=submit value=OK name=ok class="bt ok" id=ok>
+
 </form>
 </body></html>

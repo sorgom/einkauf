@@ -15,16 +15,3 @@ function ck(obj)
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send(data);
 }
-
-function cc(id) 
-{
-    var elem = document.getElementById(id);
-    var txt = elem.innerText || elem.textContent;
-    navigator.clipboard.writeText(txt);
-}
-
-function enable(id) 
-{
-    var elem = document.getElementById(id);
-    elem.disabled = false;
-}

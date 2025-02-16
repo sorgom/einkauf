@@ -12,6 +12,14 @@ function getreg()
     return array();
 }
 
+function addusr()
+{
+    global $usr;
+    $reg = getreg();
+    $reg[$usr] = 1;
+    file_put_contents(regf(), json_encode($reg));
+}
+
 function getusr()
 {
     global $usr;
@@ -21,6 +29,7 @@ function getusr()
     }
     elseif ($_POST) {
         $usr = $_POST['usr'];
+        if (array_key_exists('isnew', $_POST)) addusr();
     }
 }
 
@@ -29,7 +38,7 @@ function checkusr()
     global $usr, $txt, $log;
     getusr();
     $reg = getreg();
-    if (! array_key_exists($usr, $reg)) 
+    if (!array_key_exists($usr, $reg)) 
     { 
         header('Location: new.php');
         exit;

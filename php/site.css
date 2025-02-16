@@ -5,6 +5,10 @@
 form { margin: 0; }
 p { margin-bottom: 0.2em; margin-top: 0.2em; vertical-align: top; } */
 input[type=checkbox] { width: 2em; height: 2em; display: inline-block; }
+input[type=text] { 
+    font-size: 2em; border: 0;
+    margin-top: 0.2em; margin-bottom: 2em;
+}
 .handy { font-size: 5em; margin-left: 1em; }
 .handy input[type=checkbox] { width: 5em; height: 5em; } 
 a { text-decoration: none; color: #00F; }
