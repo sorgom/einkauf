@@ -2,19 +2,31 @@
     font-family:Arial, sans-serif; 
     margin: 0.1em; 
 }
+form { margin: 0; }
 p { margin-bottom: 0.2em; margin-top: 0.2em; vertical-align: top; } */
 input[type=checkbox] { width: 2em; height: 2em; display: inline-block; }
 .handy { font-size: 5em; margin-left: 1em; }
 .handy input[type=checkbox] { width: 5em; height: 5em; } 
 a { text-decoration: none; color: #00F; }
 hr { height: 5px; background-color: darkgray; border:none; }
-input[type=submit] {
+.bt {
     font-weight: bold;
     font-size: 1em;
-    color: darkgreen;
-    padding: 1em; 
+    /* padding: 1em;  */
     width:10em;
+    height:3em;
 }
-input[type=submit].skip { 
+.ok { 
+    color: darkgreen;
+}.skip { 
     color: darkred; 
+}
+:disabled { color: gray; }
+.copy { 
+    font-size: 1.5em; border: 2px solid darkgreen; 
+    padding: 0.5em; display: inline-block; 
+}
+.link { 
+    font-size: 1.5em; border: 2px solid darkblue; 
+    padding: 0.5em; display: inline-block; 
 }

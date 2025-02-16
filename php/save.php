@@ -1,18 +1,12 @@
 <?php
-$user = "FF00E1A4";
-if (isset($_POST['skip'])) {
-    header('Location: /');
-    exit;
-}
-$txt = "data/$user.txt";
-$log = "data/$user.json";
+require_once("usr.php");
+checkusr();
+if (isset($_POST['skip'])) go('/');
+
 $data = trim($_POST['data']);
-if (empty($data)) {
-    header('Location: input.php');
-    exit;
-}
+if (empty($data)) go('input.php');
+
 file_put_contents($txt, $data);
 unlink($log);
-header('Location: /');
-exit;
+go('/');
 ?>

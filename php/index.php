@@ -1,56 +1,49 @@
-<!DOCTYPE html>
-<html lang=en>
-<head>
-<title>einkauf</title>
-<meta charset="UTF-8">
-<link rel=stylesheet href="site.css">
-<script src=site.js></script>
-</head>
+<?php 
+    require_once("usr.php");
+    checkusr();
+    require_once("head.htm");
+?>
 <body>
-<H3><a href=input.php>Eingabe</a></H3>
+<script>setusr('<?php echo $usr?>');</script>
+<form action=input.php method=post>
+<?php usrtag(); ?>
+<input type=submit value="Zur Eingabe" class=link>
+</form> 
 <div class=handy>
 <?php
-  $user = "FF00E1A4";
-  $txt = "data/$user.txt";
-  $log = "data/$user.json";
-  if (!file_exists($txt)) {
-      header('Location: input.php');
-      exit;
-  }
-  $cont = file_get_contents($txt);
-  $checks = array();
-  if (file_exists($log)) {
-      $checks = json_decode(file_get_contents($log), true);
-  }
-
+    if (!file_exists($txt)) go('input.php');
+    $cont = file_get_contents($txt);
+    $checks = array();
+    if (file_exists($log)) $checks = json_decode(file_get_contents($log), true);
  
-  $lines = explode("\n", $cont);
-  $id = 0;
-  $hr = false;
-  $listing = false;
-  foreach ($lines as $line) {
-      $line = trim($line);
-      $isshop = preg_match("/^# (.*)/", $line, $match);
-      if ($isshop) {
-        echo "<h2>$match[1]</h2>\n";
-        $listing = true;
-        $hr = true;
-      } 
-      else if ($listing)
-      {
-          if (empty($line) && !$hr) {
-              echo "<hr/>\n";
-              $hr = true;
-          }
-          else
-          {
-              ++$id;
-              $checked = isset($checks[$id]) ? " checked" : "";
-              echo "<p><input type=checkbox id=$id onclick='checkme(this)' $checked> <label for=$id>$line</label></p>\n";
-              $hr = false;
-          }
-      }
-  }
+    $lines = explode("\n", $cont);
+    $id = 0;
+    $lset = false;
+    $lok = false;
+    $listing = false;
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if (preg_match('/^# *(.*)/', $line, $match)) 
+        {
+            echo "<h2>$match[1]</h2>\n";
+            $listing = true;
+            $lset = false;
+            $lok = false;
+        } 
+        else if ($listing)
+        {
+            if (empty($line)) $lset = $lok;
+            else
+            {
+                if ($lset) echo "<hr/>\n";
+                $lset = false;
+                $lok = true;
+                ++$id;
+                $checked = isset($checks[$id]) ? ' checked' : '';
+                echo "<p><input type=checkbox id=$id onclick='ck(this)' $checked> <label for=$id>$line</label></p>\n";
+            }
+        }
+    }
 ?>
 </div>
 </body></html>

@@ -1,16 +1,15 @@
 
-<!DOCTYPE html>
-<html lang=de>
-<head>
-<title>einkauf</title>
-<meta charset="UTF-8">
-<link rel=stylesheet href="site.css">
-</head>
+<?php 
+    require_once("usr.php");
+    getusr();
+    require_once("head.htm");
+?>
 <body>
 <h3>hierhin kopieren</h3>
-<form action="save.php" method=post>
+<form action=save.php method=post>
     <textarea name=data cols=100 rows=30 autofocus></textarea>
-    <p><input type=submit value=OK name=ok>
-    <input type=submit value=cancel name=skip class=skip></p>
+    <p><input type=submit value=OK name=ok class="bt ok">
+    <input type=submit value=cancel name=skip class="bt skip"></p>
+    <?php usrtag(); ?>
 </form>
 </body></html>
