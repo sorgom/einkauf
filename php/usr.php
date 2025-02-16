@@ -29,7 +29,7 @@ function getusr()
     }
     elseif ($_POST) {
         $usr = $_POST['usr'];
-        if (array_key_exists('isnew', $_POST)) addusr();
+        if (isset($_POST['isnew'])) addusr();
     }
 }
 
@@ -38,7 +38,7 @@ function checkusr()
     global $usr, $txt, $log;
     getusr();
     $reg = getreg();
-    if (!array_key_exists($usr, $reg)) 
+    if (!isset($reg[$usr])) 
     { 
         header('Location: new.php');
         exit;

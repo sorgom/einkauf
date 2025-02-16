@@ -6,7 +6,7 @@
     $usr = '';
     do {
         $usr = strtoupper(dechex(rand(0xF0000000, 0xFFFFFFFF)));
-    } while (array_key_exists($usr, $reg));
+    } while (isset($reg[$usr]));
 ?>
 <body>
 <h3>Hallo</h3>
