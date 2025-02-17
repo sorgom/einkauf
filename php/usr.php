@@ -22,7 +22,7 @@ function addusr()
 
 function getusr()
 {
-    global $usr;
+    global $usr, $txt, $log;
     if ($_GET)
     {
         $usr = array_keys($_GET)[0];
@@ -31,11 +31,13 @@ function getusr()
         $usr = $_POST['usr'];
         if (isset($_POST['isnew'])) addusr();
     }
+    $txt = "data/$usr.txt";
+    $log = "data/$usr.json";
 }
 
 function checkusr()
 {
-    global $usr, $txt, $log;
+    global $usr;
     getusr();
     $reg = getreg();
     if (!isset($reg[$usr])) 
@@ -43,8 +45,6 @@ function checkusr()
         header('Location: new.php');
         exit;
     }
-    $txt = "data/$usr.txt";
-    $log = "data/$usr.json";
 }
 
 function usrtag()

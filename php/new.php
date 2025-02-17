@@ -12,7 +12,7 @@
 <h3>Hallo</h3>
 <p>Kopiere dir diesen Link:</p>
 <input type=text value="http://<?php echo $_SERVER['HTTP_HOST']; echo "?$usr"?>" 
-size=50 readonly autofocus onFocus="this.select();this.setSelectionRange(0, 99999);"><br>
+size=50 readonly autofocus onFocus="this.select();this.setSelectionRange(0, 99999);"/><br/>
 <form action=input.php method=post>
     <?php usrtag(); ?>
     <input type=hidden name=isnew value=1>
