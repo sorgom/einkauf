@@ -50,7 +50,7 @@ function checkusr()
 function usrtag()
 {
     global $usr;
-    echo "\n<input type=hidden name=usr value=$usr>\n";
+    echo "<input type=hidden name=usr value=$usr>\n";
 }
 
 function go($page)

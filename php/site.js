@@ -18,3 +18,11 @@ function ck(obj)
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send(data);
 }
+
+function checkinput(obj, bid)
+{
+    var but = document.getElementById(bid);
+    if (!but) return;
+    var txt = obj.value.trim();
+    but.disabled = !txt.length;
+}

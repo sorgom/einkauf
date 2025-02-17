@@ -3,19 +3,25 @@
     require_once("usr.php");
     getusr();
     require_once("head.htm");
+    $state = ' disabled';
 ?>
 <body>
 <h3>hier reinkopieren</h3>
 <form action=save.php method=post>
-    <textarea name=data cols=40 rows=30 autofocus><?php
+    <textarea name=data cols=40 rows=30 autofocus oninput="checkinput(this, 'ok')"><?php
         if (file_exists($txt)) 
         {
-            echo trim(file_get_contents($txt));
-            echo "\n\n";
+            $cont = trim(file_get_contents($txt));
+            if ($cont) 
+            {
+                $state = '';
+                echo $cont;
+                echo "\n\n";
+            }
         }
     ?></textarea>
-    <p><input type=submit value=OK name=ok class="bt ok">
-    <input type=submit value=cancel name=skip class="bt skip"></p>
+    <p><input type=submit value=OK name=ok class="bt ok" id=ok <?php echo $state; ?>>
+    <input type=submit value=Abbruch name=skip class="bt skip"></p>
     <?php usrtag(); ?>
 </form>
 </body></html>

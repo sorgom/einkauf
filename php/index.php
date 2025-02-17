@@ -16,17 +16,17 @@
 <div class=handy>
 <?php
     if (!file_exists($txt)) go('input.php');
-    $cont = file_get_contents($txt);
+    $cont = preg_replace('/^ +/m', '', file_get_contents($txt));
+    
     $checks = array();
     if (file_exists($log)) $checks = json_decode(file_get_contents($log), true);
  
-    $lines = explode("\n", $cont);
+    $lines = explode(PHP_EOL, $cont);
     $id = 0;
     $lset = false;
     $lok = false;
     $listing = false;
     foreach ($lines as $line) {
-        $line = trim($line);
         if (preg_match('/^# *(.*)/', $line, $match)) 
         {
             checkul(false);
@@ -41,20 +41,25 @@
             else
             {
                 if ($lset) echo "<hr/>\n";
-                // if ($lset) echo "<p> </p>\n";
                 $lset = false;
                 $lok = true;
                 checkul(true);
                 ++$id;
                 $cl = isset($checks[$id]) ? ' class=x' : '';
                 echo "<li id=$id$cl><a onclick='ck(this)'>$line</a></li>\n";
-                // echo "<p><input type=checkbox id=$id onclick='ck(this)' $checked> <label for=$id>$line</label></p>\n";
             }
         }
     }
     checkul(false);
 ?>
 </div>
-<a class="top reset" href="reset.php?<?php echo $usr?>">Zurücksetzen</a>
-<a class=top href="input.php?<?php echo $usr?>">Zur Eingabe</a>
+<hr/>
+<form action=reset.php method=post>
+<input type=submit value="Zurücksetzen" class="bt skip">
+<?php usrtag(); ?>
+</form>
+<form action=input.php method=post>
+<input type=submit value="Zur Eingabe" class="bt ok">
+<?php usrtag(); ?>
+</form>
 </body></html>
