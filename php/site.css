@@ -1,7 +1,6 @@
 * { margin: 0.1em; }
 form { margin: 0; display:inline-block; }
 body { margin-bottom: 2em; }
-body.paper { background-image: url("img/paper.jpg"); }
 p { margin-bottom: 0.2em; margin-top: 0.2em; vertical-align: top; }
 
 a { text-decoration: none; color: #00F; }

@@ -1,7 +1,7 @@
 
 <?php 
     require_once("head.htm");
-    require_once("usr.php");
+    require_once('usr.php');
     $reg = getreg();
     $usr = '';
     do {

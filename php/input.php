@@ -1,6 +1,6 @@
 
 <?php 
-    require_once("usr.php");
+    require_once('usr.php');
     getusr();
     require_once("head.htm");
     $state = ' disabled';

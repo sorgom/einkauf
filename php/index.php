@@ -1,7 +1,15 @@
 <?php 
-    require_once("usr.php");
+    require_once('usr.php');
     checkusr();
     require_once("head.htm");
+?>
+<body>
+<script>setusr('<?php echo $usr?>');</script>
+<div class=handy>
+<?php
+    if (!file_exists($txt)) go('input.php');
+    require_once('fio.php');
+
     $inul = false;
     function checkul($on)
     {
@@ -10,27 +18,19 @@
         $inul = $on;
         echo $on ? "<ul>\n" : "</ul>\n";
     }
-?>
-<body class=paper>
-<script>setusr('<?php echo $usr?>');</script>
-<div class=handy>
-<?php
-    if (!file_exists($txt)) go('input.php');
-    $cont = preg_replace('/^ +/m', '', file_get_contents($txt));
-    
-    $checks = array();
-    if (file_exists($log)) $checks = json_decode(file_get_contents($log), true);
- 
-    $lines = explode(PHP_EOL, $cont);
-    $id = 0;
+
+    $lines = getlines();
+    $checks = getchecks();
+    $inr = 0;
+    $cnr = 0;
     $lset = false;
     $lok = false;
     $listing = false;
     foreach ($lines as $line) {
-        if (preg_match('/^# *(.*)/', $line, $match)) 
+        if ($lvl = totop($line, $top, $cnr)) 
         {
             checkul(false);
-            echo "<h2>$match[1]</h2>\n";
+            echo "<h$lvl>$top</h$lvl>\n";
             $listing = true;
             $lset = false;
             $lok = false;
@@ -44,9 +44,9 @@
                 $lset = false;
                 $lok = true;
                 checkul(true);
-                ++$id;
-                $cl = isset($checks[$id]) ? ' class=x' : '';
-                echo "<li id=$id$cl><a onclick='ck(this)'>$line</a></li>\n";
+                ++$inr;
+                $cl = isset($checks["$cnr.$inr"]) ? ' class=x' : '';
+                echo "<li id=$cnr.$inr$cl><a onclick='ck(this)'>$line</a></li>\n";
             }
         }
     }
