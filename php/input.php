@@ -1,9 +1,11 @@
 
 <?php 
+    session_start();
     require_once('usr.php');
     getusr();
     require_once("head.htm");
     $state = ' disabled';
+    print_r($usr)
 ?>
 <body>
 <h3>hier reinkopieren</h3>
@@ -21,7 +23,7 @@
         }
     ?></textarea>
     <p><input type=submit value=OK name=ok class="bt ok" id=ok <?php echo $state; ?>>
-    <input type=submit value=Abbruch name=skip class="bt skip"></p>
+    <input type=submit value=Abbruch name=skip class="bt nok"></p>
     <?php usrtag(); ?>
 </form>
 </body></html>

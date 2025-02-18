@@ -23,16 +23,20 @@ textarea {
 }
 
 .bt {
+    display: inline-block;
+    border: solid 1px black;
+    background-color: #DDD;
     font-weight: bold;
     font-size: 2em;
     width:10em;
     height:3em;
+    text-align: center;
+    padding-top: 0.3em;
+
 }
-.ok { 
-    color: darkgreen;
-}.skip { 
-    color: darkred; 
-}
+.ok { color: darkgreen; }
+.nok { color: darkred; }
+.res { color: darkorange; }
 :disabled, [disabled]
 { 
     color: gray; 

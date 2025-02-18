@@ -1,6 +1,22 @@
 <?php 
+    session_start();
     require_once('usr.php');
-    checkusr();
+    $usr = '';
+    if ($_GET)
+    {
+        $x = array_keys($_GET)[0];
+        if (isusr($x)) 
+        {
+            $usr = $x;
+            $_SESSION['usr'] = $usr;
+        }
+    }
+    elseif (isset($_SESSION['usr']))
+    {
+        $usr = $_SESSION['usr'];
+    }
+    if (!$usr) go('new.php');
+    setusr();
     require_once("head.htm");
 ?>
 <body>
@@ -54,12 +70,6 @@
 ?>
 </div>
 <hr/>
-<form action=reset.php method=post>
-<input type=submit value="Zurücksetzen" class="bt skip">
-<?php usrtag(); ?>
-</form>
-<form action=input.php method=post>
-<input type=submit value="Zur Eingabe" class="bt ok">
-<?php usrtag(); ?>
-</form>
+<a href=reset.php class="bt res">Zurücksetzen</a>
+<a href=input.php class="bt ok">Zur Eingabe</a>
 </body></html>

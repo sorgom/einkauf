@@ -1,7 +1,10 @@
 <?php
     function tolines($data)
     {
-        return explode(PHP_EOL, preg_replace('/^ +/m', '', preg_replace('/^.*?#/s', '#', $data)));
+        $res = array();
+        if (preg_match('/^ *#/m', $data))
+            $res = explode(PHP_EOL, preg_replace('/^ +/m', '', preg_replace('/^(?:\s*|.*?\n)#/s', '#', $data)));
+        return $res;
     }
     function getlines()
     {

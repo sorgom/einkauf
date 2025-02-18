@@ -22,25 +22,34 @@ function addusr()
 
 function getusr()
 {
+    global $usr;
+    $usr = $_SESSION['usr'];
+    setusr();
+}
+
+function isusr($x)
+{
+    $reg = getreg();
+    return isset($reg[$x]);
+}
+
+function setusr()
+{
     global $usr, $txt, $log;
-    if ($_GET)
-    {
-        $usr = array_keys($_GET)[0];
-    }
-    elseif ($_POST) {
-        $usr = $_POST['usr'];
-        if (isset($_POST['isnew'])) addusr();
-    }
     $txt = "data/$usr.txt";
     $log = "data/$usr.json";
 }
 
-function checkusr()
+function checkusr($cand)
 {
     global $usr;
-    getusr();
     $reg = getreg();
-    if (!isset($reg[$usr])) 
+    if (isset($reg[$cand])) 
+    {
+        $usr = $cand;
+        $_SESSION['usr'] = $usr;
+    }
+    else
     { 
         header('Location: new.php');
         exit;
@@ -55,8 +64,7 @@ function usrtag()
 
 function go($page)
 {
-    global $usr;
-    header("Location: $page?$usr");
+    header("Location: $page");
     exit;
 }
 ?>

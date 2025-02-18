@@ -21,7 +21,6 @@ if (file_exists($log) && file_exists($txt))
         ++$inr;
         if (isset($checks["$cnr.$inr"])) $map["$top.$line"] = 1;
     }
-    $lines = tolines($data);
     $checks = array();
     $cnr = 0;
     $inr = 0;
