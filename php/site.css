@@ -1,14 +1,17 @@
 * { margin: 0.1em; }
 form { margin: 0; display:inline-block; }
 body { margin-bottom: 2em; }
-body.prev { background-color: #a2ebff; }
 p { margin-bottom: 0.2em; margin-top: 0.2em; vertical-align: top; }
 
 a { text-decoration: none; color: #00F; }
 
-div.cont { font-size: 5em; margin-left: 0.8em; margin-bottom: 2em; }
-div.cont * { font-style: italic; color: rgb(0, 92, 200); }
-div.cont hr { height: 0.6em; background-color: none; border:none; }
+div.display { 
+    padding-bottom: 2.5em; 
+    font-size: 4em; padding-left: 0.8em;
+} 
+.display.prev { background-color: #a2ebff; border-radius: 1em; }
+div.display  * { font-style: italic; color: rgb(0, 92, 200); }
+div.display hr { height: 0.6em; background-color: none; border:none; }
 
 
 li.x, li.x > a { color: rgb(175, 175, 175); }
@@ -26,20 +29,26 @@ textarea {
 
 .bt {
     display: block;
-    border: solid 1px black;
+    height:3em;
+    /* border: solid 1px black; */
+    border: none;
+    border-radius: 1.5em;
+
     font-family: Verdana, sans-serif;
     width: 100%;
     background-color: #DDD;
     font-weight: bold;
-    font-size: 2em;
-    height:2em;
+    font-size: 2.5em;
     text-align: center;
-    padding-top: 0.3em;
+    padding-top: 0.5em;
+    color: black;
 }
 .bt:hover { cursor: pointer; }
-.ok { color: darkgreen; }
-.nok { color: darkred; }
-.res { color: darkorange; }
+.bt.ok { background-color: lightgreen; }
+.bt.nok { background-color: orange; }
+.bt.prev { background-color: #a2ebff; }
+.bt.reset { background-color: orange; }
+
 :disabled, [disabled]
 { 
     color: gray; 

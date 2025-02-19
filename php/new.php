@@ -2,21 +2,16 @@
 <?php 
     require_once("head.htm");
     require_once('usr.php');
+    require_once('buttons.php');
     $reg = getreg();
-    $usr = '';
+    $nu = '';
     do {
-        $usr = strtoupper(dechex(rand(0xF0000000, 0xFFFFFFFF)));
-    } while (isset($reg[$usr]));
+        $nu = strtoupper(dechex(rand(0xF0000000, 0xFFFFFFFF)));
+    } while (isset($reg[$nu]));
 ?>
 <body>
-<h3>Hallo</h3>
-<p>Kopiere dir diesen Link:</p>
-<input type=text value="http://<?php echo $_SERVER['HTTP_HOST']; echo "?$usr"?>" 
+<h1>Kopiere dir diesen Link:</h1>
+<input type=text value="http://<?php echo $_SERVER['HTTP_HOST']; echo "?$nu"?>" 
 size=50 readonly autofocus onFocus="this.select();this.setSelectionRange(0, 99999);"/><br/>
-<form action=input.php method=post>
-    <?php usrtag(); ?>
-    <input type=hidden name=isnew value=1>
-    <input type=submit value=OK name=ok class="bt ok" id=ok>
-
-</form>
+<?php b_new_go($nu); ?>
 </body></html>

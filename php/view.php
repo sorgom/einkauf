@@ -6,13 +6,19 @@
     $prev = isset($_SESSION['data']);
     $chap = $prev ? false : sval('chap');
 ?>
-<body <?php echo $prev ? 'class=prev' : ''?>>
+<body>
 <script>setusr('<?php echo $usr?>');</script>
 <?php
     require_once('fio.php');
     require_once('buttons.php');
 
     if ($chap) b_top();
+    if ($chap || $prev)
+    {
+        echo '<div class=\'display';
+        if ($prev) echo ' prev';
+        echo "'>\n";
+    }
 
     $inul = false;
     function checkul($on)
@@ -22,15 +28,6 @@
         $inul = $on;
         echo $on ? "<ul>\n" : "</ul>\n";
     }
-    $indiv = false;
-    function checkdiv($on)
-    {
-        global $indiv;
-        if ($indiv == $on) return;
-        $indiv = $on;
-        echo $on ? "<div class=cont>\n" : "</div>\n";
-    }
-
     $lines = $prev ? tolines($_SESSION['data']) : getlines();
     $checks = $prev ? array() : getchecks();
     $cnr = 0;
@@ -52,11 +49,6 @@
                 {
                     b_chap($cnr, $top);
                 }
-                if ($listing)
-                {
-                    checkdiv(false);
-                    checkdiv(true);
-                }    
             }
             if ($listing)
             {
@@ -75,14 +67,24 @@
                 $lset = false;
                 $lok = true;
                 checkul(true);
-                ++$inr;
-                $cl = isset($checks["$cnr.$inr"]) ? ' class=x' : '';
-                echo "<li id=$cnr.$inr$cl><a onclick='ck(this)'>$line</a></li>\n";
+                if ($prev)
+                {
+                    echo "<li><a>$line</a></li>\n";
+                }
+                else
+                {
+                    ++$inr;
+                    $cl = isset($checks["$cnr.$inr"]) ? ' class=x' : '';
+                    echo "<li id=$cnr.$inr$cl><a onclick='ck(this)'>$line</a></li>\n";
+                }
             }
         }
     }
     checkul(false);
-    checkdiv(false);
+    if ($chap || $prev)
+    {
+        echo "</div>\n";
+    }
 ?>
 <?php
     if ($prev)

@@ -7,7 +7,6 @@
     $state = ' disabled';
 ?>
 <body>
-<h3>hier reinkopieren</h3>
 <form action=data.php method=post>
     <textarea name=data cols=40 rows=30 autofocus oninput="checkinput(this, 'ok')"><?php
         $cont = '';
@@ -27,9 +26,9 @@
         }
 ?></textarea>
 <p>
-    <input type=submit value=OK name=ok class="bt ok" id=ok <?php echo $state; ?>>
-    <input type=submit value=Abbruch name=cancel class="bt nok">
-    <input type=submit value=Vorschau name=prev class="bt prev">
+<input type=submit value="" name=prev class="bt prev">
+<input type=submit value="" name=ok class="bt ok" id=ok <?php echo $state; ?>>
+    <input type=submit value="" name=cancel class="bt nok">
 </p>
 </form>
 </body></html>

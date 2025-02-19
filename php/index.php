@@ -1,7 +1,7 @@
 <?php 
+    require_once('usr.php');
     if ($_GET)
     {
-        require_once('usr.php');
         $x = array_keys($_GET)[0];
         if (isusr($x)) 
         {
@@ -10,6 +10,5 @@
             go('view');
         }
     }
-    session_destroy();
     go('new');
 ?>

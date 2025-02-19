@@ -14,12 +14,12 @@ function b_navi($what, $title, $type = false)
 
 function b_reset($cnr)
 {
-    b_base('reset', $cnr , 'Zurücksetzen', 'reset');
+    b_base('reset', $cnr , ' ', 'reset');
 }
 
 function b_top()
 {
-    b_navi('', 'Menü', 'menu');
+    b_navi('', ' ', 'menu');
 }
 
 function b_chap($cnr, $ttl)
@@ -29,16 +29,22 @@ function b_chap($cnr, $ttl)
 
 function b_input()
 {
-    b_base('input', '', 'Zur Eingabe', 'ok');
+    b_base('input', '', ' ', 'prev');
 }   
 
 function b_prev_cancel()
 {
-    b_base('data', 'C', 'Abbruch', 'nok');
+    b_base('data', 'C', ' ', 'nok');
 }
 
 function b_prev_write()
 {
-    b_base('data', 'W', 'OK', 'ok');
+    b_base('data', 'W', ' ', 'ok');
 }
+
+function b_new_go($nu)
+{
+    b_base('uadd', $nu, 'start', 'ok');
+}
+
 ?>
