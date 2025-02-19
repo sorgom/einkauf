@@ -2,28 +2,34 @@
 <?php 
     session_start();
     require_once('usr.php');
-    getusr();
+    setusr();
     require_once("head.htm");
     $state = ' disabled';
-    print_r($usr)
 ?>
 <body>
 <h3>hier reinkopieren</h3>
-<form action=save.php method=post>
+<form action=data.php method=post>
     <textarea name=data cols=40 rows=30 autofocus oninput="checkinput(this, 'ok')"><?php
-        if (file_exists($txt)) 
+        $cont = '';
+        if (isset($_SESSION['data'])) 
+        {
+            $cont = $_SESSION['data'];
+        }
+        elseif (file_exists($txt)) 
         {
             $cont = trim(file_get_contents($txt));
-            if ($cont) 
-            {
-                $state = '';
-                echo $cont;
-                echo "\n\n";
-            }
         }
-    ?></textarea>
-    <p><input type=submit value=OK name=ok class="bt ok" id=ok <?php echo $state; ?>>
-    <input type=submit value=Abbruch name=skip class="bt nok"></p>
-    <?php usrtag(); ?>
+        if ($cont) 
+        {
+            $state = '';
+            echo $cont;
+            echo "\n\n";
+        }
+?></textarea>
+<p>
+    <input type=submit value=OK name=ok class="bt ok" id=ok <?php echo $state; ?>>
+    <input type=submit value=Abbruch name=cancel class="bt nok">
+    <input type=submit value=Vorschau name=prev class="bt prev">
+</p>
 </form>
 </body></html>

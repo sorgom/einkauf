@@ -1,13 +1,15 @@
 * { margin: 0.1em; }
 form { margin: 0; display:inline-block; }
 body { margin-bottom: 2em; }
+body.prev { background-color: #a2ebff; }
 p { margin-bottom: 0.2em; margin-top: 0.2em; vertical-align: top; }
 
 a { text-decoration: none; color: #00F; }
 
-div.handy { font-size: 5em; margin-left: 0.8em; margin-bottom: 2em; }
-div.handy * { font-style: italic; color: rgb(0, 92, 200); }
-div.handy hr { height: 0.6em; background-color: none; border:none; }
+div.cont { font-size: 5em; margin-left: 0.8em; margin-bottom: 2em; }
+div.cont * { font-style: italic; color: rgb(0, 92, 200); }
+div.cont hr { height: 0.6em; background-color: none; border:none; }
+
 
 li.x, li.x > a { color: rgb(175, 175, 175); }
 li { margin-bottom: 0.4em; }
@@ -23,17 +25,18 @@ textarea {
 }
 
 .bt {
-    display: inline-block;
+    display: block;
     border: solid 1px black;
+    font-family: Verdana, sans-serif;
+    width: 100%;
     background-color: #DDD;
     font-weight: bold;
     font-size: 2em;
-    width:10em;
-    height:3em;
+    height:2em;
     text-align: center;
     padding-top: 0.3em;
-
 }
+.bt:hover { cursor: pointer; }
 .ok { color: darkgreen; }
 .nok { color: darkred; }
 .res { color: darkorange; }
