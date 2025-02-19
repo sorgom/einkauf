@@ -20,17 +20,23 @@ function isusr($x)
     return isset($reg[$x]);
 }
 
-function setusr()
+function usrfiles()
 {
     global $usr, $txt, $log;
+    $txt = "data/$usr.txt";
+    $log = "data/$usr.json";
+}
+
+function setusr()
+{
+    global $usr;
     if (!isset($_SESSION['usr'])) 
     {
         session_destroy();
         go('new');
     }
     $usr = $_SESSION['usr'];
-    $txt = "data/$usr.txt";
-    $log = "data/$usr.json";
+    usrfiles();
 }
 
 function sval($key, $def = false)

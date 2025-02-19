@@ -42,9 +42,14 @@ function b_prev_write()
     b_base('data', 'W', ' ', 'ok');
 }
 
+function b_reg_go()
+{
+    b_base('register', '', 'anmelden', 'ok');
+}
+
 function b_new_go($nu)
 {
-    b_base('uadd', $nu, 'start', 'ok');
+    b_base('index', $nu, 'start', 'ok');
 }
 
 ?>

@@ -11,7 +11,6 @@
         {
         case 'C': 
             unset($_SESSION['data']);
-            unset($_SESSION['prev']);
             go('view');
             break;
         case 'W': 
@@ -26,7 +25,6 @@
         if (isset($_POST['cancel'])) 
         {
             unset($_SESSION['data']);
-            unset($_SESSION['prev']);
             go('view');
         }
 
@@ -36,7 +34,6 @@
         if (isset($_POST['prev'])) 
         {   
             $_SESSION['data'] = $data;
-            $_SESSION['prev'] = true;
             go('view');
         }
     }
@@ -75,6 +72,6 @@
 
     file_put_contents($txt, $data);
     unset($_SESSION['data']);
-    unset($_SESSION['prev']);
+    unset($_SESSION['chap']);
     go('view');
 ?>

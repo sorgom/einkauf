@@ -3,14 +3,16 @@
     {
         $res = array();
         if (preg_match('/^ *# /m', $data))
-            $res = explode(PHP_EOL, preg_replace('/^ +/m', '', preg_replace('/^(?:\s*|.*?\n)# /s', '# ', $data)));
+            $res = preg_split('/\r?\n|\r/', preg_replace('/^ +/m', '', preg_replace('/^(?:\s*|.*?\n)# /s', '# ', $data)));
         return $res;
     }
     function getlines()
     {
         global $txt;
-        return tolines(file_get_contents($txt));
+        if (file_exists($txt)) return tolines(file_get_contents($txt));
+        return array();
     }
+
     function getchecks()
     {
         global $log;
@@ -18,11 +20,13 @@
         if (file_exists($log)) $checks = json_decode(file_get_contents($log), true);
         return $checks;
     }
+
     function wchecks($checks)
     {
         global $log;
         file_put_contents($log, json_encode($checks));
     }
+    
     function totop($line, &$top, &$cnr, &$inr)
     {
         $res = preg_match('/^(#+) *(.*)/', $line, $t);

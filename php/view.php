@@ -60,6 +60,7 @@
         } 
         else if($listing)
         {
+            // $line = trim($line);
             if (empty($line)) $lset = $lok;
             else
             {
