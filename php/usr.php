@@ -48,36 +48,6 @@ function getparam()
 {
     return $_GET ? array_keys($_GET)[0] : '';
 }
-// function addusr()
-// {
-//     global $usr;
-//     $reg = getreg();
-//     $reg[$usr] = 1;
-//     file_put_contents(regf(), json_encode($reg));
-// }
-
-
-// function checkusr($cand)
-// {
-//     global $usr;
-//     $reg = getreg();
-//     if (isset($reg[$cand])) 
-//     {
-//         $usr = $cand;
-//         $_SESSION['usr'] = $usr;
-//     }
-//     else
-//     { 
-//         header('Location: new.php');
-//         exit;
-//     }
-// }
-
-// function usrtag()
-// {
-//     global $usr;
-//     echo "<input type=hidden name=usr value=$usr>\n";
-// }
 
 function go($php)
 {
