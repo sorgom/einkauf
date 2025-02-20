@@ -1,10 +1,12 @@
 <?php
 
+$usr = NULL;
+$params = array();
+
 function regf()
 {
     return 'data/reg.json';
-}       
-
+}
 
 function getreg()
 {
@@ -29,29 +31,60 @@ function usrfiles()
 
 function setusr()
 {
-    global $usr;
-    if (!isset($_SESSION['usr'])) 
+    global $usr, $params;
+    if ($_GET)
     {
-        session_destroy();
-        go('new');
+        $params = array_keys($_GET);
+        $usr = array_shift($params);
     }
-    $usr = $_SESSION['usr'];
     usrfiles();
 }
 
-function sval($key, $def = false)
+function checkusr()
 {
-    return isset($_SESSION[$key]) ? $_SESSION[$key] : $def;
+    global $usr;
+    if (!(isset($_SESSION['usr']) && $usr == $_SESSION['usr']))
+    {
+        if (isusr($usr))
+        {
+            $_SESSION['usr'] = $usr;
+        }
+        else gonew();
+    }
 }
 
 function getparam()
 {
-    return $_GET ? array_keys($_GET)[0] : '';
+    global $params;
+    return array_shift($params);
 }
 
-function go($php)
+function go($dest, $param=NULL)
 {
-    header("Location: $php.php");
+    global $usr;
+    header("Location: $dest?$usr" . ($param ? "&$param" : ''));
     exit;
+}
+
+function goview($param=NULL)
+{
+    global $usr;
+    go('/', $param);
+}
+
+function gonew()
+{
+    if (session_status() == PHP_SESSION_ACTIVE)
+    {
+        session_destroy();
+        header('Location: new.php');
+        exit;
+    }
+}
+
+function usrtag()
+{
+    global $usr;
+    echo "<input type=hidden name=usr value=$usr>\n";
 }
 ?>

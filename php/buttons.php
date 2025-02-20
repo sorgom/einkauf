@@ -1,14 +1,10 @@
 <?php
     function b_base($dest, $what, $title, $type = false)
     {
+        global $usr;
         $t = $type ? "bt $type" : 'bt';
-        $w = $what ? "?$what" : '';
-        echo "<a href=$dest.php$w class='$t'>$title</a>\n";
-    }
-
-    function b_navi($what, $title, $type = false)
-    {
-        b_base('navi', $what, $title, $type);
+        $w = $what ? "&$what" : '';
+        echo "<a href=$dest?$usr$w class='$t'>$title</a>\n";
     }
 
     function b_reset($cnr)
@@ -18,41 +14,46 @@
 
     function b_top()
     {
-        b_navi('', ' ', 'menu');
+        b_base('/', '', ' ', 'menu');
     }
 
     function b_chap($cnr, $ttl)
     {
-        b_navi($cnr, $ttl, 'chap');
+        b_base('/', $cnr, $ttl, 'chap');
     }
 
     function b_edit()
     {
-        b_base('input', '', ' ', 'edit');
-    }   
+        b_base('input.php', '', ' ', 'edit');
+    }
 
     function b_prev_cancel()
     {
-        b_base('data', 'C', ' ', 'cancel');
+        b_base('data.php', 'C', ' ', 'cancel');
     }
 
     function b_prev_write()
     {
-        b_base('data', 'W', ' ', 'save');
+        b_base('data.php', 'W', ' ', 'save');
     }
 
     function b_reg_go()
     {
-        b_base('register', '', 'anmelden', 'ok');
+        b_base('register.php', '', 'anmelden', 'ok');
     }
 
-    function b_new_go($nu)
+    function b_new_go()
     {
-        b_base('index', $nu, 'start', 'ok');
+        b_base('/', '', 'start', 'ok');
     }
 
-    // function b_chap($cnr, $top)
-    // {
-    //     echo "<a href=navi.php?$cnr><p class='bt chap'>$top</p></a>\n";
-    // }
+    function b_logout()
+    {
+        b_base('logout.php', '', ' ', 'logout');
+    }
+
+    function b_login()
+    {
+        b_base('/', '', ' ', 'login');
+    }
 ?>

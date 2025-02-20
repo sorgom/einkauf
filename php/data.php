@@ -1,43 +1,44 @@
 <?php
     session_start();
     require_once('usr.php');
-    setusr();
 
     $data = '';
-    if ($_GET)
+    if ($_POST)
     {
-        $x = getparam();
-        switch($x)
-        {
-        case 'C': 
-            unset($_SESSION['data']);
-            go('view');
-            break;
-        case 'W': 
-            $data = $_SESSION['data'];
-            break;
-        default: 
-            go('view');
-        }
-    }
-    elseif ($_POST) 
-    {
-        if (isset($_POST['cancel'])) 
+        $usr = $_POST['usr'];
+        usrfiles();
+        if (isset($_POST['cancel']))
         {
             unset($_SESSION['data']);
-            go('view');
+            goview();
         }
 
         $data = trim($_POST['data']);
-        if (empty($data)) go('input');
+        if (empty($data)) go('input.php');
 
-        if (isset($_POST['prev'])) 
-        {   
+        if (isset($_POST['prev']))
+        {
             $_SESSION['data'] = $data;
-            go('view');
+            goview();
         }
     }
-    else go('view');
+    else
+    {
+        setusr();
+        $x = getparam();
+        switch($x)
+        {
+        case 'C':
+            unset($_SESSION['data']);
+            goview();
+            break;
+        case 'W':
+            $data = $_SESSION['data'];
+            break;
+        default:
+            goview();
+        }
+    }
 
     if (file_exists($log) && file_exists($txt))
     {
@@ -45,10 +46,10 @@
         $lines = getlines();
         $checks = getchecks();
         $top = '';
-        $map = array(); 
+        $map = array();
         $cnr = 0;
         $inr = 0;
-        foreach ($lines as $line) 
+        foreach ($lines as $line)
         {
             if (totop($line, $top, $cnr, $inr) || empty($line)) continue;
             ++$inr;
@@ -73,5 +74,5 @@
     file_put_contents($txt, $data);
     unset($_SESSION['data']);
     unset($_SESSION['chap']);
-    go('view');
+    goview();
 ?>

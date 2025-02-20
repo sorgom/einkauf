@@ -5,12 +5,12 @@ p { margin-bottom: 0.2em; margin-top: 0.2em; vertical-align: top; }
 
 a { text-decoration: none; color: #00F; }
 
-div.display { 
-    padding-bottom: 2.5em; 
+div.display {
+    padding-bottom: 2.5em;
     font-size: 4em; padding-left: 0.8em;
-} 
-.display.prev { 
-    background-color: #F8F8F8; border-radius: 1em; 
+}
+.display.prev {
+    background-color: #F8F8F8; border-radius: 1em;
     background-image: url('img/eye.svg');
     background-repeat: no-repeat;
     background-position: right top;
@@ -24,12 +24,12 @@ div.display hr { height: 0.6em; background-color: none; border:none; }
 li.x, li.x > a { color: rgb(175, 175, 175); }
 li { margin-bottom: 0.4em; }
 
-input[type=text] { 
+input[type=text] {
     font-size: 2em; border: 0;
     margin-top: 0.2em; margin-bottom: 2em;
 }
 
-textarea { 
+textarea {
     font-family:"Times New Roman", Times, serif;
     font-size: 2em;
 }
@@ -53,31 +53,42 @@ textarea {
     line-height: 3em;
 }
 .bt:hover { cursor: pointer; }
-.bt.menu { 
+.bt.menu {
     background-image: url('img/list.svg');
 }
-.bt.prev { 
-    background-color: #a2ebff; 
+.bt.prev {
+    background-color: #a2ebff;
     background-image: url('img/eye.svg');
 }
-.bt.edit { 
-    background-color: #a2ebff; 
+.bt.edit {
+    background-color: #a2ebff;
     background-image: url('img/pen.svg');
 }
-.bt.reset { 
+.bt.reset {
     background-color: lightgray;
     background-image: url('img/reset.svg');
 }
-.bt.save { 
-    background-color: lightgreen; 
+.bt.save {
+    background-color: lightgreen;
     background-image: url('img/save.svg');
 }
-.bt.cancel { 
-    background-color: orange; 
+.bt.cancel {
+    background-color: orange;
     background-image: url('img/cancel.svg');
+}
+.bt.ok {
+    background-color: lightgreen;
+}
+.bt.logout {
+    background-color: orange;
+    background-image: url('img/logout.svg');
+}
+.bt.login {
+    background-color: lightgreen;
+    background-image: url('img/login.svg');
 }
 
 .bt:disabled, .bt[disabled]
-{ 
-    background-color: lightgray; 
+{
+    background-color: lightgray;
 }

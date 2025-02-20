@@ -1,10 +1,10 @@
 <?php
 require_once('usr.php');
+setusr();
 $chap = getparam();
 if ($chap)
 {
     session_start();
-    setusr();
     require_once('fio.php');
     $checks = getchecks();
     $rx = "/^$chap\./";
@@ -15,5 +15,5 @@ if ($chap)
     }
     wchecks($checks);
 }
-go('view');
+goview(, $chap);
 ?>

@@ -5,7 +5,7 @@ function setusr(u)
     usr = u;
 }
 
-function ck(obj) 
+function ck(obj)
 {
     var p = obj.parentElement;
     p.classList.toggle('x');
@@ -19,10 +19,13 @@ function ck(obj)
     xhr.send(data);
 }
 
-function checkinput(obj, bid)
+function checkinput(obj, ...ids)
 {
-    var but = document.getElementById(bid);
-    if (!but) return;
     var txt = obj.value.trim();
-    but.disabled = !txt.length;
+    var dis = !txt.length;
+    for (var id of ids)
+    {
+        var but = document.getElementById(id);
+        if (but) but.disabled = dis;
+    }
 }
