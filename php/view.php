@@ -91,13 +91,10 @@
     if ($prev)
     {
         b_prev_write();
-        b_input();
+        b_edit();
         b_prev_cancel();
     }
-    else
-    {
-        if ($chap) b_reset($chap);
-        b_input();
-    }
+    elseif ($chap) b_reset($chap);
+    else b_edit();
 ?>
 </body></html>

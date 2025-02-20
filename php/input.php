@@ -27,8 +27,8 @@
 ?></textarea>
 <p>
 <input type=submit value="" name=prev class="bt prev">
-<input type=submit value="" name=ok class="bt ok" id=ok <?php echo $state; ?>>
-    <input type=submit value="" name=cancel class="bt nok">
+<input type=submit value="" name=ok class="bt save" id=ok <?php echo $state; ?>>
+    <input type=submit value="" name=cancel class="bt cancel">
 </p>
 </form>
 </body></html>

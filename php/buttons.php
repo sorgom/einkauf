@@ -26,19 +26,19 @@
         b_navi($cnr, $ttl, 'chap');
     }
 
-    function b_input()
+    function b_edit()
     {
-        b_base('input', '', ' ', 'prev');
+        b_base('input', '', ' ', 'edit');
     }   
 
     function b_prev_cancel()
     {
-        b_base('data', 'C', ' ', 'nok');
+        b_base('data', 'C', ' ', 'cancel');
     }
 
     function b_prev_write()
     {
-        b_base('data', 'W', ' ', 'ok');
+        b_base('data', 'W', ' ', 'save');
     }
 
     function b_reg_go()
@@ -50,4 +50,9 @@
     {
         b_base('index', $nu, 'start', 'ok');
     }
+
+    // function b_chap($cnr, $top)
+    // {
+    //     echo "<a href=navi.php?$cnr><p class='bt chap'>$top</p></a>\n";
+    // }
 ?>
