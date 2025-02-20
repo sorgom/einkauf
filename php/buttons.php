@@ -9,7 +9,7 @@
 
     function b_reset($cnr)
     {
-        b_base('reset', $cnr , ' ', 'reset');
+        b_base('reset.php', $cnr , ' ', 'reset');
     }
 
     function b_top()

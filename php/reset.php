@@ -15,5 +15,5 @@ if ($chap)
     }
     wchecks($checks);
 }
-goview(, $chap);
+goview($chap);
 ?>
