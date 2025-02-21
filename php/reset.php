@@ -6,14 +6,14 @@ if ($chap)
 {
     session_start();
     require_once('fio.php');
-    $checks = getchecks();
+    $done = getdone();
     $rx = "/^$chap\./";
 
-    foreach (array_keys($checks) as $k)
+    foreach (array_keys($done) as $k)
     {
-        if (preg_match($rx, $k)) unset($checks[$k]);
+        if (preg_match($rx, $k)) unset($done[$k]);
     }
-    wchecks($checks);
+    wdone($done);
 }
 goview($chap);
 ?>

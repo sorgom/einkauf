@@ -4,15 +4,15 @@ $id = $_POST['id'];
 $ck = $_POST['ck'];
 
 require_once('usr.php');
-if (isusr($x)) 
+if (isusr($x))
 {
     $usr = $x;
     usrfiles();
     require_once('fio.php');
 
-    $checks = getchecks();
-    if ($ck == '1') $checks[$id] = true;
-    else unset($checks[$id]);
-    wchecks($checks);
+    $done = getdone();
+    if ($ck == '1') $done[$id] = true;
+    else unset($done[$id]);
+    wdone($done);
 }
 ?>

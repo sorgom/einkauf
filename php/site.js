@@ -14,7 +14,7 @@ function ck(obj)
     // console.log('id: ', id, ' checked: ', checked);
     var data = "usr=" + usr + "&id=" + id + "&ck=" + checked;
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "check.php", true);
+    xhr.open("POST", "done.php", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send(data);
 }

@@ -44,7 +44,7 @@
     {
         require_once('fio.php');
         $lines = getlines();
-        $checks = getchecks();
+        $done = getdone();
         $top = '';
         $map = array();
         $cnr = 0;
@@ -53,18 +53,18 @@
         {
             if (totop($line, $top, $cnr, $inr) || empty($line)) continue;
             ++$inr;
-            if (isset($checks["$cnr.$inr"])) $map["$top.$line"] = 1;
+            if (isset($done["$cnr.$inr"])) $map["$top.$line"] = 1;
         }
         $lines = tolines($data);
-        $checks = array();
+        $done = array();
         $cnr = 0;
         $inr = 0;
         foreach ($lines as $line) {
             if (totop($line, $top, $cnr, $inr) || empty($line)) continue;
             ++$inr;
-            if (isset($map["$top.$line"])) $checks["$cnr.$inr"] = 1;
+            if (isset($map["$top.$line"])) $done["$cnr.$inr"] = 1;
         }
-        wchecks($checks);
+        wdone($done);
     }
     else
     {

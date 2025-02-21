@@ -30,7 +30,7 @@
         echo $on ? "<ul>\n" : "</ul>\n";
     }
     $lines = $prev ? tolines($_SESSION['data']) : getlines();
-    $checks = $prev ? array() : getchecks();
+    $done = $prev ? array() : getdone();
     $cnr = 0;
     $inr = 0;
     $lset = false;
@@ -76,7 +76,7 @@
                 else
                 {
                     ++$inr;
-                    $cl = isset($checks["$cnr.$inr"]) ? ' class=x' : '';
+                    $cl = isset($done["$cnr.$inr"]) ? ' class=x' : '';
                     echo "<li id=$cnr.$inr$cl><a onclick='ck(this)'>$line</a></li>\n";
                 }
             }
