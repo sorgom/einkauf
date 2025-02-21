@@ -22,10 +22,9 @@
         b_base('/', $cnr, $ttl, 'chap' . ($done ? ' x' : ''));
     }
 
-    function bt_chap_done($cnr, $done = NULL)
+    function bt_chap_done($cnr)
     {
-        $cl = $done ? ' x' : '';
-        echo "<a id=$cnr onclick='ckc(this)' class='bt done$cl'> </a>\n";
+        echo "<a id=$cnr onclick='chapDone(this)' class='bt done'> </a>\n";
     }
 
     function b_edit()

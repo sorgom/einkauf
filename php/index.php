@@ -96,7 +96,7 @@
     }
     elseif ($chap)
     {
-        bt_chap_done($chap, isset($done[$chap]));
+        bt_chap_done($chap);
         b_reset($chap);
     }
     else {

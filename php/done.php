@@ -12,7 +12,14 @@ if (isusr($x))
 
     $done = getdone();
     if ($ck == '1') $done[$id] = true;
-    else unset($done[$id]);
+    else
+    {
+        unset($done[$id]);
+        if (preg_match('/^(\d+)\./', $id, $m))
+        {
+            unset($done[$m[1]]);
+        }
+    }
     wdone($done);
 }
 ?>

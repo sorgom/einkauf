@@ -95,9 +95,6 @@ textarea {
     background-image: url('img/checked.svg');
 }
 .bt.done {
-    background-image: url('img/unchecked.svg');
-}
-.bt.done.x {
     background-image: url('img/checked.svg');
 }
 
