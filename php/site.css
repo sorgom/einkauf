@@ -17,10 +17,10 @@ div.display {
     background-size: 50%;
     background-attachment: fixed;
 }
-div.display  * { font-style: italic; color: rgb(0, 92, 200); }
+div.display  * { font-style: italic; }
 div.display hr { height: 0.6em; background-color: none; border:none; }
 
-
+li, li > a { color: rgb(0, 92, 200);}
 li.x, li.x > a { color: rgb(175, 175, 175); }
 li { margin-bottom: 0.4em; }
 
@@ -86,6 +86,19 @@ textarea {
 .bt.login {
     background-color: lightgreen;
     background-image: url('img/login.svg');
+}
+.bt.chap {
+    background-image: url('img/unchecked.svg');
+    background-position: left;
+}
+.bt.chap.x {
+    background-image: url('img/checked.svg');
+}
+.bt.done {
+    background-image: url('img/unchecked.svg');
+}
+.bt.done.x {
+    background-image: url('img/checked.svg');
 }
 
 .bt:disabled, .bt[disabled]

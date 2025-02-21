@@ -17,9 +17,15 @@
         b_base('/', '', ' ', 'menu');
     }
 
-    function b_chap($cnr, $ttl)
+    function b_chap($cnr, $ttl, $done = NULL)
     {
-        b_base('/', $cnr, $ttl, 'chap');
+        b_base('/', $cnr, $ttl, 'chap' . ($done ? ' x' : ''));
+    }
+
+    function bt_chap_done($cnr, $done = NULL)
+    {
+        $cl = $done ? ' x' : '';
+        echo "<a id=$cnr onclick='ckc(this)' class='bt done$cl'> </a>\n";
     }
 
     function b_edit()

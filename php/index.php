@@ -48,7 +48,7 @@
                 }
                 else
                 {
-                    b_chap($cnr, $top);
+                    b_chap($cnr, $top, isset($done[$cnr]));
                 }
             }
             if ($listing)
@@ -61,7 +61,6 @@
         }
         else if($listing)
         {
-            // $line = trim($line);
             if (empty($line)) $lset = $lok;
             else
             {
@@ -95,7 +94,11 @@
         b_edit();
         b_prev_cancel();
     }
-    elseif ($chap) b_reset($chap);
+    elseif ($chap)
+    {
+        bt_chap_done($chap, isset($done[$chap]));
+        b_reset($chap);
+    }
     else {
         b_edit();
         b_logout();

@@ -7,7 +7,7 @@ if ($chap)
     session_start();
     require_once('fio.php');
     $done = getdone();
-    $rx = "/^$chap\./";
+    $rx = "/^$chap(?:\.|$)/";
 
     foreach (array_keys($done) as $k)
     {
