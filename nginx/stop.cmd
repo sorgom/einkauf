@@ -1,3 +1,4 @@
 @echo off
-taskkill /F /IM php-cgi.exe >NUL 2>&1
-taskkill /F /IM nginx.exe >NUL 2>&1
+for %%i in (nginx php-cgi) do taskkill /F /IM %%i.exe >NUL 2>&1
+
+
