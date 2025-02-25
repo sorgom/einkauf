@@ -1,6 +1,8 @@
 # TODO
 
-## session expiry
+## formats
 
-### usr
-- usr must be transmitted in call ($_GET)
+## wording
+- $usr -> $uid, interCaps
+- text processing:
+  - as much by reference as possible

@@ -1,45 +1,120 @@
 <?php
-    function tolines($data)
+
+    function txtFile()
     {
-        $res = array();
-        if (preg_match('/^ *# /m', $data))
-            $res = preg_split('/\r?\n|\r/', preg_replace('/^ +/m', '', preg_replace('/^(?:\s*|.*?\n)# /s', '# ', $data)));
-        return $res;
+        global $uid;
+        return "data/$uid.txt";
     }
-    function getlines()
+    function logFile()
     {
-        global $txt;
-        if (file_exists($txt)) return tolines(file_get_contents($txt));
-        return array();
+        global $uid;
+        return "data/$uid.log.json";
+    }
+    function dataFile()
+    {
+        global $uid;
+        return "data/$uid.data.json";
     }
 
-    function getdone()
+    function rTxt(&$txt)
     {
-        global $log;
+        $txt = NULL;
+        $f = txtFile();
+        $ok = file_exists($f);
+        if ($ok) $txt = file_get_contents($f);
+        return $ok;
+    }
+
+    function wTxt(&$txt)
+    {
+        file_put_contents(txtFile(), $txt);
+    }
+
+    function rDone(&$done)
+    {
         $done = array();
-        if (file_exists($log)) $done = json_decode(file_get_contents($log), true);
-        return $done;
+        $f = logFile();
+        $ok = file_exists($f);
+        if ($ok) $done = json_decode(file_get_contents($f), true);
+        return $ok;
     }
 
-    function wdone($done)
+    function wDone(&$done)
     {
-        global $log;
-        file_put_contents($log, json_encode($done));
+        $f = logFile();
+        if (empty($done)) unlink($f);
+        else file_put_contents($f, json_encode($done));
     }
 
-    function totop($line, &$top, &$cnr, &$inr)
+    function wData(&$heads, &$items)
     {
-        $res = preg_match('/^(#+) *(.*)/', $line, $t);
-        $lvl = 0;
-        if ($res) {
-            $top = $t[2];
-            $lvl = strlen($t[1]);
-            if ($lvl == 1)
-            {
-                ++$cnr;
-                $inr = 0;
-            }
+        file_put_contents(dataFile(), json_encode(array($heads, $items)));
+    }
+
+    function rData(&$heads, &$items)
+    {
+        $heads = array();
+        $items = array();
+        $f = dataFile();
+        $ok = file_exists($f);
+        if ($ok) [$heads, $items] = json_decode(file_get_contents($f), true);
+        return $ok;
+    }
+
+    function toItems($items)
+    {
+        foreach ($items as &$item)
+        {
+            $item = array_filter($item, function($i) { return !(empty($i) || is_array($i)); });
         }
-        return $lvl;
+        return $items;
+    }
+
+    function clean(&$txt)
+    {
+        $txt = trim(preg_replace('/^ *| *$/m', '', str_replace("\t", ' ', $txt)));
+    }
+
+    function txt2data(&$txt, &$heads, &$items)
+    {
+        clean($txt);
+        $heads = array();
+        $items = array();
+        if (preg_match('/^.*?(@.+)/ms', $txt, $m))
+        {
+            $lines = preg_split('/\r?\n|\r/', $m[1]);
+            $lSet = false;
+            $lOk  = false;
+            $item = NULL;
+
+            foreach ($lines as $line)
+            {
+                if (empty($line))
+                {
+                    $lSet = true;
+                }
+                elseif ($line[0] == '@')
+                {
+                    if (is_array($item)) $items[] = $item;
+                    $item = array();
+                    $heads[] = trim(substr($line, 1));
+                    $lOk = false;
+                }
+                elseif ($line[0] == '#')
+                {
+                    preg_match('/^(#+) *(.*)/', $line, $m);
+                    $item[] = array(strlen($m[1]) + 1, $m[2]);
+                    $lOk = false;
+                }
+                else
+                {
+                    if ($lOk && $lSet) $item[] = '';
+                    $item[] = $line;
+                    $lSet = false;
+                    $lOk = true;
+                }
+            }
+            if (is_array($item)) $items[] = $item;
+        }
     }
 ?>

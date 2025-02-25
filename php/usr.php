@@ -1,90 +1,71 @@
 <?php
+    $uid = NULL;
+    $params = array();
 
-$usr = NULL;
-$params = array();
-
-function regf()
-{
-    return 'data/reg.json';
-}
-
-function getreg()
-{
-    $rf = regf();
-    if (file_exists($rf))
-        return json_decode(file_get_contents($rf), true);
-    return array();
-}
-
-function isusr($x)
-{
-    $reg = getreg();
-    return isset($reg[$x]);
-}
-
-function usrfiles()
-{
-    global $usr, $txt, $log;
-    $txt = "data/$usr.txt";
-    $log = "data/$usr.json";
-}
-
-function setusr()
-{
-    global $usr, $params;
-    if ($_GET)
+    function regFile()
     {
-        $params = array_keys($_GET);
-        $usr = array_shift($params);
+        return 'data/reg.json';
     }
-    usrfiles();
-}
-
-function checkusr()
-{
-    global $usr;
-    if (!(isset($_SESSION['usr']) && $usr == $_SESSION['usr']))
+    function getReg()
     {
-        if (isusr($usr))
+        $rf = regFile();
+        if (file_exists($rf))
+            return json_decode(file_get_contents($rf), true);
+        return array();
+    }
+
+    function isUid($x)
+    {
+        $reg = getReg();
+        return isset($reg[$x]);
+    }
+
+    function setUid()
+    {
+        global $uid, $params;
+        if ($_GET)
         {
-            $_SESSION['usr'] = $usr;
+            $params = array_keys($_GET);
+            $uid = array_shift($params);
         }
-        else gonew();
     }
-}
 
-function getparam()
-{
-    global $params;
-    return array_shift($params);
-}
-
-function go($dest, $param=NULL)
-{
-    global $usr;
-    header("Location: $dest?$usr" . ($param ? "&$param" : ''));
-    exit;
-}
-
-function goview($param=NULL)
-{
-    global $usr;
-    go('/', $param);
-}
-
-function gonew()
-{
-    if (session_status() == PHP_SESSION_ACTIVE)
+    function checkUid()
     {
-        session_destroy();
+        global $uid;
+        if (!(isset($_SESSION['usr']) && $uid == $_SESSION['usr']))
+        {
+            if (isUid($uid))
+            {
+                $_SESSION['usr'] = $uid;
+            }
+            else goNew();
+        }
+    }
+
+    function getParam()
+    {
+        global $params;
+        return empty($params) ? NULL : $params[0];
+    }
+
+    function go($dest, $param=NULL)
+    {
+        global $uid;
+        header("Location: $dest?$uid" . ($param ? "&$param" : ''));
+        exit;
+    }
+
+    function goView($param=NULL)
+    {
+        global $uid;
+        go('/', $param);
+    }
+
+    function goNew()
+    {
+        if (session_status() == PHP_SESSION_ACTIVE) session_destroy();
         header('Location: new.php');
         exit;
     }
-}
-
-function usrtag()
-{
-    global $usr;
-    echo "<input type=hidden name=usr value=$usr>\n";
-}
 ?>

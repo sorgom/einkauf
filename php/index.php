@@ -1,93 +1,109 @@
 <?php
     session_start();
     require_once('usr.php');
-    setusr();
-    checkusr();
-    require_once("head.htm");
-    $prev = isset($_SESSION['data']);
-    $chap = $prev ? Null : getparam();
-?>
-<body>
-<script>setusr('<?php echo $usr?>');</script>
-<?php
+    setUid();
+    checkUid();
+    require_once("body.php");
     require_once('fio.php');
-    require_once('buttons.php');
 
-    if ($chap) b_top();
-    if ($chap || $prev)
-    {
-        echo '<div class=\'display';
-        if ($prev) echo ' prev';
-        echo "'>\n";
-    }
-
-    $inul = false;
-    function checkul($on)
-    {
-        global $inul;
-        if ($inul == $on) return;
-        $inul = $on;
-        echo $on ? "<ul>\n" : "</ul>\n";
-    }
-    $lines = $prev ? tolines($_SESSION['data']) : getlines();
-    $done = $prev ? array() : getdone();
-    $cnr = 0;
+    $prev = isset($_SESSION['data']);
+    $chap = $prev ? Null : getParam();
     $inr = 0;
-    $lset = false;
-    $lok = false;
-    $listing = false;
-    foreach ($lines as $line) {
-        if ($lvl = totop($line, $top, $cnr, $inr))
+    $cnr = 0;
+    $done = array();
+    if (!$prev) rDone($done);
+
+    function chapItem($item)
+    {
+        global $done, $cnr, $inr;
+        $id = "$cnr.$inr";
+        $cl = isset($done[$id]) ? ' class=x' : '';
+        echo "<li id=$id$cl><a onclick='ck(this)'>$item</a></li>\n";
+    }
+
+    function prevItem($item)
+    {
+        echo "<li>$item</li>\n";
+    }
+
+    $ulOn = false;
+    function checkUl($on)
+    {
+        global $ulOn;
+        if ($ulOn == $on) return;
+        $ulOn = $on;
+        echo $on ? '<' : '</';
+        echo "ul>\n";
+    }
+
+    function dispItem($item, $iFunc)
+    {
+        global $done, $inr;
+        $ulOn = false;
+        $inr = 0;
+        $lSet = false;
+        $lOk = false;
+
+        foreach ($item as $i)
         {
-            if ($lvl == 1)
+            if (empty($i)) echo "<hr/>\n";
+            elseif (is_array($i))
             {
-                if ($prev) $listing = true;
-                elseif ($chap)
-                {
-                    $listing = $cnr == $chap;
-                }
-                else
-                {
-                    b_chap($cnr, $top, isset($done[$cnr]));
-                }
+                checkUl(false);
+                echo "<h$i[0]>$i[1]</h$i[0]>\n";
             }
-            if ($listing)
-            {
-                checkul(false);
-                echo "<h$lvl>$top</h$lvl>\n";
-                $lset = false;
-                $lok = false;
-            }
-        }
-        else if($listing)
-        {
-            if (empty($line)) $lset = $lok;
             else
             {
-                if ($lset) echo "<hr/>\n";
-                $lset = false;
-                $lok = true;
-                checkul(true);
-                if ($prev)
-                {
-                    echo "<li><a>$line</a></li>\n";
-                }
-                else
-                {
-                    ++$inr;
-                    $cl = isset($done["$cnr.$inr"]) ? ' class=x' : '';
-                    echo "<li id=$cnr.$inr$cl><a onclick='ck(this)'>$line</a></li>\n";
-                }
+                ++$inr;
+                checkUl(true);
+                $iFunc($i);
             }
         }
+        checkUl(false);
     }
-    checkul(false);
+    //  chapter number given: display chapter
+    if ($chap)
+    {
+        rData($heads, $items);
+        $cnr = $chap;
+        $pos = $chap - 1;
+        b_top($heads[$pos], isset($done[$chap]));
+?>
+<script src=view.js></script>
+<script>setUid('<?php echo $uid?>');</script>
+<div class='display chap'><?php
+        dispItem($items[$pos], 'chapItem');
+    }
+    //  preview: display all chapters
+    elseif ($prev)
+    {
+?><div class='display prev'><?php
+       txt2data($_SESSION['data'], $heads, $items);
+       $pos = 0;
+       foreach ($heads as $h)
+       {
+           echo "<h1>$h</h1>\n";
+           dispItem($items[$pos], 'prevItem');
+           ++$pos;
+       }
+    }
+    //  otherwise: display Menu
+    else
+    {
+        rData($heads, $items);
+        $cnr = 0;
+        foreach ($heads as $head)
+        {
+            ++$cnr;
+            b_chap($cnr, $head, isset($done[$cnr]));
+        }
+    }
+
     if ($chap || $prev)
     {
         echo "</div>\n";
     }
-?>
-<?php
+
     if ($prev)
     {
         b_prev_write();
@@ -96,7 +112,8 @@
     }
     elseif ($chap)
     {
-        bt_chap_done($chap);
+        // bt_chap_done($chap);
+        b_remove($chap);
         b_reset($chap);
     }
     else {

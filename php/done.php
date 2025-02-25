@@ -1,17 +1,16 @@
 <?php
-$x = $_POST['usr'];
+$x = $_POST['uid'];
 $id = $_POST['id'];
 $ck = $_POST['ck'];
 
 require_once('usr.php');
-if (isusr($x))
+if (isUid($x))
 {
-    $usr = $x;
-    usrfiles();
+    $uid = $x;
     require_once('fio.php');
 
-    $done = getdone();
-    if ($ck == '1') $done[$id] = true;
+    rDone($done);
+    if ($ck == '1') $done[$id] = 1;
     else
     {
         unset($done[$id]);
@@ -20,6 +19,6 @@ if (isusr($x))
             unset($done[$m[1]]);
         }
     }
-    wdone($done);
+    wDone($done);
 }
 ?>

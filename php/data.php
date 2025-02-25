@@ -2,77 +2,90 @@
     session_start();
     require_once('usr.php');
 
-    $data = '';
+    $data = NULL;
     if ($_POST)
     {
-        $usr = $_POST['usr'];
-        usrfiles();
+        $uid = $_POST['uid'];
         if (isset($_POST['cancel']))
         {
             unset($_SESSION['data']);
-            goview();
+            goView();
         }
 
-        $data = trim($_POST['data']);
-        if (empty($data)) go('input.php');
+        if (empty($_POST['data'])) go('input.php');
 
         if (isset($_POST['prev']))
         {
-            $_SESSION['data'] = $data;
-            goview();
+            $_SESSION['data'] = $_POST['data'];
+            goView();
         }
+        $data = &$_POST['data'];
     }
     else
     {
-        setusr();
-        $x = getparam();
+        setUid();
+        $x = getParam();
         switch($x)
         {
         case 'C':
             unset($_SESSION['data']);
-            goview();
+            goView();
             break;
         case 'W':
-            $data = $_SESSION['data'];
+            $data = &$_SESSION['data'];
             break;
         default:
-            goview();
+            goView();
         }
     }
 
-    if (file_exists($log) && file_exists($txt))
+    require_once('fio.php');
+    txt2data($data, $heads, $items);
+
+    if (file_exists(logFile()) && file_exists(dataFile()))
     {
-        require_once('fio.php');
-        $lines = getlines();
-        $done = getdone();
-        $top = '';
+        rDone($done);
+        rData($heads1, $items1);
+        $items1 = toItems($items1);
         $map = array();
         $cnr = 0;
-        $inr = 0;
-        foreach ($lines as $line)
+        foreach ($items1 as $item)
         {
-            if (totop($line, $top, $cnr, $inr) || empty($line)) continue;
-            ++$inr;
-            if (isset($done["$cnr.$inr"])) $map["$top.$line"] = 1;
+            $head = $heads1[$cnr];
+            echo "head: $head\n";
+            ++$cnr;
+            $inr = 0;
+            foreach ($item as $i)
+            {
+                ++$inr;
+                if (isset($done["$cnr.$inr"])) $map["$head.$i"] = 1;
+            }
         }
-        $lines = tolines($data);
+        $items2 = toItems($items);
         $done = array();
         $cnr = 0;
-        $inr = 0;
-        foreach ($lines as $line) {
-            if (totop($line, $top, $cnr, $inr) || empty($line)) continue;
-            ++$inr;
-            if (isset($map["$top.$line"])) $done["$cnr.$inr"] = 1;
+        foreach ($items2 as $item)
+        {
+            $head = $heads[$cnr];
+            ++$cnr;
+            $inr = 0;
+            $all = true;
+            foreach ($item as $i)
+            {
+                ++$inr;
+                if (isset($map["$head.$i"])) $done["$cnr.$inr"] = 1;
+                else $all = false;
+            }
+            if ($all) $done[$cnr] = 1;
         }
-        wdone($done);
+        wDone($done);
     }
     else
     {
-        unlink($log);
+        unlink(logFile());
     }
-
-    file_put_contents($txt, $data);
+    wData($heads, $items);
+    wTxt($data);
     unset($_SESSION['data']);
-    unset($_SESSION['chap']);
-    goview();
+    goView();
 ?>

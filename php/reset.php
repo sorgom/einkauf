@@ -1,19 +1,19 @@
 <?php
 require_once('usr.php');
-setusr();
-$chap = getparam();
+setUid();
+$chap = getParam();
 if ($chap)
 {
     session_start();
     require_once('fio.php');
-    $done = getdone();
+    rDone($done);
     $rx = "/^$chap(?:\.|$)/";
 
     foreach (array_keys($done) as $k)
     {
         if (preg_match($rx, $k)) unset($done[$k]);
     }
-    wdone($done);
+    wDone($done);
 }
-goview($chap);
+goView($chap);
 ?>

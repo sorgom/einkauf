@@ -1,10 +1,17 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>todo</title>
+<meta charset='UTF-8'>
+<link rel=stylesheet href='site.css'>
+<link rel=icon type='image/gif' href='img/check_icon.svg'>
+</head><body>
 <?php
     function b_base($dest, $what, $title, $type = false)
     {
-        global $usr;
-        $t = $type ? "bt $type" : 'bt';
+        global $uid;
         $w = $what ? "&$what" : '';
-        echo "<a href=$dest?$usr$w class='$t'>$title</a>\n";
+        echo "<a href=$dest?$uid$w class='bt $type'>$title</a>\n";
     }
 
     function b_reset($cnr)
@@ -12,9 +19,11 @@
         b_base('reset.php', $cnr , ' ', 'reset');
     }
 
-    function b_top()
+    function b_top($ttl, $checked=false)
     {
-        b_base('/', '', ' ', 'menu');
+        global $uid;
+        $cl = $checked ? ' x' : '';
+        echo "<div class=fixed><a id=state href=/?$uid class='bt state$cl'>$ttl</a></div>\n";
     }
 
     function b_chap($cnr, $ttl, $done = NULL)
@@ -44,7 +53,7 @@
 
     function b_reg_go()
     {
-        b_base('register.php', '', 'anmelden', 'ok');
+        b_base('register.php', '', 'sign in', 'ok');
     }
 
     function b_new_go()
@@ -60,5 +69,20 @@
     function b_login()
     {
         b_base('/', '', ' ', 'login');
+    }
+
+    function b_remove($cnr, $second=false)
+    {
+        b_base('remove.php', $second ? "$cnr&1" : $cnr, ' ', 'remove');
+    }
+
+    function b_remove_confirm($cnr, $ttl)
+    {
+        b_base('remove.php', "$cnr&X", "$ttl ?", 'remove confirm');
+    }
+
+    function b_back()
+    {
+        echo "<a href=javascript:history.back() class='bt back'> </a>\n";
     }
 ?>
