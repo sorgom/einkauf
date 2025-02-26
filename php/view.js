@@ -12,7 +12,7 @@ function getNums()
 {
     if (numItems === undefined)
     {
-        var items = document.getElementsByTagName('li');
+        var items = document.getElementsByTagName('p');
         numItems = items.length;
         numDone = 0;
         for (var item of items)

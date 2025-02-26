@@ -4,8 +4,8 @@ body { margin-bottom: 2em; }
 a { text-decoration: none; }
 
 div.display {
-    padding-bottom: 2.5em;
-    font-size: 4em; padding-left: 0.8em;
+    padding-bottom: 0.5em;
+    font-size: 4em; padding-left: 0.3em;
     overflow: hidden;
 }
 .display.prev {
@@ -19,9 +19,23 @@ div.display {
 div.display.chap { margin-top: 2.8em; }
 div.display hr { height: 0.6em; background-color: none; border:none; }
 
-li, li > a { color: rgb(0, 92, 200);}
-li.x, li.x > a { color: rgb(175, 175, 175); }
-li { margin-bottom: 0.4em; }
+h4 { font-size: 100%; margin-left: 0.9em; }
+h3 { font-size: 110%; margin-left: 0.6em; }
+h2 { font-size: 120%; margin-left: 0.3em; }
+
+p { 
+    background-image: url('img/unchecked.svg'); 
+    background-repeat: no-repeat;
+    background-position: 0 0.05em;
+    background-size: 1em;
+    padding-bottom: 0.4em;
+}
+p.x { background-image: url('img/checked.svg'); }
+p > a { 
+    display: block; padding-left: 1.2em;
+    color: rgb(0, 92, 200); 
+}
+p.x > a { color: rgb(175, 175, 175); }
 
 input[type=text] {
     font-size: 2em; border: 0;

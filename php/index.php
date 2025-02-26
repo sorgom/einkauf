@@ -18,48 +18,32 @@
         global $done, $cnr, $inr;
         $id = "$cnr.$inr";
         $cl = isset($done[$id]) ? ' class=x' : '';
-        echo "<li id=$id$cl><a onclick='ck(this)'>$item</a></li>\n";
+        echo "<p id=$id$cl><a onclick='ck(this)'>$item</a></p>\n";
     }
 
     function prevItem($item)
     {
-        echo "<li>$item</li>\n";
-    }
-
-    $ulOn = false;
-    function checkUl($on)
-    {
-        global $ulOn;
-        if ($ulOn == $on) return;
-        $ulOn = $on;
-        echo $on ? '<' : '</';
-        echo "ul>\n";
+        echo "<p><a>$item</a></p>\n";
     }
 
     function dispItem($item, $iFunc)
     {
-        global $done, $inr;
-        $ulOn = false;
+        global $inr;
         $inr = 0;
-        $lSet = false;
-        $lOk = false;
 
         foreach ($item as $i)
         {
             if (empty($i)) echo "<hr/>\n";
             elseif (is_array($i))
             {
-                checkUl(false);
                 echo "<h$i[0]>$i[1]</h$i[0]>\n";
             }
             else
             {
                 ++$inr;
-                checkUl(true);
                 $iFunc($i);
             }
         }
-        checkUl(false);
     }
     //  chapter number given: display chapter
     if ($chap)
