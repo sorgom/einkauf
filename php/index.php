@@ -18,12 +18,12 @@
         global $done, $cnr, $inr;
         $id = "$cnr.$inr";
         $cl = isset($done[$id]) ? ' class=x' : '';
-        echo "<p id=$id$cl><a onclick='ck(this)'>$item</a></p>\n";
+        echo "<a id=$id$cl onclick='ck(this)'>$item</a>\n";
     }
 
     function prevItem($item)
     {
-        echo "<p><a>$item</a></p>\n";
+        echo "<a>$item</a>\n";
     }
 
     function dispItem($item, $iFunc)
@@ -55,13 +55,13 @@
 ?>
 <script src=view.js></script>
 <script>setUid('<?php echo $uid?>');</script>
-<div class='display chap'><?php
+<div id=items class=chap><?php
         dispItem($items[$pos], 'chapItem');
     }
     //  preview: display all chapters
     elseif ($prev)
     {
-?><div class='display prev'><?php
+?><div id=items class=prev><?php
        txt2data($_SESSION['data'], $heads, $items);
        $pos = 0;
        foreach ($heads as $h)

@@ -12,7 +12,8 @@ function getNums()
 {
     if (numItems === undefined)
     {
-        var items = document.getElementsByTagName('p');
+        var cont = document.getElementById('items');
+        var items = cont.getElementsByTagName('a');
         numItems = items.length;
         numDone = 0;
         for (var item of items)
@@ -25,10 +26,10 @@ function getNums()
 
 function sendId(id, checked)
 {
-    var data = "uid=" + uid + "&id=" + id + "&ck=" + (checked ? 1 : 0);
+    var data = 'uid=' + uid + '&id=' + id + '&ck=' + (checked ? 1 : 0);
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "done.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.open('POST', 'done.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send(data);
 }
 
@@ -40,16 +41,15 @@ function chapId(id)
 function ck(obj)
 {
     getNums();
-    var p = obj.parentElement;
-    p.classList.toggle('x');
-    var checked = p.classList.contains('x');
-    sendId(p.id, checked);
+    obj.classList.toggle('x');
+    var checked = obj.classList.contains('x');
+    sendId(obj.id, checked);
 
     numDone += checked ? 1 : -1;
     if (numDone == numItems)
     {
         btState.classList.add('x');
-        sendId(chapId(p.id), true);
+        sendId(chapId(obj.id), true);
     }
     else if (!checked)
     {

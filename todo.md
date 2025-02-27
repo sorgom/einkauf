@@ -8,5 +8,10 @@
     - indent increasing by 0.2em 
 
 - a more catching icon
+## css
+- more elements by id
+    - buttons also
+- background of input textarea
+- background of sign in text input
  
  

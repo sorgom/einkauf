@@ -23,7 +23,7 @@
     {
         global $uid;
         $cl = $checked ? ' x' : '';
-        echo "<div class=fixed><a id=state href=/?$uid class='bt state$cl'>$ttl</a></div>\n";
+        echo "<div class=fixed><a id=state href=/?$uid class='bt chap$cl'>$ttl</a></div>\n";
     }
 
     function b_chap($cnr, $ttl, $done = NULL)
