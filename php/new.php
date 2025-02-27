@@ -5,5 +5,5 @@
 ?>
 <h1>Willkommen</h1>
 <h2>Hier geht's zur Anmeldung:</h2>
-<?php b_reg_go(); ?>
+<?php b_new_go(); ?>
 </body></html>

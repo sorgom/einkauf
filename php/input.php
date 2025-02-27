@@ -9,7 +9,7 @@
 ?>
 <script src=input.js></script>
 <form action=data.php method=post>
-    <textarea name=data rows=30 autofocus oninput="checkInput(this, 'ok', 'prev')"><?php
+    <textarea name=data rows=30 autofocus oninput="checkInput(this, 'save', 'prev')"><?php
     $cont = NULL;
     if (isset($_SESSION['data'])) $cont = &$_SESSION['data'];
     else {
@@ -23,9 +23,9 @@
         $state = '';
     }
 ?></textarea>
-<input type=submit value="" name=prev class="bt prev" id=prev <?php echo $state; ?>>
-<input type=submit value="" name=ok class="bt save" id=ok <?php echo $state; ?>>
-<input type=submit value="" name=cancel class="bt cancel">
+<input type=submit value='' name=prev id=prev <?php echo $state; ?>>
+<input type=submit value='' id=save  <?php echo $state; ?>>
+<input type=submit value='' name=cancel id=cancel>
 <input type=hidden name=uid value=<?php echo $uid; ?>>
 </form>
 </body></html>

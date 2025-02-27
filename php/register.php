@@ -13,6 +13,6 @@
 <input type=text value="http://<?php echo $_SERVER['HTTP_HOST']; echo "?$uid"?>"
 size=50 readonly autofocus onFocus="this.select();this.setSelectionRange(0, 99999);"/><br/>
 <?php
-    b_new_go();
+    b_reg_go();
 ?>
 </body></html>

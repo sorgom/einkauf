@@ -96,7 +96,6 @@
     }
     elseif ($chap)
     {
-        // bt_chap_done($chap);
         b_remove($chap);
         b_reset($chap);
     }

@@ -13,5 +13,8 @@
     - buttons also
 - background of input textarea
 - background of sign in text input
+
+## checks
+- remove data content checks and button disabling
  
  
