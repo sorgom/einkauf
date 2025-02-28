@@ -1,86 +1,91 @@
 html {
     --text-color-open: #CCC;
     --text-color-done: #444;
-     --text-color-chap-done: #666; 
-    --text-color-headings: rgb(46, 77, 98);
+    --text-color-chap-done: #666;
+    --text-color-heading: rgb(46, 77, 98);
     --text-color-alert: red;
     --background-color: rgb(13, 20, 25);
-    --background-color-preview: rgb(19, 30, 37);
     --background-color-button: rgb(28, 45, 56);
+    --font-size-item: 40pt;
+    --font-size-button: 60pt;
+    --margin-button: 20pt;
 }
 
 * { margin: 0; font-family: sans-serif; }
-body { 
-    background-color: rgb(13, 20, 25);
-    padding-bottom: 2em; 
+body {
+    background-color: var(--background-color);
+    padding-bottom: 40pt;
 }
-a { 
+a {
     display: block;
-    text-decoration: none; 
+    text-decoration: none;
     color: var(--text-color-open);
 }
 a:hover, input[type=submit]:hover { cursor: pointer; }
 :disabled:hover, [disabled]:hover { cursor: not-allowed; }
 
 #items {
-    padding-bottom: 0.5em;
-    font-size: 2em; 
-    padding-left: 0.3em;
+    padding-bottom: 20pt;
     overflow: hidden;
 }
 
-#items.chap { margin-top: 6em; }
-#items hr { height: 1.5em; background-color: none; border:none; }
+#items.chap { margin-top: 140pt; }
+#items hr { height: 40pt; background-color: var(--background-color); border:none; }
 
-#items > * { font-stretch: condensed; }
+#items > * {
+    font-size: var(--font-size-item);
+    font-stretch: condensed;
+}
 #items > a {
-    display: block; 
-    padding: 0.8em;
-    padding-left: 1.2em;
+    padding: 30pt;
+    padding-left: 40pt;
 }
 #items > a.x { color: var(--text-color-done); }
 
-h1, h2, h3, h4 { color: var(--text-color-headings); }
-h4 { font-size: 100%; margin-left: 0.9em; }
-h3 { font-size: 110%; margin-left: 0.6em; }
-h2 { font-size: 120%; margin-left: 0.3em; }
+h2, h3, h4 { color: var(--text-color-heading); }
+h4 { font-size: 100%; margin-left: 40pt; }
+h3 { font-size: 110%; margin-left: 30pt; }
+h2 { font-size: 120%; margin-left: 20pt; }
 
 /* TODO */
 input[type=text] {
-    font-size: 2em; border: 0;
-    margin-top: 0.2em; margin-bottom: 2em;
+    font-size: 80pt; border: 0;
+    margin-top: 50pt; margin-bottom: 100pt;
 }
 
 form { width: 100%; }
 textarea {
-    margin: 0.1em;
+    margin: 10pt;
     font-family: serif;
     font-stretch: normal;
-    font-size: 2em;
-    padding-left: 2em;
-    border-radius: 0.5em;
+    font-size: var(--font-size-item);
+    padding-left: var(--font-size-item);
     width: 70%;
+    border: none;
+    background-color: var(--background-color-button);
+    color: var(--text-color-open);
 }
 
-body > a, input[type=submit], a#state {
+body > a, input[type=submit], a#state, h1 {
     display: block;
-    margin: 0.3em;
-    height: 3em;
+    margin: var(--margin-button);
+    height: 100pt;
     background-color: var(--background-color-button);
-    font-size: 3em;
+    font-size: var(--font-size-button);
     font-weight: bold;
     text-align: center;
+    color: var(--text-color-open);
     background-repeat: no-repeat;
     background-position: center;
-    line-height: 3em;
-} 
+    line-height: 100pt;
+}
 
 input[type=submit] { width: 95%; border: none; }
 
 #back   { background-image: url('img/back.svg'); }
 #cancel { background-image: url('img/cancel.svg'); }
 #edit   { background-image: url('img/pen.svg'); }
-#login, #register, #start  
+#login, #register, #start
         { background-image: url('img/login.svg'); }
 #logout { background-image: url('img/logout.svg'); }
 #prev   { background-image: url('img/eye.svg'); }
@@ -88,27 +93,27 @@ input[type=submit] { width: 95%; border: none; }
 #reset  { background-image: url('img/reset.svg'); }
 #save   { background-image: url('img/save.svg'); }
 
-a#state {    
-        background-image: url('img/unchecked.svg'); 
+a#state {
+        background-image: url('img/unchecked.svg');
         background-position: left;}
-a#state.x {  
-        background-image: url('img/checked.svg'); 
+a#state.x {
+        background-image: url('img/checked.svg');
         color: var(--text-color-done);
 }
 
-a#remove_confirm { 
+a#remove_confirm {
         background-image: url('img/trash.svg');
-        background-position: left; 
-        color: var(--text-color-alert); 
+        background-position: left;
+        color: var(--text-color-alert);
 }
 
-a.chap { 
-        background-image: url('img/unchecked.svg'); 
-        background-position: left; 
+a.chap {
+        background-image: url('img/unchecked.svg');
+        background-position: left;
 }
-a.chap.x  { 
-        background-image: url('img/checked.svg'); 
-        color: var(--text-color-chap-done); 
+a.chap.x  {
+        background-image: url('img/checked.svg');
+        color: var(--text-color-chap-done);
 }
 
 #top {
@@ -120,4 +125,21 @@ a.chap.x  {
     z-index: 1;
     margin: 0;
     background-color: var(--background-color);
+}
+
+#info {
+    color: var(--text-color-open);
+    margin: var(--margin-button);
+    font-size: var(--font-size-item);
+    font-stretch: condensed;
+}
+#info > h2 { margin-left: 0; font-size: var(--font-size-button); }
+#info > textarea {
+    padding: 0;
+    margin: var(--margin-button);
+    border: 0;
+    border-color: Transparent;
+    background-color: var(--background-color);
+    font-stretch: condensed;
+    resize: none;
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang=de>
 <head>
-<title>todo</title>
+<title><?php echo explode('.', $_SERVER['SERVER_NAME'])[0] ?></title>
 <meta charset='UTF-8'>
 <link rel=stylesheet href='site.css'>
 <link rel=icon type='image/gif' href='img/check_icon.svg'>

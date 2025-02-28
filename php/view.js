@@ -6,22 +6,20 @@ var btState = undefined;
 function setUid(u)
 {
     uid = u;
-}
-
-function getNums()
-{
-    if (numItems === undefined)
+    var cont = document.getElementById('items');
+    var items = cont.getElementsByTagName('a');
+    numItems = items.length;
+    numDone = 0;
+    for (var item of items)
     {
-        var cont = document.getElementById('items');
-        var items = cont.getElementsByTagName('a');
-        numItems = items.length;
-        numDone = 0;
-        for (var item of items)
-        {
-            if (item.classList.contains('x')) ++numDone;
-        }
-        btState = document.getElementById('state');
+        // item.style.fontSize = '40pt';
+        if (item.classList.contains('x')) ++numDone;
     }
+    btState = document.getElementById('state');
+    // console.log('uid: ' + uid);
+    // console.log('numItems: ' + numItems);
+    // console.log('numDone: ' + numDone);
+    // console.log('btState: ' + btState);
 }
 
 function sendId(id, checked)
@@ -40,7 +38,6 @@ function chapId(id)
 
 function ck(obj)
 {
-    getNums();
     obj.classList.toggle('x');
     var checked = obj.classList.contains('x');
     sendId(obj.id, checked);

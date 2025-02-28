@@ -82,7 +82,7 @@
         $items = array();
         if (preg_match('/^.*?(@.+)/ms', $txt, $m))
         {
-            $lines = preg_split('/\r?\n|\r/', $m[1]);
+            $lines = preg_split('/\r?\n|\r/', htmlentities($m[1]));
             $lSet = false;
             $lOk  = false;
             $item = NULL;

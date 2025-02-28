@@ -33,7 +33,7 @@
 
         foreach ($item as $i)
         {
-            if (empty($i)) echo "<hr/>\n";
+            if (empty($i)) echo "<hr>\n";
             elseif (is_array($i))
             {
                 echo "<h$i[0]>$i[1]</h$i[0]>\n";
@@ -52,16 +52,13 @@
         $cnr = $chap;
         $pos = $chap - 1;
         b_top($heads[$pos], isset($done[$chap]));
-?>
-<script src=view.js></script>
-<script>setUid('<?php echo $uid?>');</script>
-<div id=items class=chap><?php
+        echo "<div id=items class=chap>\n";
         dispItem($items[$pos], 'chapItem');
     }
     //  preview: display all chapters
     elseif ($prev)
     {
-?><div id=items class=prev><?php
+       echo "<div id=items class=prev>\n";
        txt2data($_SESSION['data'], $heads, $items);
        $pos = 0;
        foreach ($heads as $h)
@@ -96,6 +93,8 @@
     }
     elseif ($chap)
     {
+        echo "<script src=view.js></script>\n";
+        echo "<script>setUid('$uid');</script>\n";
         b_remove($chap);
         b_reset($chap);
     }

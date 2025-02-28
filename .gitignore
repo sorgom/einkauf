@@ -3,5 +3,5 @@ tmp.*
 temp
 logs
 php/data/*.*
-!_keep
+!template.*
 
