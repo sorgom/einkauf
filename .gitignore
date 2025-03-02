@@ -2,6 +2,6 @@ tmp
 tmp.*
 temp
 logs
-php/data/*.*
+site/data/*.*
 !template.*
 
