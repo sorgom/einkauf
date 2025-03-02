@@ -9,7 +9,7 @@
 ?>
 <script src=input.js></script>
 <form action=data.php method=post>
-    <textarea name=data rows=30 autofocus oninput="checkInput(this, 'save', 'prev')"><?php
+    <textarea name=data rows=20 autofocus oninput="checkInput(this, 'save', 'prev')"><?php
     $cont = NULL;
     if (isset($_SESSION['data'])) $cont = &$_SESSION['data'];
     else {
