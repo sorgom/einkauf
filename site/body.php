@@ -10,7 +10,7 @@
     function b_base($id, $dest, $param=NULL)
     {
         global $uid;
-        $p = $param ? "&$param" : '';
+        $p = is_null($param) ? '' : "&$param";
         echo "<a id=$id href=$dest?$uid$p> </a>\n";
     }
 
@@ -37,16 +37,6 @@
         b_base('edit', 'input.php');
     }
 
-    function b_prev_cancel()
-    {
-        b_base('cancel', 'data.php', 'C');
-    }
-
-    function b_prev_write()
-    {
-        b_base('save', 'data.php', 'W');
-    }
-
     function b_new_go()
     {
         b_base('register', 'register.php');
@@ -55,16 +45,6 @@
     function b_reg_go()
     {
         b_base('start', '/');
-    }
-
-    function b_logout()
-    {
-        b_base('logout', 'logout.php');
-    }
-
-    function b_login()
-    {
-        b_base('login', '/');
     }
 
     function b_remove($cnr)
@@ -81,5 +61,15 @@
     function b_back()
     {
         echo "<a id=back href=javascript:history.back()> </a>\n";
+    }
+
+    function b_imprint()
+    {
+        echo "<a id=imprint href='imprint.php' title='Imprint / Impressum'> </a>\n";
+    }
+
+    function b_imprint_back()
+    {
+        echo "<a id=imprint_back href=javascript:history.back()> </a>\n";
     }
 ?>

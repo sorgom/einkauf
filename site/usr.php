@@ -27,20 +27,9 @@
         {
             $params = array_keys($_GET);
             $uid = array_shift($params);
+            if (!isUid($uid)) goNew();
         }
-    }
-
-    function checkUid()
-    {
-        global $uid;
-        if (!(isset($_SESSION['usr']) && $uid == $_SESSION['usr']))
-        {
-            if (isUid($uid))
-            {
-                $_SESSION['usr'] = $uid;
-            }
-            else goNew();
-        }
+        else goNew();
     }
 
     function getParam()
@@ -52,7 +41,7 @@
     function go($dest, $param=NULL)
     {
         global $uid;
-        header("Location: $dest?$uid" . ($param ? "&$param" : ''));
+        header("Location: $dest?$uid" . (is_null($param) ? '' : "&$param"));
         exit;
     }
 
@@ -64,7 +53,6 @@
 
     function goNew()
     {
-        if (session_status() == PHP_SESSION_ACTIVE) session_destroy();
         header('Location: new.php');
         exit;
     }

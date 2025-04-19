@@ -2,9 +2,8 @@
 require_once('usr.php');
 setUid();
 $chap = getParam();
-if ($chap)
+if (!is_null($chap))
 {
-    session_start();
     require_once('fio.php');
     rDone($done);
     $rx = "/^$chap(?:\.|$)/";

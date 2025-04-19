@@ -1,7 +1,7 @@
-# todo
+# todo - a simple shopping list / todo list site
 
-This is pre beta state.
+## run
+- Copy content of _site_ folder to your web space.
 
-Documentation follows.
-
-Currently working on a (potential) bug in connection with chrome on android.
+## disclaimer: imprint required
+- add _imprint.txt_ text file containing your imprint information to the same web space folder.

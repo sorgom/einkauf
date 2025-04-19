@@ -1,20 +1,18 @@
 html {
     --text-color-open: #CCC;
     --text-color-done: #444;
+    --text-color-out: rgb(145, 0, 0);
     --text-color-chap-done: #666;
     --text-color-heading: rgb(46, 77, 98);
     --text-color-alert: red;
     --background-color: rgb(13, 20, 25);
     --background-color-button: rgb(28, 45, 56);
-    --font-size-item: 40pt;
-    --font-size-button: 60pt;
-    --margin-button: 20pt;
 }
 
 * { margin: 0; font-family: sans-serif; font-stretch: condensed; }
 body {
     background-color: var(--background-color);
-    padding-bottom: 40pt;
+    padding-bottom: 2em;
 }
 a {
     display: block;
@@ -24,55 +22,64 @@ a {
 a:hover, input[type=submit]:hover { cursor: pointer; }
 :disabled:hover, [disabled]:hover { cursor: not-allowed; }
 
-#items {
-    padding-bottom: 20pt;
+div#items {
+    font-size: 4em;
+    padding-bottom: 2.5em;
     overflow: hidden;
 }
 
-#items.chap { margin-top: 140pt; }
-#items hr { height: 40pt; background-color: var(--background-color); border:none; }
+div#items.chap { margin-top: 4em; }
+div#items > hr { height: 1.2em; background-color: var(--background-color); border:none; }
 
-#items > * {
-    font-size: var(--font-size-item);
+div#items > div {
+    background-image: url('img/out.svg');
+    background-repeat: no-repeat;
+    background-size: 1.5em;
+    background-position: 2.5% 52%;
 }
-#items > a {
-    padding: 30pt;
-    padding-left: 40pt;
+
+div#items > div > a {
+    margin-left: 2.5em;
+    padding: 0.8em;
+    padding-left: 0;
     /* fixes chrome on android text size */
     text-size-adjust: none;
 }
-#items > a.x { color: var(--text-color-done); }
+div#items > div.x > a { color: var(--text-color-done); }
+div#items > div.y > a { color: var(--text-color-out); }
 
-h2, h3, h4 { color: var(--text-color-heading); }
-h4 { font-size: 100%; margin-left: 40pt; }
-h3 { font-size: 110%; margin-left: 30pt; }
-h2 { font-size: 120%; margin-left: 20pt; }
+h1, h2, h3, h4 { color: var(--text-color-heading); }
+h4 { font-size: 100%; margin-left: 1em; }
+h3 { font-size: 110%; margin-left: 0.7em; }
+h2 { font-size: 120%; margin-left: 0.4em; }
 
 form { width: 100%; }
 textarea {
-    margin: 10pt;
+    margin: 0.2em;
     font-family: serif;
     font-stretch: normal;
-    font-size: var(--font-size-item);
-    padding-left: 100pt;
+    font-size: 4em;
+    padding: 2em;
+    padding-right: 0;
     width: 70%;
     border: none;
     background-color: var(--background-color-button);
     color: var(--text-color-open);
 }
 
-body > a, input[type=submit], a#state, h1 {
+body > a, input[type=submit], a#state {
     display: block;
-    margin: var(--margin-button);
-    height: 100pt;
-    background-color: var(--background-color-button);
-    font-size: var(--font-size-button);
+    margin: 0.3em;
+    padding: 0;
+    height: 2em;
+    font-size: 5em;
+    line-height: 2em;
     font-weight: bold;
     text-align: center;
     color: var(--text-color-open);
+    background-color: var(--background-color-button);
     background-repeat: no-repeat;
     background-position: center;
-    line-height: 100pt;
 }
 
 input[type=submit] { width: 95%; border: none; }
@@ -80,13 +87,17 @@ input[type=submit] { width: 95%; border: none; }
 #back   { background-image: url('img/back.svg'); }
 #cancel { background-image: url('img/cancel.svg'); }
 #edit   { background-image: url('img/pen.svg'); }
-#login, #register, #start
+#register, #start
         { background-image: url('img/login.svg'); }
-#logout { background-image: url('img/logout.svg'); }
-#prev   { background-image: url('img/eye.svg'); }
 #remove { background-image: url('img/trash.svg'); }
 #reset  { background-image: url('img/reset.svg'); }
 #save   { background-image: url('img/save.svg'); }
+#imprint, #imprint_back
+        { background-image: url('img/paragraph.svg'); }
+
+#imprint {
+    height: 1em;
+}
 
 a#state {
         background-image: url('img/unchecked.svg');
@@ -124,15 +135,26 @@ a.chap.x  {
 
 #info {
     color: var(--text-color-open);
-    margin: var(--margin-button);
-    font-size: var(--font-size-item);
+    padding: 1em;
+    font-size: 2em;
 }
-#info > h2 { margin-left: 0; font-size: var(--font-size-button); }
+#info > h2 { margin-left: 0; font-size: 3em; }
 #info > textarea {
     padding: 0;
-    margin: var(--margin-button);
+    margin: 0.2em;
     border: 0;
     border-color: Transparent;
     background-color: var(--background-color);
     resize: none;
 }
+#info > pre, #info > pre > a {
+    margin-top: 1em;
+    font-family: 'Courier New', Courier, monospace;
+    overflow-x: auto;
+    padding-bottom: 1em;
+}
+#info > pre > a {
+    color: green;
+    font-weight: bold;
+}
+:disabled:hover, [disabled]:hover { cursor: not-allowed; }

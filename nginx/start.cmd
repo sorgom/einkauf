@@ -15,4 +15,8 @@ call stop.cmd
 
 start /B php-cgi.exe -b 127.0.0.1:9000
 start /B nginx.exe -e %logDir%\error.log -c %myDir%\nginx.conf -p %topDir%
+
+timeout /t 2 /nobreak >nul
+call state.cmd
+
 ENDLOCAL

@@ -9,18 +9,19 @@
     } while (isset($reg[$uid]));
     $reg[$uid] = 1;
     file_put_contents(regFile(), json_encode($reg));
-    copy('template/template.txt', "data/$uid.txt");
-    copy('template/template.data.json', "data/$uid.data.json");
+    $txt = file_get_contents('template/template.txt');
+    clean($txt);
+    txt2data($txt, $heads, $items);
+    wData($heads, $items);
+    wTxt($txt);
 ?>
 <div id=info>
 <h2>OK</h2>
 <p>Kopiere dir diesen Link:</p>
 <textarea id=link readonly autofocus spellcheck=false autofocus onFocus='this.select();this.setSelectionRange(0, 99999);'>
-<?php echo $_SERVER['REQUEST_SCHEME']; echo $_SERVER['HTTP_HOST']; echo"?$uid"; ?>
+<?php echo $_SERVER['REQUEST_SCHEME']; echo '://'; echo $_SERVER['HTTP_HOST']; echo"?$uid"; ?>
 </textarea>
 <p>und lege los ...</p>
 </div>
-<?php
-    b_reg_go();
-?>
+<?php b_reg_go(); ?>
 </body></html>

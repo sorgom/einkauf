@@ -4,4 +4,4 @@ temp
 logs
 site/data/*.*
 !template.*
-
+imprint.txt

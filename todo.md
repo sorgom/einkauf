@@ -1,20 +1,20 @@
 # TODO
-## formatting
-- get rid of the items' icons
-    - just a link within div display
-- headings:
-    - h1 120 %
-    - all other: 100% 
-    - indent increasing by 0.2em 
+## features
+- do we really need the preview? answer: no
 
-- a more catching icon
-## css
-- more elements by id
-    - buttons also
-- background of input textarea
-- background of sign in text input
+## get rid of preview
+- input.ph
+- data.php
+- index.php
 
-## checks
-- remove data content checks and button disabling
- 
- 
+## delete chapter
+- all items marked _not found_ must be moved to _?_ chapter
+- chapter _?_ must always be last
+### data.php
+- analyze text move _?_ chapter to end if in text
+- rename -> save.php
+- get rid of preview
+### fio.php
+- rename data.php
+
+- remove css & svg of unused

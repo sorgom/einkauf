@@ -10,8 +10,8 @@ if (isUid($x))
     require_once('fio.php');
 
     rDone($done);
-    if ($ck == '1') $done[$id] = 1;
-    else
+
+    if (! $ck)
     {
         unset($done[$id]);
         if (preg_match('/^(\d+)\./', $id, $m))
@@ -19,6 +19,7 @@ if (isUid($x))
             unset($done[$m[1]]);
         }
     }
+    else $done[$id] = $ck;
     wDone($done);
 }
 ?>
