@@ -7,29 +7,41 @@
 <link rel=icon type='image/gif' href='img/check_icon.svg'>
 </head><body>
 <?php
+    function toClass($id)
+    {
+        global $done;
+        if (!isset($done[$id])) return '';
+        $v = $done[$id];
+        return ' class=' . ($v == 1 ? 'x' : $v);
+    }
+
+    function b_top($ttl, $v)
+    {
+        global $uid;
+        echo "<a id=top href=/?$uid" . toClass($v) . "><p>$ttl</p></a>\n";
+    }
+
+    function b_chap($cnr, $ttl)
+    {
+        global $uid;
+        echo "<a href=/?$uid&$cnr" . toClass($cnr) ."><p>$ttl</p></a>\n";
+    }
+
+    function b_item($cnr, $inr, $ttl)
+    {
+        $id = "$cnr.$inr";
+        echo "<div id=$id" . toClass($id) . "><a><p>$ttl</p></a></div>\n";
+    }
+
     function b_base($id, $dest, $param=NULL)
     {
         global $uid;
-        $p = is_null($param) ? '' : "&$param";
-        echo "<a id=$id href=$dest?$uid$p> </a>\n";
+        echo "<a id=$id href=$dest?$uid$p" . (is_null($param) ? '' : "&$param") . "> </a>\n";
     }
 
     function b_reset($cnr)
     {
         b_base('reset', 'reset.php', $cnr);
-    }
-
-    function b_top($ttl, $checked=false)
-    {
-        global $uid;
-        echo "<div id=top><a id=state href=/?$uid" . ($checked ? ' class=x' : '') . ">$ttl</a></div>\n";
-    }
-
-    function b_chap($cnr, $ttl, $done = NULL)
-    {
-        global $uid;
-        $cl = $done ? ' x' : '';
-        echo "<a href=/?$uid&$cnr class='chap$cl'>$ttl</a>\n";
     }
 
     function b_edit()

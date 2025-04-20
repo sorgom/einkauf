@@ -79,7 +79,7 @@
     //  valid item line
     function isl($c)
     {
-        return !(empty($c) || $c[0] == '#' || is_array($c));
+        return !(empty($c) || $c[0] == '#');
     }
 
     //  explode for map
@@ -142,8 +142,8 @@
                 }
                 elseif ($line[0] == '#')
                 {
-                    preg_match('/^(#+) *(.*)/', $line, $m);
-                    $item[] = array(strlen($m[1]) + 1, $m[2]);
+                    preg_match('/^#+ *(.*)/', $line, $m);
+                    $item[] = "#$m[2]";
                     $lOk = false;
                 }
                 else

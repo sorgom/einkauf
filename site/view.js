@@ -1,6 +1,6 @@
 var uid;
 var numItems = undefined;
-var btState  = undefined;
+var bTop     = undefined;
 var clicked  = false;
 var cont     = undefined;
 var topId    = undefined;
@@ -17,7 +17,7 @@ function setUid(u)
         item.firstChild.onclick = function() { ck(this) };
     }
     topId = items[0].id.match(/(\d+)\./)[1];
-    btState = document.getElementById('state');
+    bTop = document.getElementById('top');
     console.log('topId', topId)
     count();
 }
@@ -39,14 +39,15 @@ function dea(obj)
 //  check all done
 function count()
 {
-    var cn = btState.className;
-    var ix = cont.getElementsByClassName('x');
-    var iy = cont.getElementsByClassName('y');
-    console.log('count', ix.length, iy.length);
-    var ncn = ix.length + iy.length == numItems ? 'x' : '';
+    var cn = bTop.className;
+    var ncn = '';
+    var ix = cont.getElementsByClassName('x').length;
+    var iy = cont.getElementsByClassName('y').length;
+    if (ix + iy == numItems)
+        ncn = iy > 0 ? 'y' : 'x';
     if (ncn != cn)
     {
-        btState.className = ncn;
+        bTop.className = ncn;
         sendId(topId, ncn);
     }
 }
