@@ -17,7 +17,7 @@ function setUid(u)
         item.firstChild.onclick = function() { ck(this) };
     }
     topId = items[0].id.match(/(\d+)\./)[1];
-    bTop = document.getElementById('top');
+    bTop = document.getElementById('top').firstChild;
     console.log('topId', topId)
     count();
 }

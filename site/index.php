@@ -11,6 +11,7 @@
     //  no chapter: display menu
     if (is_null($chap))
     {
+        b_edit();
         echo "<div id=menu>\n";
         foreach ($heads as $p => $head)
         {
@@ -18,7 +19,6 @@
             if ($ok) b_chap($p, $head, isset($done[$p]));
         }
         echo "</div>\n";
-        b_edit();
         b_imprint();
     }
     //  chapter number given: display chapter

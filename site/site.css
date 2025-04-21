@@ -7,6 +7,8 @@ html {
     --text-color-link: blue;
     --background-color: white(13, 20, 25);
     --background-color-button: rgb(236, 236, 236);
+    --background-color-done: lightgreen;
+    --background-color-out: lightcoral;
     --background-color-alert: orange;
 }
 * {
@@ -17,7 +19,7 @@ html {
 }
 body {
     background-color: var(--background-color);
-    font-size: 4em;
+    font-size: 4.5em;
     padding-bottom: 1em;
 }
 a { text-decoration: none;}
@@ -40,7 +42,7 @@ em {
     color: var(--text-color-alert);
 }
 
-#items > div > a, #menu > a, #top, #remove_confirm {
+#items > div > a, #menu > a, #top > a, #remove_confirm {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -50,20 +52,19 @@ em {
     text-size-adjust: none;
     text-decoration: none;
 }
-#menu > a, #top, #remove_confirm {
+#menu > a, #top > a, #remove_confirm {
     padding-left: 0.8em;
 }
 
 a > p {
     line-height: 85%;
+    overflow-x: clip;
 }
-*.x p { color: var(--text-color-done); }
-*.y p { color: var(--text-color-out); }
 
 #items {
     margin-left: 0.8em;
 }
-#items > div, a#top {
+#items > div, #top > a {
     padding-right: 1.5em;
     background-repeat: no-repeat;
     background-size: 1.2em;
@@ -73,11 +74,12 @@ a > p {
 #items > div {
     background-image: url('img/out.svg');
 }
-a#top {
-    background-image: url('img/back.svg');
+#top {
     position: sticky;
     top: 0;
-    font-weight: bold;
+}
+#top > a {
+    background-image: url('img/back.svg');
 }
 
 #menu > a, body > a, #navi > a {
@@ -94,6 +96,12 @@ body > a, #navi > a {
     background-position: center;
     background-size: 1.8em;
 }
+
+#items *.x p { color: var(--text-color-done); }
+#items *.y p { color: var(--text-color-out); }
+
+#menu *.x, #top *.x { background-color: var(--background-color-done);}
+#menu *.y, #top *.y { background-color: var(--background-color-out); }
 
 #navi {
     position: fixed;

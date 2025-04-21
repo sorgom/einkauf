@@ -20,6 +20,9 @@
 
 This is Open Source.
 <a href='https://github.com/sorgom/todo' target=_blank>view on github ..</a>
+
+PHP <?php echo phpversion() ?>
+
 </div>
 <?php b_back(); ?>
 </body></html>

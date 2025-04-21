@@ -20,7 +20,7 @@
     function b_top($ttl, $v)
     {
         global $uid;
-        echo "<a id=top href=/?$uid" . toClass($v) . "><p>$ttl</p></a>\n";
+        echo "<div id=top><a href=/?$uid" . toClass($v) . "><p>$ttl</p></a></div>\n";
     }
 
     function b_chap($cnr, $ttl)

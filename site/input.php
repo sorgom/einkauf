@@ -18,7 +18,7 @@
 <input type=hidden name=uid value=<?php echo $uid; ?>>
 </form>
 <div id=navi>
-<a onclick="document.getElementById('ff').submit();" id=save> </a>
 <?php b_back(); ?>
+<a onclick="document.getElementById('ff').submit();" id=save> </a>
 </div>
 </body></html>
