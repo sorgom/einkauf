@@ -10,7 +10,7 @@ abstract class StateElem
     {
         global $states;
         $this->id = $id;
-        $this->cl = $states->cl($id);
+        $this->cl = $states->get($id);
     }
 
     public function cl()
@@ -51,7 +51,7 @@ class MenuEntry extends TextElem
     {
         parent::__construct($id, $ttl);
     }
-    public function say()
+    public function html()
     {
         global $uid;
         echo "<a href=/?$uid&" . $this->id() . $this->clstr() . "><p>$this->ttl</p></a>\n";
@@ -64,7 +64,7 @@ class Item extends TextElem
     {
         parent::__construct($id, $ttl);
     }
-    public function say()
+    public function html()
     {
         echo '<div id=' . $this->id() . $this->clstr() . "><a><p>$this->ttl</p></a></div>\n";
     }
@@ -79,11 +79,11 @@ class Menu
         $p = $e->isOut() ? 1 : ($e->isDone() ? 2 : 0);
         $this->order[$p][] = $e;
     }
-    public function say()
+    public function html()
     {
         foreach (array_merge(... $this->order) as $e)
         {
-            $e->say();
+            $e->html();
         }
     }
 }

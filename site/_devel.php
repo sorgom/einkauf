@@ -11,6 +11,6 @@ for ($i = 0; $i < 10; ++$i)
 {
     $m->add($i, "Entry $i");
 }
-$m->say();
-$c->say();
+$m->html();
+$c->html();
 ?>

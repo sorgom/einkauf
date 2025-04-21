@@ -13,7 +13,7 @@ class States
         7 => 'y',
         8 => 'x',
     ];
-    public function cl(mixed $id)
+    public function get(mixed $id)
     {
         $cl = '';
         if (isset($this->states[$id]))
