@@ -143,7 +143,7 @@
                 elseif ($line[0] == '#')
                 {
                     preg_match('/^#+ *(.*)/', $line, $m);
-                    $item[] = "#$m[2]";
+                    $item[] = "#$m[1]";
                     $lOk = false;
                 }
                 else

@@ -1,9 +1,7 @@
 @ Top 1
 item 1
 item 2
-# heading 1
-## heading 2
-### heading 3
+# heading
 item 3
 
 @ Top 2

@@ -5,6 +5,8 @@
 <meta charset='UTF-8'>
 <link rel=stylesheet href='site.css'>
 <link rel=icon type='image/gif' href='img/check_icon.svg'>
+<style>
+</style>
 </head><body>
 <?php
     function toClass($id)
@@ -36,7 +38,7 @@
     function b_base($id, $dest, $param=NULL)
     {
         global $uid;
-        echo "<a id=$id href=$dest?$uid$p" . (is_null($param) ? '' : "&$param") . "> </a>\n";
+        echo "<a id=$id href=$dest?$uid" . (is_null($param) ? '' : "&$param") . "> </a>\n";
     }
 
     function b_reset($cnr)
@@ -67,7 +69,7 @@
     function b_remove_confirm($cnr, $ttl)
     {
         global $uid;
-        echo "<a id=remove_confirm href=remove.php?$uid&$cnr&X>$ttl ?</a>\n";
+        echo "<a id=remove_confirm href=remove.php?$uid&$cnr&X><p>$ttl</p></a>\n";
     }
 
     function b_back()

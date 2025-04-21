@@ -1,7 +1,10 @@
 # todo - a simple shopping list / todo list site
 
-## run
+## run your own
 - Copy content of _site_ folder to your web space.
 
-## disclaimer: imprint required
+### disclaimer: imprint required
 - add _imprint.txt_ text file containing your imprint information to the same web space folder.
+
+## run locally
+- see [nginx folder](nginx/README.md)

@@ -2,10 +2,12 @@ html {
     --text-color-open: black;
     --text-color-done: lightgreen;
     --text-color-out: lightcoral;
-    --text-color-heading: rgb(46, 77, 98);
+    --text-color-heading: #BBB;
     --text-color-alert: red;
+    --text-color-link: blue;
     --background-color: white(13, 20, 25);
     --background-color-button: rgb(236, 236, 236);
+    --background-color-alert: orange;
 }
 * {
     margin:0;
@@ -18,41 +20,143 @@ body {
     font-size: 4em;
     padding-bottom: 1em;
 }
-a {
+a { text-decoration: none;}
+a:hover { cursor: pointer; }
+
+h1, h2, h3, h4 { color: var(--text-color-heading); }
+
+hr {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border: none;
+}
+
+pre {
+    word-wrap: normal;
+}
+
+em {
+    font-style: normal;
+    color: var(--text-color-alert);
+}
+
+#items > div > a, #menu > a, #top, #remove_confirm {
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-height: 2em;
-    padding: 0.1em 0 0.1em 0.8em;
-    margin-bottom: 0.1em;
+    padding: 0.1em;
+    padding-right: 0;
     text-size-adjust: none;
     text-decoration: none;
 }
-a:hover { cursor: pointer; }
+#menu > a, #top, #remove_confirm {
+    padding-left: 0.8em;
+}
+
 a > p {
     line-height: 85%;
 }
-/* *.x > p, div.x > a > p { color: var(--text-color-done); }
-*.y > p, div.y > a > p { color: var(--text-color-out); } */
 *.x p { color: var(--text-color-done); }
 *.y p { color: var(--text-color-out); }
 
+#items {
+    margin-left: 0.8em;
+}
 #items > div, a#top {
     padding-right: 1.5em;
-    margin: 0;
-    background-image: url('img/out.svg');
     background-repeat: no-repeat;
     background-size: 1.2em;
     background-position: 97.5% 52%;
     margin-bottom: 0.3em;
 }
-
-#menu > a, a#top {
-    background-color: rgb(236, 236, 236);
+#items > div {
+    background-image: url('img/out.svg');
 }
 a#top {
     background-image: url('img/back.svg');
     position: sticky;
     top: 0;
     font-weight: bold;
+}
+
+#menu > a, body > a, #navi > a {
+    margin-bottom: 0.1em;
+}
+#menu > a, #top {
+    background-color: var(--background-color-button);
+}
+body > a, #navi > a {
+    display: block;
+    height: 2em;
+    background-color: var(--background-color-button);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1.8em;
+}
+
+#navi {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 25%;
+}
+
+form { width: 100%; }
+form > textarea {
+    width: 70%;
+    margin-left: 25%;
+    z-index: 1;
+    font-family: serif;
+    font-stretch: normal;
+    font-size: 1em;
+    padding: 1em;
+    padding-right: 0;
+    color: var(--text-color-open);
+    border-color: var(--background-color-button);
+    resize: none;
+}
+
+
+#back   { background-image: url('img/back.svg'); }
+#edit   { background-image: url('img/pen.svg'); }
+#imprint, #imprint_back
+        { background-image: url('img/paragraph.svg'); }
+#register, #start
+        { background-image: url('img/login.svg'); }
+#remove { background-image: url('img/trash.svg'); }
+#remove_confirm {
+        background-image: url('img/trash.svg');
+        background-color: var(--background-color-alert);
+        background-position: left;
+        padding-left: 2.5em;
+}
+
+#reset  { background-image: url('img/reset.svg'); }
+#save   { background-image: url('img/save.svg'); }
+
+div.imprint {
+    padding: 0.5em;
+    white-space: pre;
+    word-wrap: normal;
+}
+div.imprint > a {
+    color: var(--text-color-link);
+}
+
+#info {
+    color: var(--text-color-open);
+    padding: 1em;
+}
+
+#info > textarea {
+    width: 70%;
+    margin-top: 0.5em;
+    font-size: 1em;
+    padding: 0;
+    border: none;
+    border-color: Transparent;
+    background-color: var(--background-color);
+    color: var(--text-color-link);
+    resize: none;
 }

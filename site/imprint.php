@@ -3,19 +3,23 @@
     b_imprint_back();
 ?>
 
-<div id=info>
+<div class=imprint>
 <?php
     $iFile = 'imprint.txt';
     if (file_exists($iFile))
     {
-        $imprint = file_get_contents($iFile);
-        echo "<pre>$imprint<a href='https://github.com/sorgom/todo' target=_blank>This is Open Source.</a></pre>";
+        echo htmlentities(file_get_contents($iFile));
     }
     else
     {
-        echo "<p>Imprint not found.</p>";
+        echo "Imprint not found.";
     }
+
 ?>
+
+
+This is Open Source.
+<a href='https://github.com/sorgom/todo' target=_blank>view on github ..</a>
 </div>
 <?php b_back(); ?>
 </body></html>

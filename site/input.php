@@ -3,11 +3,10 @@
     require_once('usr.php');
     setUid();
     require_once("body.php");
-    $state = ' disabled';
     require_once('fio.php');
 ?>
 <script src=input.js></script>
-<form action=data.php method=post>
+<form action=data.php method=post id=ff>
     <textarea name=txt rows=20 autofocus oninput="checkInput(this, 'save')"><?php
     rTxt($txt);
     if ($txt)
@@ -16,8 +15,10 @@
         $state = '';
     }
 ?></textarea>
-<input type=submit value='' id=save  <?php echo $state; ?>>
-<input type=submit value='' name=cancel id=cancel>
 <input type=hidden name=uid value=<?php echo $uid; ?>>
 </form>
+<div id=navi>
+<a onclick="document.getElementById('ff').submit();" id=save> </a>
+<?php b_back(); ?>
+</div>
 </body></html>

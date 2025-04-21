@@ -18,8 +18,8 @@
             if ($ok) b_chap($p, $head, isset($done[$p]));
         }
         echo "</div>\n";
-        // b_edit();
-        // b_imprint();
+        b_edit();
+        b_imprint();
     }
     //  chapter number given: display chapter
     else
@@ -44,8 +44,8 @@
         echo "</div>\n";
         echo "<script src=view.js></script>\n";
         echo "<script>setUid('$uid');</script>\n";
-        // b_reset($chap);
-        // b_remove($chap);
+        b_reset($chap);
+        b_remove($chap);
     }
 ?>
 </body></html>
