@@ -1,8 +1,11 @@
 <?php
+require_once('UsrObjects.php');
 
 require_once('OutputObjects.php');
 
-$uid = 'A321863A';
+if (!Usr::instance()->valid()) exit();
+
+Register::instance()->add('ABC');
 
 $c = new Item(12, 4, 'wumpel');
 new Menu();

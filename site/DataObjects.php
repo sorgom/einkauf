@@ -1,6 +1,6 @@
 <?php
 
-echo "<!-- states -->\n";
+require_once('UsrObjects.php');
 
 abstract class DataObject
 {
@@ -9,7 +9,7 @@ abstract class DataObject
     public function __construct(string $ext)
     {
         global $uid;
-        $this->file = self::$dir . "/$uid.$ext";
+        $this->file = self::$dir . '/' . Usr::instance()->uid() . ".$ext";
     }
     public function delete()
     {
@@ -17,7 +17,7 @@ abstract class DataObject
     }
     protected function _save(mixed $cont)
     {
-        $this->check();
+        if (!is_dir(self::$dir)) mkdir(self::$dir);
         file_put_contents($this->file, $cont);
     }
     protected function _load(mixed &$cont)
@@ -26,18 +26,14 @@ abstract class DataObject
         if ($ok) $cont = file_get_contents($this->file);
         return $ok;
     }
-    private function check()
-    {
-        if (!is_dir(self::$dir)) mkdir(self::$dir);
-    }
 }
 
 class States extends DataObject
 {
-    private static $instance = NULL;
     private array $states = [];
     public function __construct(bool $load=false)
     {
+        echo "new States\n";
         parent::__construct('log.json');
         if ($load) $this->load();
     }
@@ -73,17 +69,13 @@ class States extends DataObject
     }
     public static function instance()
     {
-        if (is_null(self::$instance))
-        {
-            self::$instance = new States(true);
-        }
-        return self::$instance;
+        static $instance = new States(true);
+        return $instance;
     }
 }
 
 class Data extends DataObject
 {
-    private static $instance = NULL;
     private array $heads = [];
     private array $items = [];
 
@@ -155,11 +147,8 @@ class Data extends DataObject
 
     public static function instance()
     {
-        if (is_null(self::$instance))
-        {
-            self::$instance = new Data(true);
-        }
-        return self::$instance;
+        static $instance = new Data(true);
+        return $instance;
     }
 }
 ?>
