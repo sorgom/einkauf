@@ -7,19 +7,19 @@ require_once('usr.php');
 if (isUid($x))
 {
     $uid = $x;
-    require_once('fio.php');
+    require_once('data.php');
 
-    rDone($done);
+    rStates($states);
 
     if (! $ck)
     {
-        unset($done[$id]);
+        unset($states[$id]);
         if (preg_match('/^(\d+)\./', $id, $m))
         {
-            unset($done[$m[1]]);
+            unset($states[$m[1]]);
         }
     }
-    else $done[$id] = $ck;
-    wDone($done);
+    else $states[$id] = $ck;
+    wStates($states);
 }
 ?>

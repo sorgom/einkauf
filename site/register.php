@@ -2,7 +2,7 @@
 <?php
     require_once("body.php");
     require_once('usr.php');
-    require_once('fio.php');
+    require_once('data.php');
     $reg = getReg();
     do {
         $uid = strtoupper(dechex(rand(0xA0000000, 0xFFFFFFFF)));

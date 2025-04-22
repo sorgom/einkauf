@@ -4,15 +4,15 @@ setUid();
 $chap = getParam();
 if (!is_null($chap))
 {
-    require_once('fio.php');
-    rDone($done);
+    require_once('data.php');
+    rStates($states);
     $rx = "/^$chap(?:\.|$)/";
 
-    foreach (array_keys($done) as $k)
+    foreach (array_keys($states) as $k)
     {
-        if (preg_match($rx, $k)) unset($done[$k]);
+        if (preg_match($rx, $k)) unset($states[$k]);
     }
-    wDone($done);
+    wStates($states);
 }
 goView($chap);
 ?>

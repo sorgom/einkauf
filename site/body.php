@@ -11,9 +11,9 @@
 <?php
     function toClass($id)
     {
-        global $done;
-        if (!isset($done[$id])) return '';
-        $v = $done[$id];
+        global $states;
+        if (!isset($states[$id])) return '';
+        $v = $states[$id];
         return ' class=' . ($v == 1 ? 'x' : $v);
     }
 

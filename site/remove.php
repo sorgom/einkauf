@@ -2,7 +2,7 @@
     require_once('usr.php');
     setUid();
     $cnr = getParam();
-    require_once('fio.php');
+    require_once('data.php');
 
     if (count($params) < 2)
     {
@@ -15,7 +15,7 @@
     else
     {
         rTxt($txt);
-        rDone($done);
+        rStates($states);
         $rx = '/^@.*\n?/m';
         preg_match_all($rx, $txt, $heads);
         $heads = array_shift($heads);
@@ -46,7 +46,7 @@
         foreach ($a as $p => $line)
         {
             $c = "$cnr.$p";
-            if (isset($done[$c]) && $done[$c] == 'y') $nfd[] = $line;
+            if (isset($states[$c]) && $states[$c] == 'y') $nfd[] = $line;
         }
         addNfd($txt, $nfd);
         save($txt, preg_match('/^@ \.\.\.\n?$/', $heads[$cnr]));

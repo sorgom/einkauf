@@ -1,12 +1,15 @@
 # TODO
 ## features
 ## layout
-- menu: edit on top and sticky
+### menu
+- edit sticky ?
+- change order: open, out, done
+### items
 
+## oop
+### data.php
 
 ### rename
-- data -> save.php
-- fio -> data.php
 
 ### remove
 - some svg images:

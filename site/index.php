@@ -2,10 +2,10 @@
     require_once('usr.php');
     setUid();
     require_once("body.php");
-    require_once('fio.php');
+    require_once('data.php');
 
     $chap = getParam();
-    rDone($done);
+    rStates($states);
     rData($heads, $items);
 
     //  no chapter: display menu
@@ -16,7 +16,7 @@
         foreach ($heads as $p => $head)
         {
             $ok = !empty($items[$p]);
-            if ($ok) b_chap($p, $head, isset($done[$p]));
+            if ($ok) b_chap($p, $head, isset($states[$p]));
         }
         echo "</div>\n";
         b_imprint();

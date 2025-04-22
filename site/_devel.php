@@ -1,16 +1,11 @@
 <?php
 
-require_once('_states.php');
-require_once('_elements.php');
+require_once('OutputObjects.php');
 
-$uid = 'abcdefg';
+$uid = 'A321863A';
 
-$c = new Item(5, 'wumpel');
-$m = new Menu();
-for ($i = 0; $i < 10; ++$i)
-{
-    $m->add($i, "Entry $i");
-}
-$m->html();
+$c = new Item(12, 4, 'wumpel');
+new Menu();
 $c->html();
+new ItemList(1);
 ?>
