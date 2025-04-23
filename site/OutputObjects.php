@@ -13,6 +13,15 @@ abstract class StateElem
         $this->cl = States::instance()->cl($id);
     }
 
+    public function isDone()
+    {
+        return $this->cl == 'x';
+    }
+    public function isOut()
+    {
+        return $this->cl == 'y';
+    }
+
     public function cl()
     {
         return $this->cl;
@@ -25,13 +34,9 @@ abstract class StateElem
     {
         return $this->id;
     }
-    public function isDone()
+    protected static function out(... $items)
     {
-        return $this->cl == 'x';
-    }
-    public function isOut()
-    {
-        return $this->cl == 'y';
+        echo implode('', $items) . "\n";
     }
 }
 
@@ -53,8 +58,7 @@ class MenuEntry extends TextElem
     }
     public function html()
     {
-        global $uid;
-        echo "<a href=/?$uid&" . $this->id() . $this->clstr() . "><p>$this->ttl</p></a>\n";
+        self::out('<a href=/?', Usr::instance()->uid(), '&' , $this->id() , $this->clstr(), '><p>', htmlentities($this->ttl), '</p></a>');
     }
 }
 
@@ -85,7 +89,8 @@ class Item extends TextElem
     }
     public function html()
     {
-        echo '<div id=' . $this->id() . $this->clstr() . "><a><p>$this->ttl</p></a></div>\n";
+
+        self::out('<div id=', $this->id(), $this->clstr(), '><a><p>', htmlentities($this->ttl), '</p></a></div>');
     }
 }
 
