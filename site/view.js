@@ -1,4 +1,4 @@
-var uid;
+var uid      = undefined;;
 var numItems = undefined;
 var bTop     = undefined;
 var clicked  = false;
@@ -16,9 +16,7 @@ function setUid(u)
         item.onclick = function() { dea(this) };
         item.firstChild.onclick = function() { ck(this) };
     }
-    topId = items[0].id.match(/(\d+)\./)[1];
     bTop = document.getElementById('top').firstChild;
-    console.log('topId', topId)
     count();
 }
 
@@ -32,7 +30,7 @@ function dea(obj)
     }
     obj.classList.remove('x');
     obj.classList.toggle('y');
-    sendId(obj.id, obj.className);
+    send(obj);
     count();
 }
 
@@ -48,15 +46,14 @@ function count()
     if (ncn != cn)
     {
         bTop.className = ncn;
-        sendId(topId, ncn);
+        send(bTop);
     }
 }
 
-//  send state
-function sendId(id, val)
+//  send object state (class)
+function send(obj)
 {
-    console.log('val:', val);
-    var data = 'uid=' + uid + '&id=' + id + '&ck=' + val;
+    var data = 'uid=' + uid + '&id=' + obj.id + '&ck=' + obj.className;
     console.log('data:', data);
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'done.php', true);
@@ -71,8 +68,7 @@ function ck(obj)
     var p = obj.parentElement;
     if (p.classList.contains('y')) return;
 
-    console.log('ck');
     p.classList.toggle('x');
-    sendId(p.id, p.className);
+    send(p);
     count();
 }

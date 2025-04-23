@@ -2,14 +2,47 @@
 
 require_once('DataObjects.php');
 
-abstract class StateElem
+abstract class BaseElem
 {
     private string $id;
+
+    protected function __construct(string|int $id)
+    {
+        $this->id = $id;
+    }
+
+    protected static function cat(... $items)
+    {
+        return implode('', $items);
+    }
+
+    protected static function out(... $items)
+    {
+        echo implode('', $items) . "\n";
+    }
+
+    protected function id()
+    {
+        return $this->id;
+    }
+    protected function idstr()
+    {
+        return " id=$this->id";
+    }
+    protected static function anc(mixed $param=NULL, string $target='')
+    {
+        return self::cat('<a href=', (empty($target) ? '/' : "$target.php"), '?', Usr::instance()->uid(), (is_null($param) ? '' : "&$param") );
+    }
+
+}
+
+abstract class StateElem extends BaseElem
+{
     private string $cl = '';
     protected function __construct(string|int $id)
     {
+        parent::__construct($id);
         global $states;
-        $this->id = $id;
         $this->cl = States::instance()->cl($id);
     }
 
@@ -29,14 +62,6 @@ abstract class StateElem
     protected function clstr()
     {
         return $this->cl ?  " class=$this->cl" : '';
-    }
-    protected function id()
-    {
-        return $this->id;
-    }
-    protected static function out(... $items)
-    {
-        echo implode('', $items) . "\n";
     }
 }
 
@@ -58,7 +83,7 @@ class MenuEntry extends TextElem
     }
     public function html()
     {
-        self::out('<a href=/?', Usr::instance()->uid(), '&' , $this->id() , $this->clstr(), '><p>', htmlentities($this->ttl), '</p></a>');
+        self::out(self::anc($this->id()),  $this->clstr(), '><p>', htmlentities($this->ttl), '</p></a>');
     }
 }
 
@@ -74,10 +99,14 @@ class Menu
             $p = $e->isOut() ? 1 : ($e->isDone() ? 2 : 0);
             $order[$p][] = $e;
         }
+        new MenuEdit();
+        echo "<div id=menu>\n";
         foreach (array_merge(... $order) as $e)
         {
             $e->html();
         }
+        echo "</div>\n";
+        new MenuImprint();
     }
 }
 
@@ -90,7 +119,7 @@ class Item extends TextElem
     public function html()
     {
 
-        self::out('<div id=', $this->id(), $this->clstr(), '><a><p>', htmlentities($this->ttl), '</p></a></div>');
+        self::out('<div', $this->idstr(), $this->clstr(), '><a><p>', htmlentities($this->ttl), '</p></a></div>');
     }
 }
 
@@ -98,6 +127,8 @@ class ItemList
 {
     public function __construct($cnr)
     {
+        new ChapTop($cnr);
+        echo "<div id=items>\n";
         $inr = 0;
         foreach (Data::instance()->items()[$cnr] as $i)
         {
@@ -113,7 +144,68 @@ class ItemList
                 ++$inr;
             }
         }
+        echo "</div>\n";
+        new ChapReset($cnr);
+        new ChapRemove($cnr);
     }
 }
 
+class ChapTop extends TextElem
+{
+    public function __construct(int $cnr)
+    {
+        parent::__construct($cnr, Data::instance()->heads()[$cnr]);
+        $this->html();
+    }
+    public function html()
+    {
+        self::out('<div id=top>', self::anc(), $this->idstr(), $this->clstr(), '><p>', htmlentities($this->ttl), '</p></a></div>');
+    }
+}
+
+class Link extends BaseElem
+{
+    private string $target;
+    private string $param;
+    public function __construct(string $id, mixed $param=NULL, string $target='')
+    {
+        parent::__construct($id);
+        $this->target = $target;
+        $this->param = $param;
+        $this->html();
+    }
+    public function html()
+    {
+        self::out(self::anc($this->param, $this->target), $this->idstr(), '> </a>');
+    }
+}
+
+class ChapReset extends Link
+{
+    public function __construct($cnr) { parent::__construct('reset', $cnr, 'reset'); }
+}
+class ChapRemove extends Link
+{
+    public function __construct($cnr) { parent::__construct('remove', $cnr, 'remove'); }
+}
+class MenuEdit extends Link
+{
+    public function __construct() { parent::__construct('edit', '', 'input'); }
+}
+class MenuImprint extends Link
+{
+    public function __construct() { parent::__construct('imprint', '', 'imprint'); }
+}
+
+class Back extends BaseElem
+{
+    public function __construct() {
+        parent::__construct('back');
+        $this->html();
+    }
+    private function html()
+    {
+        self::out('<a' , $this->idstr(), ' href=javascript:history.back()> </a>');
+    }
+}
 ?>

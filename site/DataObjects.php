@@ -11,7 +11,7 @@ abstract class DataObject
         global $uid;
         $this->file = self::$dir . '/' . Usr::instance()->uid() . ".$ext";
     }
-    public function delete()
+    public function _delete()
     {
         if (file_exists($this->file)) unlink($this->file);
     }
@@ -20,40 +20,48 @@ abstract class DataObject
         if (!is_dir(self::$dir)) mkdir(self::$dir);
         file_put_contents($this->file, $cont);
     }
-    protected function _load(mixed &$cont)
+    protected function _load(&$cont)
     {
+        // echo "File: $this->file\n";
         $ok = file_exists($this->file);
-        if ($ok) $cont = file_get_contents($this->file);
+        if ($ok)
+        {
+            $cont = file_get_contents($this->file);
+            // var_dump($cont);
+        }
         return $ok;
     }
-    protected static function isl(string &$c)
+    protected static function isl(string $c)
     {
         return !(empty($c) || $c[0] == '#');
     }
 
-    protected static function xpl(string &$s) { return explode("\n", $s); }
+    protected static function xpl(string $s) { return explode("\n", $s); }
 
     protected static function impl($a) { return implode("\n", $a); }
 }
 
 class States extends DataObject
 {
-    private array $states = [];
+    private array $states = array();
     public function __construct(bool $load=false)
     {
-        echo "new States\n";
         parent::__construct('log.json');
         if ($load) $this->load();
     }
     public function load()
     {
-        if ($this->_load($data)) $this->states = json_decode($data, true);
+        if ($this->_load($data))
+        {
+            // var_dump($data);
+            $this->states = json_decode($data, true);
+        }
         else $this->states = [];
     }
     public function save()
     {
-        if (empty($this->states)) $this->delete();
-        else $this->_save(json_encode($states));
+        if (empty($this->states)) $this->_delete();
+        else $this->_save(json_encode($this->states));
     }
 
     public function given()
@@ -81,6 +89,16 @@ class States extends DataObject
     public function set($val, ...$ids)
     {
         if ($val) $this->states[implode('.', $ids)] = $val;
+    }
+
+    public function reset(int $cnr)
+    {
+        unset($this->states[$cnr]);
+        $rx = "/^$cnr\.)/";
+        foreach (array_keys($this->states) as $k)
+        {
+            if (preg_match($rx, $k)) unset($this->states[$k]);
+        }
     }
 
     public static function instance()
@@ -119,7 +137,7 @@ class Data extends DataObject
     }
     public function lines(int $cnr)
     {
-        return array_values(array_filter($this->items[$cnr], 'self::isl'));
+        return array_values(array_filter($this->items[$cnr], 'DataObject::isl'));
     }
 
     public function given()
@@ -196,9 +214,17 @@ class Txt extends DataObject
         $this->clean();
         $this->locateNfd();
     }
+    public function txt()
+    {
+        return $this->txt;
+    }
 
     public function save()
     {
+        $nData   = new Data();
+        $nData->set($this->txt);
+        $nStates = new States();
+
         $oData   = Data::Instance();
         $oStates = States::instance();
         if ($oStates->given() && $oData->given())
@@ -211,9 +237,6 @@ class Txt extends DataObject
                     $map->set($oStates->cl($cnr, $inr), $head, $line);
                 }
             }
-            $nData   = new Data;
-            $nStates = new States;
-            $nData->set($this->txt);
             foreach ($nData->heads() as $cnr => $head)
             {
                 foreach ($nData->lines($cnr) as $inr => $line)
@@ -221,10 +244,10 @@ class Txt extends DataObject
                     $nStates->set($map->cl($head, $line), $cnr, $inr);
                 }
             }
-            $nData->save();
-            $nStates->save();
         }
         $this->_save($this->txt);
+        $nData->save();
+        $nStates->save();
     }
 
     public static function instance()
@@ -254,7 +277,7 @@ class Txt extends DataObject
             $rx = '/(^|\n)@ *\.\.\.(?:\n(?:@|(.*?))?)(\n@|$)/s';
             if (preg_match_all($rx, $this->txt, $m))
             {
-                $a = array_merge(... array_map('self::xpl', $m[2]));
+                $a = array_merge(... array_map('DataObject::xpl', $m[2]));
                 $this->txt = preg_replace($rx, '\1\3', $this->txt);
                 $this->addNfd($a);
                 $this->despace();
@@ -262,10 +285,10 @@ class Txt extends DataObject
         }
     }
 
-    private static function addNfd($nfd)
+    private function addNfd($nfd)
     {
         if (!empty($nfd))
-            $this->txt = trim($this->txt) . "\n\n@ ...\n" . self::impl(array_filter(array_unique($nfd), 'self::isl'));
+            $this->txt = trim($this->txt) . "\n\n@ ...\n" . self::impl(array_filter(array_unique($nfd), 'DataObject::isl'));
     }
 
 }

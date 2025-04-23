@@ -1,24 +1,18 @@
 
 <?php
-    require_once('usr.php');
-    setUid();
+    require_once('OutputObjects.php');
+    Usr::instance()->check();
     require_once("body.php");
-    require_once('data.php');
 ?>
 <script src=input.js></script>
 <form action=save.php method=post id=ff>
     <textarea name=txt rows=20 autofocus oninput="checkInput(this, 'save')"><?php
-    rTxt($txt);
-    if ($txt)
-    {
-        echo $txt;
-        $state = '';
-    }
+    echo Txt::instance()->txt();
 ?></textarea>
-<input type=hidden name=uid value=<?php echo $uid; ?>>
+<input type=hidden name=uid value=<?php echo Usr::instance()->uid(); ?>>
 </form>
 <div id=navi>
-<?php b_back(); ?>
+<?php new Back(); ?>
 <a onclick="document.getElementById('ff').submit();" id=save> </a>
 </div>
 </body></html>

@@ -8,7 +8,6 @@ class Register
 
     public function __construct(bool $load=false)
     {
-        echo "new Register\n";
         if ($load) $this->load();
     }
     public function save()
@@ -68,9 +67,27 @@ class Usr
         return $this->uid;
     }
 
+    public function check()
+    {
+        if (!$this->valid) header("Location: $php?" . $this->uid);
+    }
+
+    public function go(string $php)
+    {
+        header("Location: $php.php?" . $this->uid);
+    }
+    public function view($cnr=NULL)
+    {
+        header("Location: /?" . $this->uid . (is_null($cnr) ? '' : "&$cnr"));
+    }
+
+    function param()
+    {
+        return empty($this->params) ? NULL : $this->params[0];
+    }
+
     private function __construct()
     {
-        echo "new Usr\n";
         if ($_POST)
         {
             $this->uid = $_POST['uid'];
