@@ -1,5 +1,5 @@
 <?php
-require_once('DataObjects.php');
+require_once('TxtObject.php');
 Usr::instance()->check();
 $cnr = Usr::instance()->param();
 if (!is_null($cnr))

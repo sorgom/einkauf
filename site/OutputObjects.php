@@ -136,7 +136,7 @@ class ItemList
             elseif (is_array($i));
             elseif ($i[0] == '#')
             {
-                echo '<h3>' . substr($i, 1) . "</h3>\n";
+                echo '<h3>' . substr($i, 2) . "</h3>\n";
             }
             else
             {

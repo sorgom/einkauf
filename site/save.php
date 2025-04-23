@@ -1,5 +1,5 @@
 <?php
-    require_once('DataObjects.php');
+    require_once('TxtObject.php');
     Usr::instance()->check();
 
     if (empty($_POST['txt'])) Usr::instance()->go('input');

@@ -1,8 +1,9 @@
 
 <?php
-    require_once('OutputObjects.php');
+    require_once('TxtObject.php');
     Usr::instance()->check();
     require_once("body.php");
+    require_once("OutputObjects.php");
 ?>
 <script src=input.js></script>
 <form action=save.php method=post id=ff>

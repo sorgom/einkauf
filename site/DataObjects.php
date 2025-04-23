@@ -22,13 +22,8 @@ abstract class DataObject
     }
     protected function _load(&$cont)
     {
-        // echo "File: $this->file\n";
         $ok = file_exists($this->file);
-        if ($ok)
-        {
-            $cont = file_get_contents($this->file);
-            // var_dump($cont);
-        }
+        if ($ok) $cont = file_get_contents($this->file);
         return $ok;
     }
     protected static function isl(string $c)
@@ -43,7 +38,7 @@ abstract class DataObject
 
 class States extends DataObject
 {
-    private array $states = array();
+    private array $states = [];
     public function __construct(bool $load=false)
     {
         parent::__construct('log.json');
@@ -51,11 +46,7 @@ class States extends DataObject
     }
     public function load()
     {
-        if ($this->_load($data))
-        {
-            // var_dump($data);
-            $this->states = json_decode($data, true);
-        }
+        if ($this->_load($data)) $this->states = json_decode($data, true);
         else $this->states = [];
     }
     public function save()
@@ -171,7 +162,7 @@ class Data extends DataObject
                 elseif ($line[0] == '#')
                 {
                     preg_match('/^#+ *(.*)/', $line, $m);
-                    $item[] = "#$m[1]";
+                    $item[] = "# $m[1]";
                     $lOk = false;
                 }
                 else
@@ -188,6 +179,22 @@ class Data extends DataObject
         $this->items = $items;
     }
 
+    public function remove(int $cnr)
+    {
+        $res = [];
+        $nfd = [];
+        $lines = $this->lines($cnr);
+        $states = States::instance();
+        foreach ($lines as $inr => $i)
+        {
+            if ($states->cl($cnr, $inr) == 'y') $nfd[] = $line;
+        }
+        foreach ($this->heads as $cnr => $head)
+        {
+
+        }
+    }
+
     public static function instance()
     {
         static $instance = new Data(true);
@@ -195,101 +202,4 @@ class Data extends DataObject
     }
 }
 
-class Txt extends DataObject
-{
-    private string $txt = '';
-    public function __construct(bool $load=false)
-    {
-        parent::__construct('txt');
-        if ($load) $this->load();
-    }
-    public function load()
-    {
-        $this->_load($this->txt);
-    }
-
-    public function set(string $txt)
-    {
-        $this->txt = $txt;
-        $this->clean();
-        $this->locateNfd();
-    }
-    public function txt()
-    {
-        return $this->txt;
-    }
-
-    public function save()
-    {
-        $nData   = new Data();
-        $nData->set($this->txt);
-        $nStates = new States();
-
-        $oData   = Data::Instance();
-        $oStates = States::instance();
-        if ($oStates->given() && $oData->given())
-        {
-            $map = new States();
-            foreach ($oData->heads() as $cnr => $head)
-            {
-                foreach ($oData->lines($cnr) as $inr => $line)
-                {
-                    $map->set($oStates->cl($cnr, $inr), $head, $line);
-                }
-            }
-            foreach ($nData->heads() as $cnr => $head)
-            {
-                foreach ($nData->lines($cnr) as $inr => $line)
-                {
-                    $nStates->set($map->cl($head, $line), $cnr, $inr);
-                }
-            }
-        }
-        $this->_save($this->txt);
-        $nData->save();
-        $nStates->save();
-    }
-
-    public static function instance()
-    {
-        static $instance = new Txt(true);
-        return $instance;
-    }
-
-    private function despace()
-    {
-        $this->txt = preg_replace('/\n{3,}/', "\n\n", $this->txt);
-    }
-
-    private function clean()
-    {
-        $this->txt = trim(preg_replace('/^ *| *$/m', '', preg_replace('/\r\n|\r/', "\n", str_replace("\t", ' ', $this->txt))));
-        $this->despace();
-    }
-
-    private function locateNfd()
-    {
-        if (preg_match('/^@ *\.\.\.$/ms', $this->txt))
-        {
-            // empty ones
-            $this->txt = preg_replace('/(^|\n)@ *\.\.\.(?:\n(\s*@)|\s*$)/', '\1\2', $this->txt);
-
-            $rx = '/(^|\n)@ *\.\.\.(?:\n(?:@|(.*?))?)(\n@|$)/s';
-            if (preg_match_all($rx, $this->txt, $m))
-            {
-                $a = array_merge(... array_map('DataObject::xpl', $m[2]));
-                $this->txt = preg_replace($rx, '\1\3', $this->txt);
-                $this->addNfd($a);
-                $this->despace();
-            }
-        }
-    }
-
-    private function addNfd($nfd)
-    {
-        if (!empty($nfd))
-            $this->txt = trim($this->txt) . "\n\n@ ...\n" . self::impl(array_filter(array_unique($nfd), 'DataObject::isl'));
-    }
-
-}
 ?>
