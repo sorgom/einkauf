@@ -1,11 +1,10 @@
 <?php
-    require_once('TxtObject.php');
+    require_once('data.php');
     usr()->check();
 
     if (empty($_POST['txt'])) usr()->go('input');
-
-    $txt = new Txt();
-    $txt->set($_POST['txt']);
-    $txt->save();
+    $data = new Data();
+    $data->set($_POST['txt']);
+    $data->save();
     usr()->view();
 ?>

@@ -1,6 +1,5 @@
 <?php
-    require_once("body.php");
-    require_once('OutputObjects.php');
+    require_once("view.php");
     usr()->check();
 
     $chap = usr()->param();

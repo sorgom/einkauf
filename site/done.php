@@ -3,10 +3,10 @@ $x = $_POST['uid'];
 $id = $_POST['id'];
 $ck = $_POST['ck'];
 
-require_once('UsrObjects.php');
+require_once('usr.php');
 if (usr()->valid())
 {
-    require_once('DataObjects.php');
+    require_once('data.php');
     states()->set($ck, $id);
     states()->save();
 }

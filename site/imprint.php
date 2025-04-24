@@ -1,6 +1,6 @@
 <?php
-    require_once("body.php");
-    b_imprint_back();
+    require_once("view.php");
+    new ImprintBack();
 ?>
 
 <div class=imprint>
@@ -24,5 +24,5 @@ This is Open Source.
 PHP <?php echo phpversion() ?>
 
 </div>
-<?php b_back(); ?>
+<?php new Back(); ?>
 </body></html>

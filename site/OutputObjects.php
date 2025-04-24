@@ -1,6 +1,6 @@
 <?php
 
-require_once('DataObjects.php');
+require_once('data.php');
 
 abstract class BaseElem
 {
@@ -18,7 +18,7 @@ abstract class BaseElem
 
     protected static function out(... $items)
     {
-        echo implode('', $items) . "\n";
+        echo self::cat($items) . "\n";
     }
 
     protected function id()

@@ -1,5 +1,5 @@
 <?php
-require_once('DataObjects.php');
+require_once('data.php');
 
 class Txt extends DataObject
 {

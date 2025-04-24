@@ -1,14 +1,12 @@
 
 <?php
-    require_once('TxtObject.php');
+    require_once("view.php");
     usr()->check();
-    require_once("body.php");
-    require_once("OutputObjects.php");
 ?>
 <script src=input.js></script>
 <form action=save.php method=post id=ff>
     <textarea name=txt rows=20 autofocus oninput="checkInput(this, 'save')"><?php
-    echo Txt::instance()->txt();
+    echo data()->txt();
 ?></textarea>
 <input type=hidden name=uid value=<?php echo usr()->uid(); ?>>
 </form>

@@ -1,6 +1,6 @@
 
 <?php
-    require_once("body.php");
+    require_once("view.php");
     require_once('usr.php');
     require_once('data.php');
     $reg = getReg();

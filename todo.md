@@ -3,13 +3,16 @@
 ## layout
 ### menu
 - edit sticky ?
-- change order: open, out, done
 ### items
+### input
+- navi on top
+- full width
 
 ## oop
 ### data.php
 
 ### rename
+
 
 ### remove
 - some svg images:

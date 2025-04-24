@@ -1,59 +1,116 @@
 <?php
-    $uid = NULL;
-    $params = array();
 
-    function regFile()
+class Register
+{
+    private static string $dir = 'data';
+    private static string $file = 'data/reg.json';
+    private array $uids = [];
+
+    public function __construct(bool $load=false)
     {
-        return 'data/reg.json';
+        if ($load) $this->load();
     }
-    function getReg()
+    public function save()
     {
-        $rf = regFile();
-        if (file_exists($rf))
-            return json_decode(file_get_contents($rf), true);
-        return array();
+        if (!is_dir(self::$dir)) mkdir(self::$dir);
+        file_put_contents(self::$file, json_encode($this->uids));
+    }
+    public function load()
+    {
+        $ok = file_exists(self::$file);
+        if ($ok) $this->uids = json_decode(file_get_contents(self::$file), true);
+        return $ok;
     }
 
-    function isUid($x)
+    public function has(string $uid)
     {
-        $reg = getReg();
-        return isset($reg[$x]);
+        return isset($this->uids[$uid]);
     }
 
-    function setUid()
+    public function add(string $uid)
     {
-        global $uid, $params;
-        if ($_GET)
+        return $this->uids[$uid] = 1;
+    }
+
+    public function remove(string &$uid)
+    {
+        unset($this->uids[$uid]);
+    }
+
+    public static function instance()
+    {
+        static $instance = new Register(true);
+        return $instance;
+    }
+}
+
+class Usr
+{
+    private string $uid = '';
+    private bool $valid = false;
+    private array $params = [];
+
+    public static function instance()
+    {
+        static $instance = new Usr();
+        return $instance;
+    }
+
+    public function valid()
+    {
+        return $this->valid;
+    }
+
+    public function uid()
+    {
+        return $this->uid;
+    }
+
+    public function check()
+    {
+        if (!$this->valid) header("Location: $php?" . $this->uid);
+    }
+
+    public function go(string $php)
+    {
+        header("Location: $php.php?" . $this->uid);
+    }
+    public function view($cnr=NULL)
+    {
+        header("Location: /?" . $this->uid . (is_null($cnr) ? '' : "&$cnr"));
+    }
+
+    function param()
+    {
+        return empty($this->params) ? NULL : $this->params[0];
+    }
+
+    function params()
+    {
+        return $this->params;
+    }
+
+    private function __construct()
+    {
+        if ($_POST)
         {
-            $params = array_keys($_GET);
-            $uid = array_shift($params);
-            if (!isUid($uid)) goNew();
+            $this->uid = $_POST['uid'];
         }
-        else goNew();
+        else if ($_GET)
+        {
+            $this->params = array_keys($_GET);
+            $this->uid = array_shift($this->params);
+        }
+        if ($this->uid)
+        {
+            $this->valid = Register::instance()->has($this->uid);
+        }
     }
+}
 
-    function getParam()
-    {
-        global $params;
-        return empty($params) ? NULL : $params[0];
-    }
+function usr()
+{
+    return Usr::instance();
+}
 
-    function go($dest, $param=NULL)
-    {
-        global $uid;
-        header("Location: $dest?$uid" . (is_null($param) ? '' : "&$param"));
-        exit;
-    }
-
-    function goView($param=NULL)
-    {
-        global $uid;
-        go('/', $param);
-    }
-
-    function goNew()
-    {
-        header('Location: new.php');
-        exit;
-    }
 ?>

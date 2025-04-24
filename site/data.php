@@ -1,201 +1,311 @@
 <?php
 
-    function chkData()
-    {
-        if (!is_dir('data')) mkdir('data');
-    }
+require_once('usr.php');
 
-    function txtFile()
-    {
-        global $uid;
-        return "data/$uid.txt";
-    }
-    function logFile()
-    {
-        global $uid;
-        return "data/$uid.log.json";
-    }
-    function dataFile()
-    {
-        global $uid;
-        return "data/$uid.data.json";
-    }
+class Fnc
+{
+    protected static function isl(string $c) { return !(empty($c) || $c[0] == '#'); }
+    protected static function xpl(string $s) { return explode("\n", $s); }
+    protected static function impl($a) { return implode("\n", $a); }
+}
 
-    function rTxt(&$txt)
+abstract class DataObject extends Fnc
+{
+    private string $file;
+    private static string $dir = 'data';
+    public function __construct(string $ext)
     {
-        $txt = '';
-        $f = txtFile();
-        $ok = file_exists($f);
-        if ($ok) $txt = file_get_contents($f);
+        global $uid;
+        $this->file = self::$dir . '/' . usr()->uid() . ".$ext";
+    }
+    public function _delete()
+    {
+        if (file_exists($this->file)) unlink($this->file);
+    }
+    protected function _save(mixed $cont)
+    {
+        if (!is_dir(self::$dir)) mkdir(self::$dir);
+        file_put_contents($this->file, $cont);
+    }
+    protected function _load(&$cont)
+    {
+        $ok = file_exists($this->file);
+        if ($ok) $cont = file_get_contents($this->file);
         return $ok;
     }
 
-    function wTxt(&$txt)
+}
+
+class States extends DataObject
+{
+    private array $states = [];
+    public function __construct(bool $load=false)
     {
-        chkData();
-        file_put_contents(txtFile(), $txt);
+        parent::__construct('log.json');
+        if ($load) $this->load();
+    }
+    public function load()
+    {
+        if ($this->_load($data)) $this->states = json_decode($data, true);
+        else $this->states = [];
+    }
+    public function save()
+    {
+        if (empty($this->states)) $this->_delete();
+        else $this->_save(json_encode($this->states));
     }
 
-    function rStates(&$states)
+    public function given()
     {
-        $states = array();
-        $f = logFile();
-        $ok = file_exists($f);
-        if ($ok) $states = json_decode(file_get_contents($f), true);
-        return $ok;
+        return !(empty($this->states));
     }
 
-    function wStates(&$states)
+    public function cl(... $ids)
     {
-        if (empty($states)) dStates();
+        $id = implode('.', $ids);
+        $cl = '';
+        if (isset($this->states[$id]))
+        {
+            // this is compatibility
+            // former state was 1 for done
+            // now it's:
+            // x for done
+            // y for postponed
+            $v = $this->states[$id];
+            $cl = $v == 1 ? 'x' : $v;
+        }
+        return $cl;
+    }
+
+    public function set($val, ...$ids)
+    {
+        $id = implode('.', $ids);
+        if ($val) $this->states[$id] = $val;
         else {
-            chkData();
-            file_put_contents(logFile(), json_encode($states));
-        }
-    }
-
-    function dStates()
-    {
-        $f = logFile();
-        if (file_exists($f)) unlink($f);
-    }
-
-    function wData(&$heads, &$items)
-    {
-        chkData();
-        file_put_contents(dataFile(), json_encode(array($heads, $items)));
-    }
-
-    function rData(&$heads, &$items)
-    {
-        $heads = array();
-        $items = array();
-        $f = dataFile();
-        $ok = file_exists($f);
-        if ($ok) [$heads, $items] = json_decode(file_get_contents($f), true);
-        return $ok;
-    }
-
-    //  valid item line
-    function isl($c)
-    {
-        return !(empty($c) || $c[0] == '#');
-    }
-
-    //  explode for map
-    function xpl($a) { return explode("\n", $a); }
-
-    //  implode
-    function impl($a) { return implode("\n", $a); }
-
-    // remove more than double line spaces
-    function despace(&$txt)
-    {
-        $txt = preg_replace('/\n{3,}/', "\n\n", $txt);
-    }
-
-    //  filter valid items
-    function toItems($items)
-    {
-        foreach ($items as &$item)
-        {
-            $item = array_values(array_filter($item, 'isl'));
-        }
-        return $items;
-    }
-
-    function clean(&$txt)
-    {
-        $txt = trim(preg_replace('/^ *| *$/m', '', preg_replace('/\r\n|\r/', "\n", str_replace("\t", ' ', $txt))));
-        despace($txt);
-    }
-
-    function addNfd(&$txt, $nfd)
-    {
-        if (!empty($nfd))
-            $txt = trim($txt) . "\n\n@ ...\n" . impl(array_filter(array_unique($nfd), 'isl'));
-    }
-
-    function txt2data(&$txt, &$heads, &$items)
-    {
-        $heads = array();
-        $items = array();
-        if (preg_match('/^.*?(@.+)/ms', $txt, $m))
-        {
-            $lines = explode("\n", htmlentities($m[1]));
-            $lSet = false;
-            $lOk  = false;
-            $item = NULL;
-
-            foreach ($lines as $line)
+            unset($this->states[$id]);
+            if (preg_match('/^(\d+)\./', $id, $m))
             {
-                if (empty($line))
+                unset($this->states[$m[1]]);
+            }
+        }
+    }
+
+    public function reset(int $cnr)
+    {
+        unset($this->states[$cnr]);
+        $rx = "/^$cnr\.)/";
+        foreach (array_keys($this->states) as $k)
+        {
+            if (preg_match($rx, $k)) unset($this->states[$k]);
+        }
+    }
+
+    public static function instance()
+    {
+        static $instance = new States(true);
+        return $instance;
+    }
+}
+
+class Data extends DataObject
+{
+    private array $heads = [];
+    private array $items = [];
+    private string $notes = '';
+
+    public function __construct(bool $load=false)
+    {
+        parent::__construct('data.json');
+        if ($load) $this->load();
+    }
+
+    public function load()
+    {
+        $this->heads = [];
+        $this->items = [];
+        $this->notes = '';
+        if ($this->_load($data))
+        {
+            // compatibility
+            // was: heads, items
+            // now: heads, items, notes
+            $a = json_decode($data, true);
+            $this->heads = $a[0];
+            $this->items = $a[1];
+            if (count($a) > 2) $this->notes = $a[2];
+        }
+    }
+
+    public function save()
+    {
+        //  re-assign states to new order
+        $oData   = new Data(true);
+        $oStates = states();
+        $nStates = new States();
+        if ($oStates->given() && $oData->given())
+        {
+            $map = new States();
+            foreach ($oData->heads() as $cnr => $head)
+            {
+                foreach ($oData->lines($cnr) as $inr => $line)
                 {
-                    $lSet = true;
+                    $map->set($oStates->cl($cnr, $inr), $head, $line);
                 }
-                elseif ($line[0] == '@')
+            }
+            foreach ($this->heads as $cnr => $head)
+            {
+                $all = true;
+                $cst = 'x';
+                foreach ($this->lines($cnr) as $inr => $line)
                 {
-                    if (is_array($item)) $items[] = $item;
-                    $item = array();
-                    $heads[] = trim(substr($line, 1));
-                    $lOk = false;
+                    $c = $map->cl($head, $line);
+                    if ($all && $c) $cst = $c == 'y' ? 'y' : $cst;
+                    else $all = false;
+                    $nStates->set($map->cl($head, $line), $cnr, $inr);
                 }
-                elseif ($line[0] == '#')
+                if ($all) $nStates->set($cst, $cnr);
+            }
+        }
+        $this->_save(json_encode([$this->heads, $this->items, $this->notes]));
+        $nStates->save();
+    }
+
+    public function heads()
+    {
+        return $this->heads;
+    }
+    public function items()
+    {
+        return $this->items;
+    }
+    public function lines(int $cnr)
+    {
+        return array_values(array_filter($this->items[$cnr], 'Fnc::isl'));
+    }
+
+    public function given()
+    {
+        return !(empty($this->heads));
+    }
+
+    private static function txt2item(string $txt)
+    {
+        $lines = explode("\n", $txt);
+        $lSet = false;
+        $lOk  = false;
+        $item = [];
+        foreach ($lines as $line)
+        {
+            if (empty($line))
+            {
+                $lSet = true;
+            }
+            elseif ($line[0] == '#')
+            {
+                preg_match('/^#+ *(.*)/', $line, $m);
+                $item[] = "# $m[1]";
+                $lOk = false;
+            }
+            else
+            {
+                if ($lOk && $lSet) $item[] = '';
+                $item[] = $line;
+                $lSet = false;
+                $lOk = true;
+            }
+        }
+        return $item;
+    }
+
+    public function set(string &$text)
+    {
+        $this->heads = [];
+        $this->items = [];
+        $this->notes = '';
+
+        $txt = trim(preg_replace('/^ *| *$/m', '', preg_replace('/\r\n|\r/', "\n", str_replace("\t", ' ', $text))));
+
+        $rx = '/^@ *(.+)\n?/m';
+
+        if (preg_match_all($rx, $txt, $m))
+        {
+            $post = [];
+            $ttls = $m[1];
+            $data = array_map('trim', preg_split($rx, $txt));
+            $this->notes = array_shift($data);
+            foreach ($data as $cnr => $txt)
+            {
+                $item = self::txt2item($txt);
+                $ttl  = $ttls[$cnr];
+                if ('...' == $ttl)
                 {
-                    preg_match('/^#+ *(.*)/', $line, $m);
-                    $item[] = "#$m[1]";
-                    $lOk = false;
+                    $post = array_merge($post, array_filter($item, 'Fnc::isl'));
                 }
                 else
                 {
-                    if ($lOk && $lSet) $item[] = '';
-                    $item[] = $line;
-                    $lSet = false;
-                    $lOk = true;
+                    $this->heads[] = $ttl;
+                    $this->items[] = $item;
                 }
             }
-            if (is_array($item)) $items[] = $item;
+            if (!empty($post))
+            {
+                $this->heads[] = '...';
+                $this->items[] = array_unique($post);
+            }
         }
+        else $this->notes = $txt;
     }
 
-    function save(&$txt, $skip=false)
+    public function remove(int $cnr)
     {
-        txt2data($txt, $heads, $items);
-
-        if (file_exists(logFile()) && file_exists(dataFile()))
+        $post = [];
+        $lines = $this->lines($cnr);
+        $states = states();
+        foreach ($lines as $inr => $line)
         {
-            rStates($states);
-            rData($heads1, $items1);
-            $items1 = toItems($items1);
-            $map = array();
-            foreach ($items1 as $cnr => $item)
-            {
-                $head = $heads1[$cnr];
-                if ($skip && $head == '...') continue;
-                foreach ($item as $inr => $i)
-                {
-                    $c = "$cnr.$inr";
-                    if (isset($states[$c])) $map["$head.$i"] = $states[$c];
-                }
-            }
-            $items2 = toItems($items);
-            $states = array();
-            foreach ($items2 as $cnr => $item)
-            {
-                $head = $heads[$cnr];
-                $all = true;
-                foreach ($item as $inr => $i)
-                {
-                    $c = "$head.$i";
-                    if (isset($map[$c])) $states["$cnr.$inr"] = $map[$c];
-                    else $all = false;
-                }
-                if ($all) $states[$cnr] = 1;
-            }
-            wStates($states);
+            if ($states->cl($cnr, $inr) == 'y') $post[] = $line;
         }
-        else dStates();
-        wData($heads, $items);
-        wTxt($txt);
+        $this->heads = array_splice($this->heads, $cnr, 1);
+        $this->items = array_splice($this->items, $cnr, 1);
+        if (!empty($post))
+        {
+            if (end($this->heads) == '...')
+            {
+                $post = array_unique(array_merge($post, end($this->items)));
+                array_pop($this->items);
+            }
+            else $this->heads[] = '...';
+
+            $this->items[] = $post;
+        }
     }
+
+    public function txt()
+    {
+        $res = [$this->notes, ''];
+        foreach ($this->heads as $cnr => $head)
+        {
+            $res[] = "@ $head";
+            $res[] = Fnc::impl($this->items[$cnr]);
+            $res[] = '';
+        }
+        return trim(Fnc::impl($res)) . "\n";
+    }
+
+    public static function instance()
+    {
+        static $instance = new Data(true);
+        return $instance;
+    }
+}
+
+function states()
+{
+    return States::instance();
+}
+function data()
+{
+    return Data::instance();
+}
+
 ?>
