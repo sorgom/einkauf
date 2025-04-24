@@ -103,4 +103,10 @@ class Usr
         }
     }
 }
+
+function usr()
+{
+    return Usr::instance();
+}
+
 ?>

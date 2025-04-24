@@ -32,7 +32,7 @@ class Txt extends DataObject
         $nStates = new States();
 
         $oData   = Data::Instance();
-        $oStates = States::instance();
+        $oStates = states();
         if ($oStates->given() && $oData->given())
         {
             $map = new States();

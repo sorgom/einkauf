@@ -31,7 +31,7 @@ abstract class BaseElem
     }
     protected static function anc(mixed $param=NULL, string $target='')
     {
-        return self::cat('<a href=', (empty($target) ? '/' : "$target.php"), '?', Usr::instance()->uid(), (is_null($param) ? '' : "&$param") );
+        return self::cat('<a href=', (empty($target) ? '/' : "$target.php"), '?', usr()->uid(), (is_null($param) ? '' : "&$param") );
     }
 
 }
@@ -43,7 +43,7 @@ abstract class StateElem extends BaseElem
     {
         parent::__construct($id);
         global $states;
-        $this->cl = States::instance()->cl($id);
+        $this->cl = states()->cl($id);
     }
 
     public function isDone()

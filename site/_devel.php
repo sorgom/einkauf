@@ -3,7 +3,7 @@ require_once('UsrObjects.php');
 
 require_once('OutputObjects.php');
 
-if (!Usr::instance()->valid()) exit();
+if (!usr()->valid()) exit();
 
 Register::instance()->add('ABC');
 

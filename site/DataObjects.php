@@ -9,7 +9,7 @@ abstract class DataObject
     public function __construct(string $ext)
     {
         global $uid;
-        $this->file = self::$dir . '/' . Usr::instance()->uid() . ".$ext";
+        $this->file = self::$dir . '/' . usr()->uid() . ".$ext";
     }
     public function _delete()
     {
@@ -26,10 +26,8 @@ abstract class DataObject
         if ($ok) $cont = file_get_contents($this->file);
         return $ok;
     }
-    protected static function isl(string $c)
-    {
-        return !(empty($c) || $c[0] == '#');
-    }
+
+    protected static function isl(string $c) { return !(empty($c) || $c[0] == '#'); }
 
     protected static function xpl(string $s) { return explode("\n", $s); }
 
@@ -79,8 +77,17 @@ class States extends DataObject
 
     public function set($val, ...$ids)
     {
-        if ($val) $this->states[implode('.', $ids)] = $val;
+        $id = implode('.', $ids);
+        if ($val) $this->states[$id] = $val;
+        else {
+            unset($this->states[$id]);
+            if (preg_match('/^(\d+)\./', $id, $m))
+            {
+                unset($this->states[$m[1]]);
+            }
+        }
     }
+
 
     public function reset(int $cnr)
     {
@@ -103,6 +110,7 @@ class Data extends DataObject
 {
     private array $heads = [];
     private array $items = [];
+    private string $notes = '';
 
     public function __construct(bool $load=false)
     {
@@ -138,45 +146,69 @@ class Data extends DataObject
 
     public function set(string &$txt)
     {
-        $heads = array();
-        $items = array();
-        if (preg_match('/^.*?(@.+)/ms', $txt, $m))
+        $this->heads = [];
+        $this->items = [];
+        $this->notes = '';
+
+        $this->txt = trim(preg_replace('/^ *| *$/m', '', preg_replace('/\r\n|\r/', "\n", str_replace("\t", ' ', $txt))));
+
+        if (preg_match('/^(.*?\n)?(@.+)/s', $txt, $m))
         {
-            $lines = explode("\n", $m[1]);
+            $this->notes = trim($m[1]);
+            $lines = explode("\n", $m[2]);
             $lSet = false;
             $lOk  = false;
             $item = NULL;
+            $nfd = [];
+            $dm = true;
             foreach ($lines as $line)
             {
                 if (empty($line))
                 {
-                    $lSet = true;
+                    if ($dm) $lSet = true;
                 }
                 elseif ($line[0] == '@')
                 {
-                    if (is_array($item)) $items[] = $item;
-                    $item = array();
-                    $heads[] = trim(substr($line, 1));
-                    $lOk = false;
+                    $head = trim(substr($line, 1));
+                    $dm = $head != '...';
+                    if ($dm)
+                    {
+                        if (is_array($item)) $this->items[] = $item;
+                        $item = [];
+                        if (empty($head)) $head = '??';
+                        $this->heads[] = $head;
+                        $lOk = false;
+                    }
                 }
                 elseif ($line[0] == '#')
                 {
-                    preg_match('/^#+ *(.*)/', $line, $m);
-                    $item[] = "# $m[1]";
-                    $lOk = false;
+                    if ($dm)
+                    {
+                        preg_match('/^#+ *(.*)/', $line, $m);
+                        $item[] = "# $m[1]";
+                        $lOk = false;
+                    }
                 }
                 else
                 {
-                    if ($lOk && $lSet) $item[] = '';
-                    $item[] = $line;
-                    $lSet = false;
-                    $lOk = true;
+                    if ($dm)
+                    {
+                        if ($lOk && $lSet) $item[] = '';
+                        $item[] = $line;
+                        $lSet = false;
+                        $lOk = true;
+                    }
+                    else $nfd[] = $line;
                 }
             }
-            if (is_array($item)) $items[] = $item;
+            if (is_array($item)) $this->items[] = $item;
+            if (!empty($nfd))
+            {
+                $this->heads[] = '...';
+                $this->items[] = $nfd;
+            }
         }
-        $this->heads = $heads;
-        $this->items = $items;
+        else $this->notes = $txt;
     }
 
     public function remove(int $cnr)
@@ -184,7 +216,7 @@ class Data extends DataObject
         $res = [];
         $nfd = [];
         $lines = $this->lines($cnr);
-        $states = States::instance();
+        $states = states();
         foreach ($lines as $inr => $i)
         {
             if ($states->cl($cnr, $inr) == 'y') $nfd[] = $line;
@@ -200,6 +232,15 @@ class Data extends DataObject
         static $instance = new Data(true);
         return $instance;
     }
+}
+
+function states()
+{
+    return States::instance();
+}
+function data()
+{
+    return Data::instance();
 }
 
 ?>

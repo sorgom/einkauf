@@ -1,7 +1,7 @@
 
 <?php
     require_once('TxtObject.php');
-    Usr::instance()->check();
+    usr()->check();
     require_once("body.php");
     require_once("OutputObjects.php");
 ?>
@@ -10,7 +10,7 @@
     <textarea name=txt rows=20 autofocus oninput="checkInput(this, 'save')"><?php
     echo Txt::instance()->txt();
 ?></textarea>
-<input type=hidden name=uid value=<?php echo Usr::instance()->uid(); ?>>
+<input type=hidden name=uid value=<?php echo usr()->uid(); ?>>
 </form>
 <div id=navi>
 <?php new Back(); ?>
