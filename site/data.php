@@ -259,14 +259,14 @@ class Data extends DataObject
     public function remove(int $cnr)
     {
         $post = [];
-        $lines = $this->lines($cnr);
         $states = states();
+        $lines = $this->lines($cnr);
         foreach ($lines as $inr => $line)
         {
             if ($states->cl($cnr, $inr) == 'y') $post[] = $line;
         }
-        $this->heads = array_splice($this->heads, $cnr, 1);
-        $this->items = array_splice($this->items, $cnr, 1);
+        array_splice($this->heads, $cnr, 1);
+        array_splice($this->items, $cnr, 1);
         if (!empty($post))
         {
             if (end($this->heads) == '...')

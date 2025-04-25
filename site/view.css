@@ -1,15 +1,30 @@
-html {
-    --text-color-open: black;
-    --text-color-done: lightgreen;
-    --text-color-out: lightcoral;
-    --text-color-heading: #BBB;
-    --text-color-alert: red;
-    --text-color-link: blue;
-    --background-color: white(13, 20, 25);
-    --background-color-button: rgb(236, 236, 236);
-    --background-color-done: lightgreen;
-    --background-color-out: lightcoral;
-    --background-color-alert: orange;
+@media (prefers-color-scheme: light) {
+    :root {
+        --text-color-open: black;
+        --text-color-done: lightgreen;
+        --text-color-out: lightcoral;
+        --text-color-heading: #BBB;
+        --text-color-link: blue;
+        --background-color: white;
+        --background-color-button: rgb(236, 236, 236);
+        --background-color-done: lightgreen;
+        --background-color-out: lightcoral;
+        --background-color-alert: orange;
+        }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color-open: white;
+        --text-color-done: green;
+        --text-color-out: darkred;
+        --text-color-heading: grey;
+        --text-color-link: blue;
+        --background-color: rgb(35, 33, 33);
+        --background-color-button: rgb(7, 47, 64);
+        --background-color-done: rgb(7, 76, 37);
+        --background-color-out: rgb(98, 4, 7);
+        --background-color-alert: rgb(130, 91, 8);
+        }
 }
 * {
     margin:0;
@@ -17,11 +32,19 @@ html {
     font-family: sans-serif; font-stretch: condensed;
     color: var(--text-color-open);
 }
+@media (orientation: landscape) {
+    body { font-size: 3em; }
+}
+
+@media (orientation: portrait) {
+    body { font-size: 4.5em; }
+}
+
 body {
     background-color: var(--background-color);
-    font-size: 4.5em;
     padding-bottom: 1em;
 }
+
 a { text-decoration: none;}
 a:hover { cursor: pointer; }
 
@@ -35,11 +58,6 @@ hr {
 
 pre {
     word-wrap: normal;
-}
-
-em {
-    font-style: normal;
-    color: var(--text-color-alert);
 }
 
 #items > div > a, #menu > a, #top > a, #remove_confirm {
@@ -79,7 +97,7 @@ a > p {
     top: 0;
 }
 #top > a {
-    background-image: url('img/back.svg');
+    background-image: url('img/up.svg');
 }
 
 #menu > a, body > a, #navi > a {
@@ -104,24 +122,26 @@ body > a, #navi > a {
 #menu *.y, #top *.y { background-color: var(--background-color-out); }
 
 #navi {
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
-    width: 25%;
+    background-color: var(--background-color);
+    z-index: 5;
+    /* width: 25%; */
 }
 
 form { width: 100%; }
 form > textarea {
-    width: 70%;
-    margin-left: 25%;
-    z-index: 1;
+    width: 100%;
     font-family: serif;
     font-stretch: normal;
     font-size: 1em;
-    padding: 1em;
-    padding-right: 0;
+    padding: 1em 0 2em 1em;
+
+    /* padding-right: 0; */
     color: var(--text-color-open);
     border-color: var(--background-color-button);
+    background-color: var(--background-color);
     resize: none;
 }
 

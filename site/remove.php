@@ -3,13 +3,11 @@
     usr()->check();
     $cnr = usr()->param();
 
-    var_dump(usr()->params());
-
     if (count(usr()->params()) < 2)
     {
         require_once('view.php');
-        new RemoveConfirm($cnr);
         new Back();
+        new RemoveConfirm($cnr);
         ?></body></html><?php
     }
     else

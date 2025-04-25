@@ -246,7 +246,7 @@
         public function __construct() { $this->html(); }
         private function html()
         {
-            echo "<a href=register.php id=register> </a>\n";
+            echo "<a href=start.php id=register> </a>\n";
         }
     }
 ?>

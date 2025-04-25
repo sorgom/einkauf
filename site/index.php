@@ -12,7 +12,7 @@
     else
     {
         new ItemList($chap);
-        echo "<script src=view.js></script>\n";
+        echo "<script src=items.js></script>\n";
         echo "<script>setUid('" . usr()->uid() . "');</script>\n";
     }
 ?>

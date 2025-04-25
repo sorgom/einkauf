@@ -73,7 +73,7 @@ class Usr
 
     public function check()
     {
-        if (!$this->valid) header('Location: new.php');
+        if (!$this->valid) header('Location: hello.php');
     }
 
     public function go(string $php)

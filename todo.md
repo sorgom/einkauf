@@ -10,18 +10,14 @@
 ### items
 - up.svg
 - buttons
+- reset remove in a row sticky bottom
 ### input
 - navi on top
 - full width
 ## oop
+## data
+- get rid of concatenations
 
 ### rename
-new.php hello.php
-register.php start.php
-view.js items.js
 
 ### remove
-- some svg images:
-    - checked
-    - unchecked
-    - cancel (-> back)
