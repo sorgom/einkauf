@@ -50,7 +50,6 @@
         protected function __construct(string|int $id)
         {
             parent::__construct($id);
-            global $states;
             $this->cl = states()->cl($id);
         }
 
@@ -200,6 +199,14 @@
     {
         public function __construct($cnr) { parent::__construct('remove', $cnr, 'remove'); }
     }
+    class RemoveConfirm extends Link
+    {
+        public function __construct($cnr)
+        {
+            parent::__construct('remove_confirm', "$cnr&_", 'remove', '<p>' . data()->heads()[$cnr] . '</p>');
+        }
+    }
+
     class MenuEdit extends Link
     {
         public function __construct() { parent::__construct('edit', NULL, 'input'); }
@@ -208,11 +215,9 @@
     {
         public function __construct() { parent::__construct('imprint', NULL, 'imprint'); }
     }
-    class RemoveConfirm extends Link
+    class UsrStart extends Link
     {
-        public function __construct($cnr) {
-            parent::__construct('remove_confirm', "$cnr&_", 'remove', data()->heads()[$cnr]);
-        }
+        public function __construct() { parent::__construct('start'); }
     }
 
     class BackElem extends BaseElem
@@ -234,5 +239,14 @@
     class ImprintBack extends BackElem
     {
         public function __construct() { parent::__construct('imprint_back'); }
+    }
+
+    class UsrNew
+    {
+        public function __construct() { $this->html(); }
+        private function html()
+        {
+            echo "<a href=register.php id=register> </a>\n";
+        }
     }
 ?>

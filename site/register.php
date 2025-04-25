@@ -1,19 +1,17 @@
 
 <?php
     require_once("view.php");
-    require_once('usr.php');
-    require_once('data.php');
-    $reg = getReg();
+    $reg = reg();
     do {
         $uid = strtoupper(dechex(rand(0xA0000000, 0xFFFFFFFF)));
-    } while (isset($reg[$uid]));
-    $reg[$uid] = 1;
-    file_put_contents(regFile(), json_encode($reg));
+    } while ($reg->has($uid));
+    $reg->add($uid);
+    $reg->save();
+    usr()->set($uid);
     $txt = file_get_contents('template/template.txt');
-    clean($txt);
-    txt2data($txt, $heads, $items);
-    wData($heads, $items);
-    wTxt($txt);
+    $data = new Data();
+    $data->set($txt);
+    $data->save();
 ?>
 <div id=info>
 <h2>OK</h2>
@@ -23,5 +21,5 @@
 </textarea>
 <p>und lege los ...</p>
 </div>
-<?php b_reg_go(); ?>
+<?php new UsrStart(); ?>
 </body></html>

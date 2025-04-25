@@ -93,7 +93,7 @@ class States extends DataObject
     public function reset(int $cnr)
     {
         unset($this->states[$cnr]);
-        $rx = "/^$cnr\.)/";
+        $rx = "/^$cnr\.\d+/";
         foreach (array_keys($this->states) as $k)
         {
             if (preg_match($rx, $k)) unset($this->states[$k]);

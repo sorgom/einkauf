@@ -56,6 +56,11 @@ class Usr
         return $instance;
     }
 
+    public function set(string $uid)
+    {
+        $this->uid = $uid;
+    }
+
     public function valid()
     {
         return $this->valid;
@@ -68,7 +73,7 @@ class Usr
 
     public function check()
     {
-        if (!$this->valid) header("Location: $php?" . $this->uid);
+        if (!$this->valid) header('Location: new.php');
     }
 
     public function go(string $php)
@@ -103,7 +108,7 @@ class Usr
         }
         if ($this->uid)
         {
-            $this->valid = Register::instance()->has($this->uid);
+            $this->valid = reg()->has($this->uid);
         }
     }
 }
@@ -112,5 +117,8 @@ function usr()
 {
     return Usr::instance();
 }
-
+function reg()
+{
+    return Register::instance();
+}
 ?>
