@@ -81,6 +81,7 @@ a > p {
 
 #items {
     margin-left: 0.8em;
+    margin-bottom: 2em;
 }
 #items > div, #top > a {
     padding-right: 1.5em;
@@ -100,13 +101,13 @@ a > p {
     background-image: url('img/up.svg');
 }
 
-#menu > a, body > a, #navi > a {
+#menu > a, body > a, #navi > a, #bottom > a {
     margin-bottom: 0.1em;
 }
 #menu > a, #top {
     background-color: var(--background-color-button);
 }
-body > a, #navi > a {
+body > a, #navi > a, #bottom > a {
     display: block;
     height: 2em;
     background-color: var(--background-color-button);
@@ -121,13 +122,30 @@ body > a, #navi > a {
 #menu *.x, #top *.x { background-color: var(--background-color-done);}
 #menu *.y, #top *.y { background-color: var(--background-color-out); }
 
+#navi, #bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    background-color: var(--background-color);
+    z-index: 5;
+    left: 0;
+}
 #navi {
     position: sticky;
     top: 0;
-    left: 0;
-    background-color: var(--background-color);
-    z-index: 5;
-    /* width: 25%; */
+}
+#bottom {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
+
+#navi > a, #bottom > a {
+    flex-grow: 1;
+    margin-left: 0.1em;
+}
+#navi > a:nth-child(1), #bottom > a:nth-child(1) {
+    margin-left: 0;
 }
 
 form { width: 100%; }
@@ -137,14 +155,10 @@ form > textarea {
     font-stretch: normal;
     font-size: 1em;
     padding: 1em 0 2em 1em;
-
-    /* padding-right: 0; */
     color: var(--text-color-open);
-    border-color: var(--background-color-button);
     background-color: var(--background-color);
     resize: none;
 }
-
 
 #back   { background-image: url('img/back.svg'); }
 #edit   { background-image: url('img/pen.svg'); }

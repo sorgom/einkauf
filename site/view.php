@@ -151,9 +151,10 @@
                     ++$inr;
                 }
             }
-            echo "</div>\n";
+            echo "</div>\n<div id=bottom>\n";
             new ChapReset($cnr);
             new ChapRemove($cnr);
+            echo "</div>\n";
         }
     }
 
