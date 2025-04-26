@@ -1,36 +1,38 @@
 @media (prefers-color-scheme: light) {
     :root {
-        --text-color-open: black;
-        --text-color-done: lightgreen;
-        --text-color-out: lightcoral;
-        --text-color-heading: #BBB;
-        --text-color-link: blue;
-        --background-color: white;
-        --background-color-button: rgb(236, 236, 236);
-        --background-color-done: lightgreen;
-        --background-color-out: lightcoral;
-        --background-color-alert: orange;
+        --tc: black;
+        --tc-done: lightgreen;
+        --tc-out: orange;
+        --tc-heading: #BBB;
+        --tc-link: blue;
+        --tc-low: #666;
+        --bg: white;
+        --bg-button: rgb(236, 236, 236);
+        --bg-done: lightgreen;
+        --bg-out: orange;
+        --bg-alert: rgb(255, 83, 83);
         }
 }
 @media (prefers-color-scheme: dark) {
     :root {
-        --text-color-open: white;
-        --text-color-done: green;
-        --text-color-out: darkred;
-        --text-color-heading: grey;
-        --text-color-link: blue;
-        --background-color: rgb(35, 33, 33);
-        --background-color-button: rgb(7, 47, 64);
-        --background-color-done: rgb(7, 76, 37);
-        --background-color-out: rgb(98, 4, 7);
-        --background-color-alert: rgb(130, 91, 8);
+        --tc: white;
+        --tc-done: green;
+        --tc-out: darkred;
+        --tc-heading: grey;
+        --tc-link: blue;
+        --tc-low: #AAA;
+        --bg: rgb(35, 33, 33);
+        --bg-button: rgb(7, 47, 64);
+        --bg-done: rgb(7, 76, 37);
+        --bg-out: rgb(98, 4, 7);
+        --bg-alert: rgb(130, 91, 8);
         }
 }
 * {
     margin:0;
     padding:0;
-    font-family: sans-serif; font-stretch: condensed;
-    color: var(--text-color-open);
+    font-family: sans-serif;
+    color: var(--tc);
 }
 @media (orientation: landscape) {
     body { font-size: 3em; }
@@ -38,17 +40,22 @@
 
 @media (orientation: portrait) {
     body { font-size: 4.5em; }
+    * { font-stretch: condensed; }
+    div.imprint {
+        font-size: 50%;
+    }
+
 }
 
 body {
-    background-color: var(--background-color);
-    padding-bottom: 1em;
+    background-color: var(--bg);
+    padding-bottom: 3em;
 }
 
 a { text-decoration: none;}
 a:hover { cursor: pointer; }
 
-h1, h2, h3, h4 { color: var(--text-color-heading); }
+h1, h2, h3, h4 { color: var(--tc-heading); }
 
 hr {
     margin-top: 1em;
@@ -81,7 +88,6 @@ a > p {
 
 #items {
     margin-left: 0.8em;
-    margin-bottom: 2em;
 }
 #items > div, #top > a {
     padding-right: 1.5em;
@@ -105,29 +111,40 @@ a > p {
     margin-bottom: 0.1em;
 }
 #menu > a, #top {
-    background-color: var(--background-color-button);
+    background-color: var(--bg-button);
 }
 body > a, #navi > a, #bottom > a {
     display: block;
     height: 2em;
-    background-color: var(--background-color-button);
+    background-color: var(--bg-button);
     background-repeat: no-repeat;
     background-position: center;
     background-size: 1.8em;
 }
 
-#items *.x p { color: var(--text-color-done); }
-#items *.y p { color: var(--text-color-out); }
+#items *.x p { color: var(--tc-done); }
+#items *.y p { color: var(--tc-out); }
 
-#menu *.x, #top *.x { background-color: var(--background-color-done);}
-#menu *.y, #top *.y { background-color: var(--background-color-out); }
+#menu *.x, #top *.x {
+    background-color: var(--bg-done);
+}
+#menu *.y, #top *.y {
+    background-color: var(--bg-out);
+}
+#menu *.x p, #top *.x p {
+    color: var(--tc-low);
+}
+#menu *.y p, #top *.y p {
+    color: var(--tc-low);
+}
 
 #navi, #bottom {
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: left;
-    background-color: var(--background-color);
-    z-index: 5;
+    background-color: var(--bg);
+    /* z-index: 5; */
     left: 0;
 }
 #navi {
@@ -135,7 +152,6 @@ body > a, #navi > a, #bottom > a {
     top: 0;
 }
 #bottom {
-    width: 100%;
     position: fixed;
     bottom: 0;
 }
@@ -151,15 +167,16 @@ body > a, #navi > a, #bottom > a {
 form { width: 100%; }
 form > textarea {
     width: 100%;
+    height: 90%;
     font-family: serif;
-    font-stretch: normal;
+    /* font-stretch: normal; */
     font-size: 1em;
     padding: 1em 0 2em 1em;
-    color: var(--text-color-open);
-    background-color: var(--background-color);
+    color: var(--tc);
+    background-color: var(--bg);
     resize: none;
+    animation: 1s blink step-end infinite;
 }
-
 #back   { background-image: url('img/back.svg'); }
 #edit   { background-image: url('img/pen.svg'); }
 #imprint, #imprint_back
@@ -169,7 +186,7 @@ form > textarea {
 #remove { background-image: url('img/trash.svg'); }
 #remove_confirm {
         background-image: url('img/trash.svg');
-        background-color: var(--background-color-alert);
+        background-color: var(--bg-alert);
         background-position: left;
         padding-left: 2.5em;
 }
@@ -183,11 +200,11 @@ div.imprint {
     word-wrap: normal;
 }
 div.imprint > a {
-    color: var(--text-color-link);
+    color: var(--tc-link);
 }
 
 #info {
-    color: var(--text-color-open);
+    color: var(--tc);
     padding: 1em;
 }
 
@@ -198,7 +215,7 @@ div.imprint > a {
     padding: 0;
     border: none;
     border-color: Transparent;
-    background-color: var(--background-color);
-    color: var(--text-color-link);
+    background-color: var(--bg);
+    color: var(--tc-link);
     resize: none;
 }

@@ -122,6 +122,7 @@
         public function __construct(int $cnr, int $inr, string $ttl)
         {
             parent::__construct("$cnr.$inr", $ttl);
+            $this->html();
         }
         public function html()
         {
@@ -147,7 +148,7 @@
                 }
                 else
                 {
-                    new Item($cnr, $inr, $i)->html();
+                    new Item($cnr, $inr, $i);
                     ++$inr;
                 }
             }
@@ -186,8 +187,6 @@
         }
         public function html()
         {
-            $a = self::anc($this->param, $this->target);
-            $i = $this->idstr();
             self::out(self::anc($this->param, $this->target), $this->idstr(), '>', $this->ttl, '</a>');
         }
     }

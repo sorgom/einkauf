@@ -1,8 +1,8 @@
 <?php
     require_once("view.php");
-    new ImprintBack();
+    // new ImprintBack();
 ?>
-
+<div id=navi> <?php new ImprintBack(); ?></div>
 <div class=imprint>
 <?php
     $iFile = 'imprint.txt';
@@ -23,6 +23,5 @@ This is Open Source.
 
 PHP <?php echo phpversion() ?>
 
-</div>
-<?php new Back(); ?>
+</div><div id=bottom> <?php new Back(); ?></div>
 </body></html>

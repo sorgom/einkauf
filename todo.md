@@ -18,6 +18,9 @@
 ## data
 - get rid of concatenations
 
+### super samples
+- [:checked](https://developer.mozilla.org/de/docs/Web/CSS/:checked)
+
 ### rename
 
 ### remove

@@ -46,7 +46,13 @@ class States extends DataObject
     }
     public function load()
     {
-        if ($this->_load($data)) $this->states = json_decode($data, true);
+        if ($this->_load($data))
+        {
+            // bugfix: sometimes strange }"} at end
+            // when run on server
+            $data = preg_replace('/\}.*/', '}', $data);
+            $this->states = json_decode($data, true);
+        }
         else $this->states = [];
     }
     public function save()
