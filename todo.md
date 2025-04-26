@@ -11,6 +11,7 @@
 - up.svg
 - buttons
 - reset remove in a row sticky bottom
+- remove confirm: bottom
 ### input
 - navi on top
 - full width
