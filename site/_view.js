@@ -20,7 +20,7 @@ function gen_items(data)
     head = tlink(ttl);
     head.id = 'top';
     head.sid = cc;
-    head.href = '/?' + uid;
+    head.href = '_index.php?' + uid;
     let cl = states[cc];
     if (cl) head.classList = cl;
     document.body.appendChild(head);
