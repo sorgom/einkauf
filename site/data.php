@@ -66,6 +66,27 @@ class States extends DataObject
         return !(empty($this->states));
     }
 
+    public function items(int $cnr)
+    {
+        $rx = "/^$cnr(?:\.\d+)?$/";
+        $res = ['X' => 1];
+        foreach($this->states as $k => $v)
+        {
+            if (preg_match($rx, $k)) $res[$k] = $v;
+        }
+        var_dump($cnr, $res);
+        return $res;
+    }
+    public function chapters()
+    {
+        $res = [];
+        foreach($this->states as $k => $v)
+        {
+            if (preg_match('/^\d+$/', $k)) $res[$k] = $v;
+        }
+        return $res;
+    }
+
     public function cl(... $ids)
     {
         $id = implode('.', $ids);
@@ -99,7 +120,7 @@ class States extends DataObject
     public function reset(int $cnr)
     {
         unset($this->states[$cnr]);
-        $rx = "/^$cnr\.\d+/";
+        $rx = "/^$cnr\.\d+$/";
         foreach (array_keys($this->states) as $k)
         {
             if (preg_match($rx, $k)) unset($this->states[$k]);
@@ -180,6 +201,12 @@ class Data extends DataObject
     {
         return $this->heads;
     }
+
+    public function citems(int $cnr)
+    {
+        return $this->items[$cnr];
+    }
+
     public function items()
     {
         return $this->items;

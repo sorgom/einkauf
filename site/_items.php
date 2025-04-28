@@ -1,4 +1,17 @@
 
+<!--
+<?php
+    require_once('data.php');
+    usr()->check();
+    $cnr = usr()->param();
+    // $data = [ usr()->uid(), $cnr, data()->citems($cnr), states()->items($cnr) ];
+    $data = [
+        usr()->uid(), $cnr, data()->heads()[$cnr],
+        data()->citems($cnr), states()->items($cnr) ];
+    $c = json_encode($data);
+    var_dump($c);
+?>
+-->
 <!DOCTYPE html>
 <html lang=de>
 <head>
@@ -7,6 +20,13 @@
 <!-- <link rel=stylesheet href='view.css'> -->
 <link rel=icon type='image/gif' href='img/check_icon.svg'>
 <style>
+:root {
+    --mr: 1em;
+    --mh: 2em;
+    --ml: 1em;
+    --mtr: 0.5em;
+    --hr: 1.2em;
+}
 @media (prefers-color-scheme: light) {
     :root {
         --tc: black;
@@ -60,7 +80,6 @@
 body {
     background-color: var(--bg);
     padding-bottom: 3em;
-    background-color: beige;
 }
 
 a {
@@ -72,64 +91,107 @@ a > p {
     line-height: 90%;
     overflow-x: clip;
 }
-#items {
-    background-color: lightgreen;
-    width: 100%;
-}
-#items > div {
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    margin: 1em 0 1em 0;
-    background-color: yellow;
-}
-a {
-    width: 84%;
+#top, div > div {
     display: flex;
     flex-direction: column;
-    justify-content: top;
-    min-height: 2em;
-    padding: 0.05em;
-    padding-left: 1em;
+    justify-content: center;
+    min-height: var(--mh);
 }
-#items > div > a:nth-child(2) {
-    display: block;
-    width: 1em;
-    height: 1.2em;
-    min-height: 1em;
+#items {
+    margin-top: 1em;
+}
+div > div {
+    position: relative;
+    margin-bottom: 1em;
+}
+div > div > a:nth-child(1) {
+    margin-right: var(--mr);
+    padding: 0.05em;
+    padding-left: var(--ml);
+}
+div > div > a:nth-child(2) {
+    position: absolute;
+    top: var(--mtr);
+    right: 0;
+    z-index: 3;
+    width: var(--mr);
+    height: var(--hr);
     border: 3px solid var(--tc-out);
     border-right: none;
     border-radius: 0.25em 0 0 0.25em;
 }
+#top, h2 {
+    padding-left: var(--ml);
+}
+h2 {
+    font-size: 100%;
+    color: var(--tc-heading);
+}
+hr {
+    margin: 1em;
+    border: none;
+}
+
 #items .x p { color: var(--tc-done) }
 #items .y p { color: var(--tc-out) }
-#top > .x { background-color: var(--bg-done); }
-#top > .y { background-color: var(--bg-out); }
+#top.x { background-color: var(--bg-done); }
+#top.y { background-color: var(--bg-out); }
 
-a#top {
+#top {
     position: sticky;
     top: 0;
     left: 0;
     z-index: 5;
     width: 100%;
+}
+a#top {
     justify-content: center;
     background-color: var(--bg-button);
 }
 
+div.mn {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    background-color: var(--bg);
+    width: 100%;
+    z-index: 5;
+}
+div.mn > a {
+    flex-grow: 1;
+    background-color: var(--bg-button);
+    margin-left: 0.1em;
+    height: var(--mh);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+div.mn > a:nth-child(1) {
+    margin-left: 0;
+}
+div#bottom {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+.reset { background-image: url('img/reset.svg'); }
+.remove { background-image: url('img/trash.svg'); }
+
 </style>
-<script src=_items.js></script>
+<script src=_view.js></script>
 
 </head><body>
 </script>
-<script>display(['som', 1, 'EDEKA Versand-handel',
+<script>gen_items(<?php echo $c ?>);</script>
+<!-- <script>display(['som', 1, 'EDEKA Versand-handel',
     [
         "Schinkensalami mit einem Hauch von Knoblauch",
         "lola",
         "# Fleischtheke",
         "zardoz",
         "",
-        "seppl"
+        "seppl",
+        "wumpel"
     ],
     { "1.0":"x", "1.1":"y", "2":"x"}
-]);</script>
+]);</script> -->
 </body></html>
