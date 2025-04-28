@@ -74,7 +74,6 @@ class States extends DataObject
         {
             if (preg_match($rx, $k)) $res[$k] = $v;
         }
-        var_dump($cnr, $res);
         return $res;
     }
     public function chapters()

@@ -1,25 +1,3 @@
-
-<!--
-<?php
-    require_once('data.php');
-    usr()->check();
-    $cnr = usr()->param();
-    // $data = [ usr()->uid(), $cnr, data()->citems($cnr), states()->items($cnr) ];
-    $data = [
-        usr()->uid(), $cnr, data()->heads()[$cnr],
-        data()->citems($cnr), states()->items($cnr) ];
-    $c = json_encode($data);
-    var_dump($c);
-?>
--->
-<!DOCTYPE html>
-<html lang=de>
-<head>
-<title>localhost</title>
-<meta charset='UTF-8'>
-<!-- <link rel=stylesheet href='view.css'> -->
-<link rel=icon type='image/gif' href='img/check_icon.svg'>
-<style>
 :root {
     --mr: 1em;
     --mh: 2em;
@@ -175,23 +153,3 @@ div#bottom {
 }
 .reset { background-image: url('img/reset.svg'); }
 .remove { background-image: url('img/trash.svg'); }
-
-</style>
-<script src=_view.js></script>
-
-</head><body>
-</script>
-<script>gen_items(<?php echo $c ?>);</script>
-<!-- <script>display(['som', 1, 'EDEKA Versand-handel',
-    [
-        "Schinkensalami mit einem Hauch von Knoblauch",
-        "lola",
-        "# Fleischtheke",
-        "zardoz",
-        "",
-        "seppl",
-        "wumpel"
-    ],
-    { "1.0":"x", "1.1":"y", "2":"x"}
-]);</script> -->
-</body></html>
