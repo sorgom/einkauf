@@ -4,8 +4,21 @@
     --ml: 1em;
     --mtr: 0.5em;
     --hr: 1.2em;
+    --bg-light: white;
+    --bg-dark: black;
 }
-@media (prefers-color-scheme: light) {
+
+/*
+    icon based buttons:
+    light background
+    invert in dark mode
+    only dark icons required
+ */
+div.mn {
+    background-color: var(--bg-light);
+}
+
+ @media (prefers-color-scheme: light) {
     :root {
         --tc: black;
         --tc-done: lightgreen;
@@ -18,9 +31,12 @@
         --bg-done: lightgreen;
         --bg-out: orange;
         --bg-alert: rgb(255, 83, 83);
-        }
-}
+    }
+ }
 @media (prefers-color-scheme: dark) {
+    div.mn {
+        filter: invert(100%);
+    }
     :root {
         --tc: white;
         --tc-done: green;
@@ -28,12 +44,12 @@
         --tc-heading: grey;
         --tc-link: blue;
         --tc-low: #AAA;
-        --bg: rgb(35, 33, 33);
+        --bg: var(--bg-dark);
         --bg-button: rgb(7, 47, 64);
         --bg-done: rgb(7, 76, 37);
         --bg-out: rgb(98, 4, 7);
         --bg-alert: rgb(130, 91, 8);
-        }
+    }
 }
 
 * {
@@ -79,6 +95,8 @@ a > p {
 }
 div > div {
     position: relative;
+}
+#items > div {
     margin-bottom: 1em;
 }
 div > div > a:nth-child(1) {
@@ -111,15 +129,19 @@ hr {
 
 #items .x p { color: var(--tc-done) }
 #items .y p { color: var(--tc-out) }
-#top.x { background-color: var(--bg-done); }
-#top.y { background-color: var(--bg-out); }
+#top.x, #menu > div.x { background-color: var(--bg-done); }
+#top.y, #menu > div.y { background-color: var(--bg-out); }
+#menu > div.x p, #menu > div.y p { color: var(--tc-low); }
+#menu > div {
+    background-color: var(--bg-button);
+    margin-bottom: 0.1em;
+}
 
 #top {
     position: sticky;
     top: 0;
     left: 0;
     z-index: 5;
-    width: 100%;
     padding-right: var(--mr);
 }
 a#top {
@@ -131,20 +153,18 @@ div.mn {
     display: flex;
     flex-direction: row;
     justify-content: left;
-    background-color: var(--bg);
+    border-top: 1px solid var(--tc-heading);
     width: 100%;
     z-index: 5;
 }
 div.mn > a {
     flex-grow: 1;
-    /* background-color: var(--bg-button); */
     margin-left: 0.1em;
-    height: var(--mh);
+    /* height: var(--mh); */
     height: 1.2em;
     background-size: 1em;
     background-repeat: no-repeat;
     background-position: center;
-    border-top: 1px solid var(--tc-heading);
 }
 div.mn > a:nth-child(1) {
     margin-left: 0;
@@ -156,3 +176,34 @@ div#bottom {
 }
 .reset { background-image: url('img/reset.svg'); }
 .remove { background-image: url('img/trash.svg'); }
+.edit { background-image: url('img/pen.svg'); }
+
+/* https://developer.mozilla.org/de/docs/Web/CSS/:checked */
+#menu > div.e {
+    visibility: visible;
+    background-color: lightblue;
+}
+
+/* Hide the toggle checkbox */
+#expand-box {
+    display: none;
+}
+
+  /* Style the label */
+#expand-label {
+    display: block;
+    margin-top: 12px;
+    padding: 5px 11px;
+    background-color: #ff7;
+    border: 1px solid;
+    border-radius: 3px;
+}
+
+#expand-box:checked ~ #menu > div.e,
+#expand-box:checked ~ #expand-label {
+    background-color: lightgreen;
+    /* visibility: hidden; */
+}
+/* #expand-box:checked ~ #expand-label {
+    background-color: lightgreen;
+} */

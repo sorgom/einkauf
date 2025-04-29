@@ -5,13 +5,13 @@
 <g id="up">
 <g>
 <g transform="matrix(1,0,0,1,-76.1905,-190.476)">
-<path d="M212,440L576,440" style="fill:none;stroke:rgb(128,128,128);stroke-width:50px;"/>
+<path d="M212,440L576,440" style="fill:none;stroke:black;stroke-width:50px;"/>
 </g>
 <g transform="matrix(1,0,0,1,-76.1905,-117.476)">
-<path d="M212,367L359.872,219.128" style="fill:none;stroke:rgb(128,128,128);stroke-width:50px;"/>
+<path d="M212,367L359.872,219.128" style="fill:none;stroke:black;stroke-width:50px;"/>
 </g>
 <g transform="matrix(2.83277e-16,1,-1,2.83277e-16,502.81,37.5238)">
-<path d="M212,367L359.872,219.128" style="fill:none;stroke:rgb(128,128,128);stroke-width:50px;"/>
+<path d="M212,367L359.872,219.128" style="fill:none;stroke:black;stroke-width:50px;"/>
 </g>
 </g>
 </g>

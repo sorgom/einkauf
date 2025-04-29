@@ -3,8 +3,10 @@
 ## layout
 - round buttons?
 - themes
-[media orientation](https://developer.mozilla.org/de/docs/Web/CSS/@media/orientation)
-[CSS Dark Mode](https://www.mediaevent.de/css/darkmode.html)
+    - [media orientation](https://developer.mozilla.org/de/docs/Web/CSS/@media/orientation)
+    - [CSS Dark Mode](https://www.mediaevent.de/css/darkmode.html)
+    - [CSS dark mode invert](https://www.rechnerhaus.de/blog/css-dark-mode-mit-zwei-zeilen-code)
+
 ### menu
 - edit sticky ?
 ### items
