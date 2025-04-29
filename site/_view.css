@@ -6,6 +6,7 @@
     --hr: 1.2em;
     --bg-light: white;
     --bg-dark: black;
+    --bg-middle: #888;
 }
 
 /*
@@ -103,23 +104,18 @@ a > p {
 div > div {
     position: relative;
 }
-#items > div {
-    margin-bottom: 1em;
-}
-div > div > a.a1 {
+a.a1 {
     margin-right: var(--mr);
     padding: 0.05em;
     padding-left: var(--ml);
 }
-div > div > a.a2 {
+a.a2 {
     position: absolute;
     top: var(--mtr);
     right: 0;
     z-index: 3;
     width: var(--mr);
     height: var(--hr);
-    border: 3px solid var(--tc-out);
-    border-right: none;
     border-radius: 0.25em 0 0 0.25em;
 }
 #ch, h2 {
@@ -132,6 +128,17 @@ h2 {
 hr {
     margin: 1em;
     border: none;
+}
+#items > div {
+    margin-bottom: 1em;
+}
+#items .a2 {
+    background-color: var(--bg-out);
+    /* border: 3px solid var(--tc-out);
+    border-right: none; */
+}
+#menu .a2 {
+    background-color: var(--bg-middle);
 }
 
 #items .x p { color: var(--tc-done) }
