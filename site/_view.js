@@ -1,35 +1,62 @@
 
+var uid = undefined;
 
-function tlink(ttl)
+function p(par, ttl)
 {
     let p = document.createElement('p');
     p.innerText = ttl;
-    let a = document.createElement('a');
-    a.appendChild(p);
+    par.appendChild(p);
+    return p;
+}
+
+function tlink(par, ttl)
+{
+    let a = anc(par);
+    p(a, ttl);
     return a;
 }
 
-function ilink(cl)
+function ilink(par, cl)
 {
-    let a = document.createElement('a');
+    let a = anc(par);
     a.className = 'i ' + cl;
     return a;
 }
 
+function Entry(sid, ttl)
+{
+    let d = div();
+    d.sid = sid;
+    let a1 = anc(d);
+    a1.className = 'a1';
+    p(a1, ttl);
+    let a2 = anc(d);
+    a2.className = 'a2';
+    this.d = d;
+    this.a1 = a1;
+    this.a2 = a2;
+}
+Entry.prototype.add    = function(cl) { this.d.classList.add(cl); }
+Entry.prototype.remove = function(cl) { this.d.classList.remove(cl); }
+Entry.prototype.toggle = function(cl) { this.d.classList.toggle(cl); }
+Entry.prototype.has    = function(cl) { return this.d.classList.contains(cl); }
+Entry.prototype.put    = function(tg) { tg.appendChild(this.d); }
+
 //  bottom action menu
 function mn_bottom()
 {
-    let bt = document.createElement('div');
+    let bt = div();
     bt.id = 'bottom';
     bt.className = 'mn';
     document.body.appendChild(bt);
     return bt;
 }
 
+
 //  bottom action menu
 function mn_top()
 {
-    let bt = document.createElement('div');
+    let bt = div();
     bt.id = 'top';
     bt.className = 'mn';
     document.body.appendChild(bt);
@@ -41,13 +68,23 @@ function insertAfter(trg, obj)
     trg.parentNode.insertBefore(obj, trg.nextSibling);
 }
 
-function div()
+function div(par=undefined)
 {
-    return document.createElement('div');
+    let d = document.createElement('div');
+    if (par) par.appendChild(d);
+    return d;
 }
-function anc()
+function anc(par)
 {
-    return document.createElement('a');
+    let a = document.createElement('a');
+    par.appendChild(a);
+    return a;
+}
+
+function reset(obj)
+{
+    obj.classList.remove('x');
+    obj.classList.remove('y');
 }
 
 //  send object state (class)

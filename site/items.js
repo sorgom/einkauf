@@ -1,7 +1,6 @@
 var numElems = 0;
 var numDone = 0;
 var head = undefined;
-var uid = undefined;
 var items = [];
 
 function gen(data)
@@ -11,16 +10,16 @@ function gen(data)
     const cc = '' + cnr;
 
         // display of current chapter
-    head = tlink(ttl);
+    head = tlink(document.body, ttl);
     head.id = 'ch';
     head.sid = cc;
     head.href = '/?' + uid;
     let cl = states[cc];
     if (cl) head.classList = cl;
-    document.body.appendChild(head);
+    // document.body.appendChild(head);
 
     //  items list
-    let trg = document.createElement('div');
+    let trg = div();
     trg.id = 'items';
     let inr = 0;
     for (const c of lines)
@@ -37,19 +36,19 @@ function gen(data)
         }
         else
         {
-            let d = document.createElement('div');
+            let d = div(trg);
             d.sid = cc + '.' + inr;
-            let a = tlink(c);
+            let a = tlink(d, c);
+            a.className = 'a1';
             a.onclick = function() { check(d) };
-            d.appendChild(a);
-            let b = document.createElement('a');
+            let b = anc(d);
             b.onclick = function() { lock(d, 'y') };
-            d.appendChild(b);
+            b.className = 'a2';
 
             let cl = states[d.sid];
             if (cl) d.className = cl;
 
-            trg.appendChild(d);
+            // trg.appendChild(d);
             items.push(d);
             ++inr;
         }
@@ -58,16 +57,12 @@ function gen(data)
 
     //  bottom action menu
     let bt = mn_bottom();
-    let a = ilink('reset');
-    a.onclick = reset;
-    bt.appendChild(a);
-    a = ilink('remove');
+    let a = ilink(bt, 'reset');
+    a.onclick = resetAll;
+    a = ilink(bt, 'remove');
     a.href = 'remove.php?' + uid + '&' + cnr;
-    bt.appendChild(a);
-    a = ilink('edit');
+    a = ilink(bt, 'edit');
     a.href = 'edit.php?' + uid + '&' + cnr;
-    bt.appendChild(a);
-    // document.body.appendChild(bt);
 
     console.log(document.body.childNodes);
 
@@ -118,9 +113,9 @@ function ckh()
     eval(head, clo, false);
 }
 
-function reset()
+function resetAll()
 {
-    for (let item of items) item.classList = '';
-    head.classList = '';
+    for (let item of items) reset(item);
+    reset(head);
     send('_reset.php', head);
 }

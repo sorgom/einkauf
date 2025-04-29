@@ -1,6 +1,5 @@
-entries = [];
-uid = undefined;
-tbnr = undefined;
+var entries = [];
+var tbnr = undefined;
 
 function gen(data)
 {
@@ -15,37 +14,31 @@ function gen(data)
     let out = [];
     for (const ch of heads)
     {
-        let d = document.createElement('div');
-        d.sid = cnr;
-        let a = tlink(ch);
+        var e = new Entry(cnr, ch);
         if (empty.includes(cnr))
         {
-            d.classList.add('e');
-            a.href = 'edit.php/?' + uid + '&' + cnr;
+            e.add('e');
+            e.a1.href = 'edit.php/?' + uid + '&' + cnr;
         }
-        else a.href = '/?' + uid + '&' + cnr;
-        d.appendChild(a);
-        let b = document.createElement('a');
-        b.onclick = function () { toolbox(this); };
-        d.appendChild(b);
+        else e.a1.href = '/?' + uid + '&' + cnr;
+        e.a2.onclick = function () { toolbox(this); };
         let cl = states[cnr];
-        if (cl) d.classList.add(cl);
-        if (d.classList.contains('y')) out.push(d);
-        else if (d.classList.contains('x')) done.push(d);
-        else trg.appendChild(d);
-        entries.push(d);
+        if (cl) e.add(cl);
+        if (e.has('y')) out.push(e);
+        else if (e.has('x')) done.push(e);
+        else e.put(trg);
+        entries.push(e);
         ++cnr;
     }
-    for (const d of out) trg.appendChild(d);
-    for (const d of done) trg.appendChild(d);
+    for (const e of out) e.put(trg);
+    for (const e of done) e.put(trg);
 
     trg.appendChild(document.createComment('end'));
     document.body.appendChild(trg);
 
     let bt = mn_bottom();
-    a = ilink('edit');
+    a = ilink(bt, 'edit');
     a.href = 'input.php?' + uid;
-    bt.appendChild(a);
 }
 
 function toolbox(obj)
@@ -54,16 +47,30 @@ function toolbox(obj)
     if (tb) tb.remove();
     const par = obj.parentNode;
     const sid = par.sid;
+    console.log('TB', par.className);
     if (tbnr == sid) tbnr = undefined;
     else
     {
         let tb = div();
         tb.className = 'mn';
         tb.id = 'tb';
-        let a = ilink('remove');
+        let a = ilink(tb, 'reset');
+        a.onclick = function () { resetEntry(par); }
+        a = ilink(tb, 'remove');
         a.href = 'remove.php?' + uid + '&' + sid;
-        tb.appendChild(a);
+        a = ilink(tb, 'edit');
+        a.href = 'edit.php?' + uid + '&' + sid;
         insertAfter(par, tb);
         tbnr = sid;
+    }
+}
+
+function resetEntry(obj)
+{
+    const clo = obj.className;
+    reset(obj);
+    if (obj.className != clo)
+    {
+        send('_reset.php', obj);
     }
 }

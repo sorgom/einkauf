@@ -106,12 +106,12 @@ div > div {
 #items > div {
     margin-bottom: 1em;
 }
-div > div > a:nth-child(1) {
+div > div > a.a1 {
     margin-right: var(--mr);
     padding: 0.05em;
     padding-left: var(--ml);
 }
-div > div > a:nth-child(2) {
+div > div > a.a2 {
     position: absolute;
     top: var(--mtr);
     right: 0;
