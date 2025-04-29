@@ -1,128 +1,4 @@
 
-var numElems = 0;
-var numDone = 0;
-var head = undefined;
-var uid = undefined;
-var items = [];
-
-function gen_items(data)
-{
-    const [ nid, cnr, ttl, lines, states] = data;
-    uid = nid;
-    const cc = '' + cnr;
-
-        // display of current chapter
-    head = tlink(ttl);
-    head.id = 'top';
-    head.sid = cc;
-    head.href = '_index.php?' + uid;
-    let cl = states[cc];
-    if (cl) head.classList = cl;
-    document.body.appendChild(head);
-
-    //  items list
-    let trg = document.createElement('div');
-    trg.id = 'items';
-    let inr = 0;
-    for (const c of lines)
-    {
-        if (!c)
-        {
-            trg.appendChild(document.createElement('hr'));
-        }
-        else if (c[0] == '#')
-        {
-            let h = document.createElement('h2');
-            h.innerText = c.substring(2);
-            trg.appendChild(h);
-        }
-        else
-        {
-            let d = document.createElement('div');
-            d.sid = cc + '.' + inr;
-            let a = tlink(c);
-            a.onclick = function() { check(d) };
-            d.appendChild(a);
-            let b = document.createElement('a');
-            b.onclick = function() { lock(d, 'y') };
-            d.appendChild(b);
-
-            let cl = states[d.sid];
-            if (cl) d.className = cl;
-
-            trg.appendChild(d);
-            items.push(d);
-            ++inr;
-        }
-    }
-    document.body.appendChild(trg);
-
-    //  bottom action menu
-    let bt = document.createElement('div');
-    bt.id = 'bottom';
-    bt.className = 'mn';
-    let a = ilink('reset');
-    a.onclick = reset;
-    bt.appendChild(a);
-    a = ilink('remove');
-    a.href = 'remove.php?' + uid + '&' + cnr;
-    bt.appendChild(a);
-    a = ilink('edit');
-    a.href = '_edit.php?' + uid + '&' + cnr;
-    bt.appendChild(a);
-    document.body.appendChild(bt);
-
-    console.log(document.body.childNodes);
-
-    numElems = items.length;
-    console.log('numElems', numElems);
-    ckh();
-}
-
-function gen_menu(data)
-{
-    const [ nid, heads, states, empty] = data;
-    uid = nid;
-
-    //  items list
-    let trg = document.createElement('div');
-    trg.id = 'menu';
-    let cnr = 0;
-    let done = [];
-    let out = [];
-    for (const ch of heads)
-    {
-        let d = document.createElement('div');
-        let a = tlink(ch);
-        a.href = '_index.php?' + uid + '&' + cnr;
-        d.appendChild(a);
-        let b = document.createElement('a');
-        b.href = '_edit.php?' + uid + '&' + cnr;
-        d.appendChild(b);
-        let cl = states[cnr];
-        if (cl) d.classList.add(cl);
-        if (empty.includes(cnr)) d.classList.add('e');
-        if (d.classList.contains('y')) out.push(d);
-        else if (d.classList.contains('x')) done.push(d);
-        else trg.appendChild(d);
-        ++cnr;
-    }
-    for (const d of out) trg.appendChild(d);
-    for (const d of done) trg.appendChild(d);
-
-    document.body.appendChild(trg);
-
-    // // expand empty button
-    // let b = document.createElement('input');
-    // b.type = 'checkbox';
-    // b.id = 'expand-box';
-    // let l = document.createElement('label');
-    // l.id = 'expand-label';
-    // l.setAttribute('for', b.id);
-    // l.innerText = 'expand';
-    // document.body.appendChild(b);
-    // document.body.appendChild(l);
-}
 
 function tlink(ttl)
 {
@@ -137,64 +13,48 @@ function ilink(cl)
 {
     let a = document.createElement('a');
     a.className = 'i ' + cl;
-    // a.innerText = a.className;
     return a;
 }
 
-function check(obj)
+//  bottom action menu
+function mn_bottom()
 {
-    const clo = obj.className;
-    if (obj.classList.contains('y'))
-        obj.className = '';
-    else obj.classList.toggle('x');
-    eval(obj, clo);
+    let bt = document.createElement('div');
+    bt.id = 'bottom';
+    bt.className = 'mn';
+    document.body.appendChild(bt);
+    return bt;
 }
 
-function lock(obj)
+//  bottom action menu
+function mn_top()
 {
-    const clo = obj.className;
-    obj.classList.remove('x');
-    obj.classList.toggle('y');
-    eval(obj, clo);
+    let bt = document.createElement('div');
+    bt.id = 'top';
+    bt.className = 'mn';
+    document.body.appendChild(bt);
+    return bt;
 }
 
-function eval(obj, clo, ck=true)
+function insertAfter(trg, obj)
 {
-    const cln = obj.className;
-    if (clo != cln)
-    {
-        console.log('eval', obj.sid, obj.className);
-        send('_state.php', obj);
-        if (ck) ckh();
-    }
+    trg.parentNode.insertBefore(obj, trg.nextSibling);
 }
 
-function ckh()
+function div()
 {
-    if (numElems == 0) return;
-    const clo = head.className;
-    let done = {
-        'x' : 0,
-        'y' : 0
-    };
-    for (const i of items) ++done[i.className];
-    const cln = done['x'] + done['y'] < numElems ? '' : done['y'] > 0 ? 'y' : 'x';
-    console.log('ckh', numElems, done);
-    head.className = cln;
-    eval(head, clo, false);
+    return document.createElement('div');
 }
-
-function reset()
+function anc()
 {
-    for (let item of items) item.classList = '';
-    head.classList = '';
-    send('_reset.php', head);
+    return document.createElement('a');
 }
 
 //  send object state (class)
 function send(trg, obj)
 {
-    var data = 'uid=' + uid + '&id=' + obj.sid + '&st=' + obj.className;
+    const cl = obj.classList.contains('y') ? 'y' : obj.classList.contains('x') ? 'x' : '';
+    var data = 'uid=' + uid + '&id=' + obj.sid + '&st=' + cl;
     console.log('send', trg, data);
     var xhr = new XMLHttpRequest();
     xhr.open('POST', trg, true);

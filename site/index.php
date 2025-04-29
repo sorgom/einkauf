@@ -1,19 +1,31 @@
-<?php
-    require_once("view.php");
-    usr()->check();
 
-    $chap = usr()->param();
-    //  no chapter: display menu
-    if (is_null($chap))
+<?php
+    require_once('data.php');
+    usr()->check();
+    require_once('_view.php');
+?>
+<script src="_view.js"></script>
+<?php
+    $cnr = usr()->param();
+    if (!is_null($cnr))
     {
-        new Menu();
+        $data = [
+            usr()->uid(), $cnr, data()->heads()[$cnr],
+            data()->lines($cnr), states()->items($cnr)
+        ];
+        $script = 'items.js';
+        $call = 'gen_items';
     }
-    //  chapter number given: display chapter
     else
     {
-        new ItemList($chap);
-        echo "<script src=items.js></script>\n";
-        echo "<script>setUid('" . usr()->uid() . "');</script>\n";
+        $data = [
+            usr()->uid(), data()->heads(),
+            states()->chapters(), data()->ecs()];
+            $script = 'menu.js';
+            $call = 'gen_menu';
     }
+    $c = json_encode($data);
+    echo "<script src=$script></script>\n";
+    echo "<script>gen($c);</script>\n";
 ?>
 </body></html>

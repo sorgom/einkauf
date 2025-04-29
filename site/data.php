@@ -173,23 +173,27 @@ class Data extends DataObject
             $map = new States();
             foreach ($oData->heads() as $cnr => $head)
             {
-                foreach ($oData->lines($cnr) as $inr => $line)
+                foreach ($oData->items($cnr) as $inr => $line)
                 {
                     $map->set($oStates->cl($cnr, $inr), $head, $line);
                 }
             }
             foreach ($this->heads as $cnr => $head)
             {
-                $all = true;
-                $cst = 'x';
-                foreach ($this->lines($cnr) as $inr => $line)
+                $items = $this->items($cnr);
+                if (!empty($items))
                 {
-                    $c = $map->cl($head, $line);
-                    if ($all && $c) $cst = $c == 'y' ? 'y' : $cst;
-                    else $all = false;
-                    $nStates->set($map->cl($head, $line), $cnr, $inr);
+                    $all = true;
+                    $cst = 'x';
+                    foreach ($items as $inr => $line)
+                    {
+                        $c = $map->cl($head, $line);
+                        if ($all && $c) $cst = $c == 'y' ? 'y' : $cst;
+                        else $all = false;
+                        $nStates->set($map->cl($head, $line), $cnr, $inr);
+                    }
+                    if ($all) $nStates->set($cst, $cnr);
                 }
-                if ($all) $nStates->set($cst, $cnr);
             }
         }
         $this->_save(json_encode([$this->heads, $this->items, $this->notes]));
@@ -201,19 +205,27 @@ class Data extends DataObject
         return $this->heads;
     }
 
-    public function citems(int $cnr)
+    public function lines(int $cnr)
     {
         return $this->items[$cnr];
     }
 
-    public function items()
-    {
-        return $this->items;
-    }
-    public function lines(int $cnr)
+    public function items(int $cnr)
     {
         return array_values(array_filter($this->items[$cnr], 'Fnc::isl'));
     }
+
+    // retrieve empty chapters
+    public function ecs()
+    {
+        $nd = [];
+        foreach($this->items as $cnr => $i)
+        {
+            if (empty($i)) $nd[] = $cnr;
+        }
+        return $nd;
+    }
+
 
     public function given()
     {

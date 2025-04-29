@@ -14,7 +14,7 @@
     invert in dark mode
     only dark icons required
  */
-div.mn {
+#menu > div#tb, div.mn {
     background-color: var(--bg-light);
 }
 
@@ -32,9 +32,9 @@ div.mn {
         --bg-out: orange;
         --bg-alert: rgb(255, 83, 83);
     }
- }
+}
 @media (prefers-color-scheme: dark) {
-    div.mn {
+    div#tb, div.mn {
         filter: invert(100%);
     }
     :root {
@@ -84,7 +84,14 @@ a > p {
     line-height: 90%;
     overflow-x: clip;
 }
-#top, div > div {
+
+.e p
+{
+    color: var(--tc-low);
+}
+
+
+#ch, div > div {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -115,7 +122,7 @@ div > div > a:nth-child(2) {
     border-right: none;
     border-radius: 0.25em 0 0 0.25em;
 }
-#top, h2 {
+#ch, h2 {
     padding-left: var(--ml);
 }
 h2 {
@@ -129,22 +136,22 @@ hr {
 
 #items .x p { color: var(--tc-done) }
 #items .y p { color: var(--tc-out) }
-#top.x, #menu > div.x { background-color: var(--bg-done); }
-#top.y, #menu > div.y { background-color: var(--bg-out); }
+#ch.x, #menu > div.x { background-color: var(--bg-done); }
+#ch.y, #menu > div.y { background-color: var(--bg-out); }
 #menu > div.x p, #menu > div.y p { color: var(--tc-low); }
 #menu > div {
     background-color: var(--bg-button);
     margin-bottom: 0.1em;
 }
 
-#top {
+#ch {
     position: sticky;
     top: 0;
     left: 0;
     z-index: 5;
     padding-right: var(--mr);
 }
-a#top {
+a#ch {
     justify-content: center;
     background-color: var(--bg-button);
 }
@@ -153,7 +160,6 @@ div.mn {
     display: flex;
     flex-direction: row;
     justify-content: left;
-    border-top: 1px solid var(--tc-heading);
     width: 100%;
     z-index: 5;
 }
@@ -173,37 +179,23 @@ div#bottom {
     position: fixed;
     left: 0;
     bottom: 0;
+    border-top: 1px solid var(--tc-heading);
 }
 .reset { background-image: url('img/reset.svg'); }
 .remove { background-image: url('img/trash.svg'); }
 .edit { background-image: url('img/pen.svg'); }
+.view { background-image: url('img/eye.svg'); }
+
+div#tb {
+    position: relative;
+    top: -0.1em;
+    height: 1.5em;
+    min-height: 0;
+    /* border-top: 1px solid var(--tc-heading);
+    background-color: none; */
+}
 
 /* https://developer.mozilla.org/de/docs/Web/CSS/:checked */
-#menu > div.e {
-    visibility: visible;
-    background-color: lightblue;
+.e {
+    color: var(--tc-low);
 }
-
-/* Hide the toggle checkbox */
-#expand-box {
-    display: none;
-}
-
-  /* Style the label */
-#expand-label {
-    display: block;
-    margin-top: 12px;
-    padding: 5px 11px;
-    background-color: #ff7;
-    border: 1px solid;
-    border-radius: 3px;
-}
-
-#expand-box:checked ~ #menu > div.e,
-#expand-box:checked ~ #expand-label {
-    background-color: lightgreen;
-    /* visibility: hidden; */
-}
-/* #expand-box:checked ~ #expand-label {
-    background-color: lightgreen;
-} */
