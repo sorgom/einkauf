@@ -10,7 +10,7 @@ function gen(data)
     const cc = '' + cnr;
 
         // display of current chapter
-    head = tlink(document.body, ttl);
+    head = tLink(document.body, ttl);
     head.id = 'ch';
     head.sid = cc;
     head.href = '/?' + uid;
@@ -38,7 +38,7 @@ function gen(data)
         {
             let d = div(trg);
             d.sid = cc + '.' + inr;
-            let a = tlink(d, c);
+            let a = tLink(d, c);
             a.className = 'a1';
             a.onclick = function() { check(d) };
             let b = anc(d);
@@ -57,11 +57,11 @@ function gen(data)
 
     //  bottom action menu
     let bt = mn_bottom();
-    let a = ilink(bt, 'reset');
+    let a = iLink(bt, 'reset');
     a.onclick = resetAll;
-    a = ilink(bt, 'remove');
+    a = iLink(bt, 'remove');
     a.href = 'remove.php?' + uid + '&' + cnr;
-    a = ilink(bt, 'edit');
+    a = iLink(bt, 'edit');
     a.href = 'edit.php?' + uid + '&' + cnr;
 
     console.log(document.body.childNodes);
@@ -93,7 +93,7 @@ function eval(obj, clo, ck=true)
     if (clo != cln)
     {
         console.log('eval', obj.sid, obj.className);
-        send('_state.php', obj);
+        sendObj('_state.php', obj);
         if (ck) ckh();
     }
 }
@@ -117,5 +117,5 @@ function resetAll()
 {
     for (let item of items) reset(item);
     reset(head);
-    send('_reset.php', head);
+    sendObj('_reset.php', head);
 }

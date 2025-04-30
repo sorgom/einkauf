@@ -14,14 +14,14 @@ function gen(data)
     let out = [];
     for (const ch of heads)
     {
-        var e = new Entry(cnr, ch);
+        const e = new Entry(cnr, ch);
         if (empty.includes(cnr))
         {
             e.add('e');
             e.a1.href = 'edit.php/?' + uid + '&' + cnr;
         }
         else e.a1.href = '/?' + uid + '&' + cnr;
-        e.a2.onclick = function () { toolbox(this); };
+        e.a2.onclick = function () { toolbox(e); };
         let cl = states[cnr];
         if (cl) e.add(cl);
         if (e.has('y')) out.push(e);
@@ -37,30 +37,34 @@ function gen(data)
     document.body.appendChild(trg);
 
     let bt = mn_bottom();
-    a = ilink(bt, 'edit');
+    a = iLink(bt, 'edit');
     a.href = 'input.php?' + uid;
 }
 
-function toolbox(obj)
+function toolbox(e)
 {
+    // const rect = obj.getBoundingClientRect();
+    // console.log(rect.top, rect.right, rect.bottom, rect.left);
     let tb = document.getElementById('tb');
     if (tb) tb.remove();
-    const par = obj.parentNode;
-    const sid = par.sid;
-    console.log('TB', par.className);
+    const sid = e.sid;
+    console.log('TB', e.sid);
     if (tbnr == sid) tbnr = undefined;
     else
     {
         let tb = div();
         tb.className = 'mn';
         tb.id = 'tb';
-        let a = ilink(tb, 'reset');
-        a.onclick = function () { resetEntry(par); }
-        a = ilink(tb, 'remove');
-        a.href = 'remove.php?' + uid + '&' + sid;
-        a = ilink(tb, 'edit');
+        let a = iLink(tb, 'reset');
+        a.onclick = function () {
+            if (e.reset(true))
+                window.location.reload();
+        }
+        a = iLink(tb, 'remove');
+        a.onclick = function () { removeConf.show(sid, e.ttl()); }
+        a = iLink(tb, 'edit');
         a.href = 'edit.php?' + uid + '&' + sid;
-        insertAfter(par, tb);
+        insertAfter(e.node(), tb);
         tbnr = sid;
     }
 }
@@ -71,6 +75,6 @@ function resetEntry(obj)
     reset(obj);
     if (obj.className != clo)
     {
-        send('_reset.php', obj);
+        sendObj('_reset.php', obj);
     }
 }

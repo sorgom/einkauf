@@ -1,5 +1,7 @@
 # TODO
 ## features
+### edit.php
+
 ## layout
 - round buttons?
 - themes
@@ -10,13 +12,7 @@
 ### menu
 - edit sticky ?
 ### items
-- up.svg
-- buttons
-- reset remove in a row sticky bottom
-- remove confirm: bottom
 ### input
-- navi on top
-- full width
 ## oop
 ## data
 - get rid of concatenations

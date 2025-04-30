@@ -205,6 +205,11 @@ class Data extends DataObject
         return $this->heads;
     }
 
+    public function head($cnr)
+    {
+        return $this->heads[$cnr];
+    }
+
     public function lines(int $cnr)
     {
         return $this->items[$cnr];
@@ -230,6 +235,11 @@ class Data extends DataObject
     public function given()
     {
         return !(empty($this->heads));
+    }
+
+    private static function clean(string &$text)
+    {
+        return trim(preg_replace('/^ *| *$/m', '', preg_replace('/\r\n|\r/', "\n", str_replace("\t", ' ', $text))));
     }
 
     private static function txt2item(string $txt)
@@ -261,13 +271,22 @@ class Data extends DataObject
         return $item;
     }
 
+    public function setc(int $cnr, string $ttl, string &$text)
+    {
+        var_dump($cnr, $ttl, $text);
+        var_dump($this->items);
+        array_splice($this->heads, $cnr, 1, [str_replace("\n", ' ', self::clean($ttl))]);
+        array_splice($this->items, $cnr, 1, [self::txt2item(self::clean($text))]);
+        var_dump($this->items);
+    }
+
     public function set(string &$text)
     {
         $this->heads = [];
         $this->items = [];
         $this->notes = '';
 
-        $txt = trim(preg_replace('/^ *| *$/m', '', preg_replace('/\r\n|\r/', "\n", str_replace("\t", ' ', $text))));
+        $txt = self::clean($text);
 
         $rx = '/^@ *(.+)\n?/m';
 
@@ -334,6 +353,11 @@ class Data extends DataObject
             $res[] = '';
         }
         return trim(Fnc::impl($res)) . "\n";
+    }
+
+    public function ctxt($cnr)
+    {
+        return Fnc::impl($this->items[$cnr]) . "\n";
     }
 
     public static function instance()
