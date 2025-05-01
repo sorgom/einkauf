@@ -19,29 +19,27 @@ function hidden(frm, name, val)
     return ip;
 }
 
-function Form(data)
+class Form
 {
-    const [task, ttl, txt, cnr] = data;
-    let frm = document.createElement('form');
-    frm.action = 'save.php';
-    frm.method = 'post';
-    if (task != 'x')
+    constructor(data)
     {
-        textarea(frm,  2, 'ttl', ttl);
+        const [task, ttl, txt, cnr] = data;
+
+        let frm = document.createElement('form');
+        frm.action = 'save.php';
+        frm.method = 'post';
+        let d = div(document.body);
+        d.className = 'mn top';
+        bLink(d);
+        let a = iLink(d, 'save');
+        a.onclick = function() { frm.submit(); }
+
+        textarea(frm, 50, 'txt', txt);
+
+        hidden(frm, 'uid', uid);
+
+
+        document.body.appendChild(frm);
+
     }
-    textarea(frm, 20, 'txt', txt);
-
-    hidden(frm, 'task', task);
-    hidden(frm, 'cnr', cnr);
-    hidden(frm, 'uid', uid);
-
-
-    document.body.appendChild(frm);
-
-    let d = div(document.body);
-    d.id = 'top';
-    d.className = 'mn';
-    bLink(d);
-    let a = iLink(d, 'save');
-    a.onclick = function() { frm.submit(); }
 }

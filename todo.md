@@ -17,6 +17,17 @@
  -> JS
 tLink -> class tLink
 
+### items
+- div[a1[p[]] a2]
+- color of p
+- margin
+### menu
+- a[p[]]
+- bg-color of a x / y
+### heading
+- a[p[]]
+- bg-color of a x / y
+
 
 ### chapters' list
 

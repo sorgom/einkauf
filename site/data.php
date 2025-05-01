@@ -220,15 +220,36 @@ class Data extends DataObject
         return array_values(array_filter($this->items[$cnr], 'Fnc::isl'));
     }
 
-    // retrieve empty chapters
-    public function ecs()
+    function menuData()
     {
-        $nd = [];
+        $res = [];
         foreach($this->items as $cnr => $i)
         {
-            if (empty($i)) $nd[] = $cnr;
+            if (!empty($i))
+            {
+                $res[] = [ $cnr, htmlentities($this->heads[$cnr]), states()->cl($cnr) ];
+            }
         }
-        return $nd;
+        return [ usr()->uid(), $res ];
+    }
+    function ItemData($cnr)
+    {
+        $res = [];
+        $inr = 0;
+        foreach ($this->items[$cnr] as $i)
+        {
+            $i = htmlentities($i);
+            if (empty($i))
+                $e = ['hr'];
+            else if ($i[0] == '#')
+                $e = ['h', substr($i, 2)];
+            else {
+                $e = ['i', $i, states()->cl($cnr, $inr)];
+                ++$inr;
+            }
+            $res[] = $e;
+        }
+        return [ usr()->uid(), $cnr, $this->heads[$cnr], states()->cl($cnr), $res];
     }
 
 
@@ -269,15 +290,6 @@ class Data extends DataObject
             }
         }
         return $item;
-    }
-
-    public function setc(int $cnr, string $ttl, string &$text)
-    {
-        var_dump($cnr, $ttl, $text);
-        var_dump($this->items);
-        array_splice($this->heads, $cnr, 1, [str_replace("\n", ' ', self::clean($ttl))]);
-        array_splice($this->items, $cnr, 1, [self::txt2item(self::clean($text))]);
-        var_dump($this->items);
     }
 
     public function set(string &$text)

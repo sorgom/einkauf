@@ -1,80 +1,83 @@
-var entries = [];
-var tbnr = undefined;
 
-function gen(data)
+class Menu extends Usr
 {
-    const [ nid, heads, states, empty] = data;
-    uid = nid;
-
-    //  items list
-    let trg = document.createElement('div');
-    trg.id = 'menu';
-    let cnr = 0;
-    let done = [];
-    let out = [];
-    for (const ch of heads)
+    constructor(data)
     {
-        const e = new Entry(cnr, ch);
-        if (empty.includes(cnr))
+        const [ uid, entries ] = data;
+        super(uid);
+        let _this = this;
+        let done = [];
+        let post = [];
+        let bd = document.body;
+        for (const [cnr, ttl, cl]  of entries)
         {
-            e.add('e');
-            e.a1.href = 'edit.php/?' + uid + '&' + cnr;
+            let a = tLink(ttl);
+            console.log(cl);
+            if (cl) a.classList.add(cl);
+            a.onclick = function() { _this.view(cnr); }
+            if      (cl == 'y') post.push[a];
+            else if (cl == 'x') done.push[a];
+            else bd.appendChild(a);
         }
-        else e.a1.href = '/?' + uid + '&' + cnr;
-        e.a2.onclick = function () { toolbox(e); };
-        let cl = states[cnr];
-        if (cl) e.add(cl);
-        if (e.has('y')) out.push(e);
-        else if (e.has('x')) done.push(e);
-        else e.put(trg);
-        entries.push(e);
-        ++cnr;
-    }
-    for (const e of out) e.put(trg);
-    for (const e of done) e.put(trg);
-
-    trg.appendChild(document.createComment('end'));
-    document.body.appendChild(trg);
-
-    let bt = mn_bottom();
-    a = iLink(bt, 'edit');
-    a.href = 'input.php?' + uid;
-}
-
-function toolbox(e)
-{
-    // const rect = obj.getBoundingClientRect();
-    // console.log(rect.top, rect.right, rect.bottom, rect.left);
-    let tb = document.getElementById('tb');
-    if (tb) tb.remove();
-    const sid = e.sid;
-    console.log('TB', e.sid);
-    if (tbnr == sid) tbnr = undefined;
-    else
-    {
-        let tb = div();
-        tb.className = 'mn';
-        tb.id = 'tb';
-        let a = iLink(tb, 'reset');
-        a.onclick = function () {
-            if (e.reset(true))
-                window.location.reload();
-        }
-        a = iLink(tb, 'remove');
-        a.onclick = function () { removeConf.show(sid, e.ttl()); }
-        a = iLink(tb, 'edit');
-        a.href = 'edit.php?' + uid + '&' + sid;
-        insertAfter(e.node(), tb);
-        tbnr = sid;
+        for (const a of post) bd.appendChild(a);
+        for (const a of done) bd.appendChild(a);
+        let d = div(bd);
+        d.className = 'mn bottom';
+        let a = iLink('imprint', d);
+        a.onclick = function() { _this.go('imprint'); }
+        let b = iLink('edit', d);
+        b.onclick = function() { _this.go('edit'); }
     }
 }
 
-function resetEntry(obj)
+class Item
 {
-    const clo = obj.className;
-    reset(obj);
-    if (obj.className != clo)
+    inr;
+    di;
+    constructor(inr, data)
     {
-        sendObj('_reset.php', obj);
+        let _this = this;
+        this.inr = inr;
+        const [ttl, cl ] = data;
+        let di = div(document.body);
+        di.className = 'item';
+        if (cl) di.classList.add(cl);
+        let a1 = tLink(ttl, di);
+        a1.className = 'a1';
+        a1.onclick = this.x;
+        let a2 = anc(di);
+        a2.className = 'a2';
+        a1.onclick = this.y;
+        this.di = di;
     }
+    cl()
+    {
+        return sClass(this.di);
+    }
+    x()
+    {
+        let cll = this.di.classList;
+        if (cll.contains('y')) cll.remove('y');
+        else cll.toggle('x');
+    }
+    y()
+    {
+        let cll = this.di.classList;
+        cll.remove('x');
+        cll.toggle('y');
+    }
+}
+
+class Items extends Usr
+{
+    cnr;
+    constructor(data)
+    {
+        const [ uid, cnr, entries ] = data;
+        super(uid);
+        this.cnr = cnr;
+
+    }
+
+
 }
