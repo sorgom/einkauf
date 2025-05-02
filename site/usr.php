@@ -47,10 +47,10 @@ class Register
     {
         if (!is_dir(self::$dir)) mkdir(self::$dir);
     }
-    public static function log(string $message)
+    public static function log(mixed $message)
     {
         self::check();
-        error_log($message . "\n", 3, self::$log);
+        error_log(serialize($message) . "\n", 3, self::$log);
     }
 }
 
@@ -90,9 +90,9 @@ class Usr
     {
         header("Location: $php.php?" . $this->uid);
     }
-    public function view($cnr=NULL)
+    public function view(... $params)
     {
-        header("Location: /?" . $this->uid . (is_null($cnr) ? '' : "&$cnr"));
+        header("Location: /?" . implode('|', [ $this->uid, ...$params]));
     }
 
     function param(int $n=0)
@@ -113,8 +113,12 @@ class Usr
         }
         else if ($_GET)
         {
-            $this->params = array_keys($_GET);
-            $this->uid = array_shift($this->params);
+            $ps = array_keys($_GET);
+            if ($ps)
+            {
+                $this->params = explode('|', $ps[0]);
+                $this->uid = array_shift($this->params);
+            }
         }
         if ($this->uid)
         {

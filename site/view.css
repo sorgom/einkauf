@@ -193,7 +193,21 @@ div.mn > a:nth-child(1) {
 .view       { background-image: url('img/eye.svg'); }
 .back       { background-image: url('img/back.svg'); }
 .imprint    { background-image: url('img/paragraph.svg'); }
+.up         { background-image: url('img/up.svg'); }
+.save       { background-image: url('img/save.svg'); }
 
+textarea.txt {
+    width: 100%;
+    height: 90%;
+    font-family: serif;
+    /* font-stretch: normal; */
+    font-size: 1em;
+    padding: 1em 0 2em 1em;
+    color: var(--tc);
+    background-color: var(--bg);
+    resize: none;
+    animation: 1s blink step-end infinite;
+}
 /* confirm button  */
 #conf {
     position: fixed;
