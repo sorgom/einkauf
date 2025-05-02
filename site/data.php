@@ -238,20 +238,19 @@ class Data extends DataObject
         $inr = 0;
         foreach ($this->items[$cnr] as $i)
         {
-            $i = htmlentities($i);
+            // $i = htmlentities($i);
             if (empty($i))
-                $e = ['hr'];
+                $e = '';
             else if ($i[0] == '#')
-                $e = ['h', substr($i, 2)];
+                $e = substr($i, 2);
             else {
-                $e = ['i', $i, states()->cl($cnr, $inr)];
+                $e = [$i, states()->cl($cnr, $inr)];
                 ++$inr;
             }
             $res[] = $e;
         }
         return [ usr()->uid(), $cnr, $this->heads[$cnr], states()->cl($cnr), $res];
     }
-
 
     public function given()
     {

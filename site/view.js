@@ -24,26 +24,28 @@ class Usr
     }
 }
 
+function make(what, par=undefined)
+{
+    let e = document.createElement(what);
+    if (par) par.appendChild(e);
+    return e;
+}
+
 function div(par=undefined)
 {
-    let d = document.createElement('div');
-    if (par) par.appendChild(d);
-    return d;
+    return make('div', par);
 }
 
 function p(ttl, par=undefined)
 {
-    let p = document.createElement('p');
+    let p = make('p', par);
     p.innerText = ttl;
-    if (par) par.appendChild(p);
     return p;
 }
 
 function anc(par)
 {
-    let a = document.createElement('a');
-    if (par) par.appendChild(a);
-    return a;
+    return make('a', par);
 }
 
 function tLink(ttl, par=undefined)
@@ -72,4 +74,9 @@ function sClass(obj)
 {
     const cll = obj.classList;
     return cll.contains('y') ? 'y' : cll.contains('x') ? 'x' : '';
+}
+
+function say(...c)
+{
+    console.log(...c);
 }

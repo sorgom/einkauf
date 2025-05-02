@@ -2,8 +2,9 @@
 
 class Register
 {
-    private static string $dir = 'data';
+    private static string $dir  = 'data';
     private static string $file = 'data/reg.json';
+    private static string $log  = 'data/.log';
     private array $uids = [];
 
     public function __construct(bool $load=false)
@@ -12,7 +13,7 @@ class Register
     }
     public function save()
     {
-        if (!is_dir(self::$dir)) mkdir(self::$dir);
+        self::check();
         file_put_contents(self::$file, json_encode($this->uids));
     }
     public function load()
@@ -41,6 +42,15 @@ class Register
     {
         static $instance = new Register(true);
         return $instance;
+    }
+    private static function check()
+    {
+        if (!is_dir(self::$dir)) mkdir(self::$dir);
+    }
+    public static function log(string $message)
+    {
+        self::check();
+        error_log($message . "\n", 3, self::$log);
     }
 }
 
@@ -85,9 +95,9 @@ class Usr
         header("Location: /?" . $this->uid . (is_null($cnr) ? '' : "&$cnr"));
     }
 
-    function param()
+    function param(int $n=0)
     {
-        return empty($this->params) ? NULL : $this->params[0];
+        return count($this->params) > $n ? $this->params[$n] : NULL;
     }
 
     function params()
