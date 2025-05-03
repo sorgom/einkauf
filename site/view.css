@@ -111,10 +111,13 @@ a.p {
 }
 
 a.p.x {
-    background-color: var(--bg-done);
+    /* background-color: var(--bg-done); */
+    text-decoration: line-through;
 }
 a.p.y {
-    background-color: var(--bg-out);
+    /* background-color: var(--bg-out); */
+    /* font-style: italic; */
+    text-decoration: underline;
 }
 /*  links with txt color
     - items
@@ -126,10 +129,13 @@ a.a1 {
     color: var(--tc);
 }
 .x > .a1 > p {
-    color: var(--tc-done);
+    /* color: var(--tc-done); */
+    text-decoration: line-through;
 }
 .y > .a1 > p {
-    color: var(--tc-out);
+    /* color: var(--tc-out); */
+    /* font-style: italic; */
+    text-decoration: underline;
 }
 /* items: small links right */
 a.a2 {
