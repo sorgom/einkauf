@@ -59,6 +59,7 @@ class Usr
     private string $uid = '';
     private bool $valid = false;
     private array $params = [];
+    private static string $sep = '-';
 
     public static function instance()
     {
@@ -92,7 +93,7 @@ class Usr
     }
     public function view(... $params)
     {
-        header("Location: /?" . implode('|', [ $this->uid, ...$params]));
+        header("Location: /?" . implode(self::$sep, [ $this->uid, ...$params]));
     }
 
     function param(int $n=0)
@@ -116,7 +117,7 @@ class Usr
             $ps = array_keys($_GET);
             if ($ps)
             {
-                $this->params = explode('|', $ps[0]);
+                $this->params = explode(self::$sep, $ps[0]);
                 $this->uid = array_shift($this->params);
             }
         }

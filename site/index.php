@@ -4,7 +4,7 @@
     usr()->check();
     require_once('view.php');
 ?>
-<script src=menu.js></script>
+<script src=view.js></script>
 <?php
     $x = usr()->param();
     $uid = usr()->uid();

@@ -5,5 +5,4 @@
 <meta charset='UTF-8'>
 <link rel=stylesheet href=view.css>
 <link rel=icon type='image/gif' href='img/check_icon.svg'>
-<script src=view.js></script>
 </head><body>
