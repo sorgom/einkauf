@@ -46,10 +46,15 @@ div.mn {
         --tc-link: blue;
         --tc-low: #AAA;
         --bg: var(--bg-dark);
-        --bg-button: rgb(7, 47, 64);
+        /* --bg-button: rgb(7, 47, 64); */
+        --bg-button: #444;
         --bg-done: rgb(7, 76, 37);
-        --bg-out: rgb(98, 4, 7);
-        --bg-alert: rgb(130, 91, 8);
+        /* --bg-out: rgb(195, 110, 0); */
+        --bg-out: darkred;
+        --bg-alert: rgb(186, 51, 51);
+
+        /* --bg-out: rgb(98, 4, 7);
+        --bg-alert: rgb(130, 91, 8); */
     }
 }
 
@@ -195,9 +200,10 @@ div.mn > a:nth-child(1) {
 .imprint    { background-image: url('img/paragraph.svg'); }
 .up         { background-image: url('img/up.svg'); }
 .save       { background-image: url('img/save.svg'); }
+.enter      { background-image: url('img/enter.svg'); }
 
 textarea.txt {
-    width: 100%;
+    width: 95%;
     height: 90%;
     font-family: serif;
     /* font-stretch: normal; */
@@ -206,6 +212,7 @@ textarea.txt {
     color: var(--tc);
     background-color: var(--bg);
     resize: none;
+    overflow-x: clip;
     animation: 1s blink step-end infinite;
 }
 /* confirm button  */
@@ -228,14 +235,31 @@ textarea.txt {
 #conf > div {
     margin: 2%;
     background-color: var(--bg);
-    box-shadow: 5px 5px 15px grey;
+    border: solid 2px var(--bg-alert);
+    box-shadow: 5px 5px 15px black;
 }
 #conf > div > p {
     background-color: var(--bg-alert);
     padding: 0.1em 0.5em 0.1em 0.5em;
     line-height: 90%;
     overflow-x: clip;
+    text-align: center;
 }
 a.p.conf {
     padding-left: 0.05em;
+}
+
+.itxt {
+    white-space: break-spaces;
+    font-size: 60%;
+    margin: 1em;
+}
+.itxt > a {
+    color: var(--tc-link);
+}
+
+textarea.line {
+    width: 80%;
+    margin: 0 10% 0 10%;
+    font-size: 100%;
 }

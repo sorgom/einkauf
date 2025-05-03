@@ -1,22 +1,29 @@
+'use strict';
 
 class Menu extends Usr
 {
-    constructor(data)
+    constructor(uid)
     {
-        const [ uid, entries ] = data;
         super(uid);
+        this.get('menu');
+    }
+
+    process(txt)
+    {
+        const data = JSON.parse(txt);
+        const [ uid, entries ] = data;
         const _this = this;
         let done = [];
         let post = [];
         const bd = document.body;
         for (const [cnr, ttl, cl] of entries)
         {
-            say('menu', cnr, ttl, cl);
+            console.log('menu', cnr, ttl, cl);
             const a = tLink(ttl, undefined);
             a.onclick = function() { _this.view(cnr); }
             if (cl)
             {
-                say(cl);
+                console.log(cl);
                 a.classList.add(cl);
                 if      (cl == 'y') post.push(a);
                 else if (cl == 'x') done.push(a);
@@ -27,10 +34,8 @@ class Menu extends Usr
         for (const a of done) bd.appendChild(a);
         const d = div(bd);
         d.className = 'mn bottom';
-        const a = iLink('imprint', d);
-        a.onclick = function() { _this.go('imprint'); }
-        const b = iLink('edit', d);
-        b.onclick = function() { _this.go('edit'); }
+        const a = iLink('edit', d);
+        a.onclick = function() { _this.view('e'); }
     }
 }
 
@@ -98,11 +103,17 @@ class Items extends Usr
     items = [];
     cl = '';
     conf;
-    constructor(data)
+    constructor(uid, cnr)
     {
+        super(uid);
+        this.get('items', cnr);
+    }
+
+    process(txt)
+    {
+        const data = JSON.parse(txt);
         const [ uid, cnr, hl, cl, entries ] = data;
         console.log('Items', cnr, hl);
-        super(uid);
         const _this = this;
         this.cnr = cnr;
         const bd = document.body;
@@ -139,11 +150,12 @@ class Items extends Usr
         a3.onclick = function() { _this.view(); }
 
         this.conf = new ConfirmRemove(uid, cnr, hl);
+
     }
 
     note(inr, cl)
     {
-        say(inr, cl);
+        console.log(inr, cl);
         this.send('_state', cl, this.cnr, inr);
         let cnt = { 'x':0, 'y':0};
         for (const i of this.items)
@@ -189,7 +201,7 @@ class ConfirmRemove extends Usr
         a1.onclick = function () { _this.hide(); }
         const a2 = iLink('remove', dm);
         a2.onclick = function () {
-            say('clicked');
+            console.log('clicked');
             _this.go('remove', cnr);
         }
         this.dc = dc;
@@ -200,10 +212,15 @@ class ConfirmRemove extends Usr
 
 class InputForm extends Usr
 {
-    constructor(data)
+    constructor(uid)
     {
-        const [uid, txt] = data;
         super(uid);
+        this.get('txt');
+    }
+
+    process(txt)
+    {
+        console.log('process derived');
         const _this = this;
         const frm = document.createElement('form');
         frm.action = 'save.php';
@@ -218,8 +235,7 @@ class InputForm extends Usr
 
         textarea(frm, 50, 'txt', txt);
 
-        hidden(frm, 'uid', uid);
+        hidden(frm, 'uid', this.uid);
         document.body.appendChild(frm);
     }
-
 }

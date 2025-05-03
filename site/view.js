@@ -1,3 +1,4 @@
+'use strict';
 
 class Usr
 {
@@ -7,6 +8,7 @@ class Usr
     constructor(uid)
     {
         this.uid = uid;
+        console.log('uid:', this.uid);
     }
     url(trg, ...params)
     {
@@ -25,6 +27,28 @@ class Usr
     {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', this.url(trg, ...params), true);
+        xhr.send(null);
+    }
+
+    process()
+    {
+        console.log('process base');
+    }
+
+    get(...params)
+    {
+        console.log('GET');
+        const _this = this;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function()
+        {
+            if (xhr.readyState == 4 && xhr.status == 200)
+            {
+                console.log('DATA');
+                _this.process(xhr.responseText);
+            }
+        }
+        xhr.open('GET', this.url('_get', ...params), true);
         xhr.send(null);
     }
 }
@@ -105,9 +129,4 @@ function sClass(obj)
 function reset(e)
 {
     e.classList.remove('x', 'y');
-}
-
-function say(...c)
-{
-    console.log(...c);
 }

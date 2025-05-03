@@ -1,27 +1,17 @@
 <?php
     require_once("view.php");
-    // new ImprintBack();
 ?>
-<div id=navi> <?php new ImprintBack(); ?></div>
-<div class=imprint>
+<div id=imprint>
 <?php
     $iFile = 'imprint.txt';
-    if (file_exists($iFile))
-    {
-        echo htmlentities(file_get_contents($iFile));
-    }
-    else
-    {
-        echo "Imprint not found.";
-    }
-
+    if (!file_exists($iFile)) $file = 'imprint_default.txt';
+    echo htmlentities(file_get_contents($iFile));
 ?>
-
 
 This is Open Source.
 <a href='https://github.com/sorgom/todo' target=_blank>view on github ..</a>
 
 PHP <?php echo phpversion() ?>
-
-</div><div id=bottom> <?php new Back(); ?></div>
+</div>
+<!-- <div class='mn bottom'> <a class='back' onclick='history.back();'> </a></div> -->
 </body></html>

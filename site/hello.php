@@ -2,9 +2,15 @@
 <?php
     require_once("view.php");
 ?>
-<div id=info>
-<h2>Willkommen</h2>
-<p>Hier geht's zur Anmeldung:</p>
-</div>
-<?php new UsrNew(); ?>
+<div class=itxt><?php
+    $iFile = 'hello.txt';
+    if (!file_exists($iFile)) $iFile = 'hello_default.txt';
+    echo htmlentities(trim(file_get_contents($iFile)));
+?>
+
+
+This is Open Source.
+<a href='https://github.com/sorgom/todo' target=_blank>view on github ..</a>
+[ PHP <?php echo phpversion() ?> ]</div>
+<div class='mn bottom'> <a class='enter' href=start.php> </a></div>
 </body></html>
