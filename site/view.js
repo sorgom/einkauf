@@ -87,7 +87,6 @@ class Usr
     constructor(uid)
     {
         this.uid = uid;
-        console.log('uid:', this.uid);
     }
     url(trg, ...params)
     {
@@ -107,24 +106,25 @@ class Usr
         var xhr = new XMLHttpRequest();
         xhr.open('GET', this.url(trg, ...params), true);
         xhr.send(null);
+        const t2 = performance.now();
     }
 
-    process()
-    {
-        console.log('process base');
-    }
+    process() {}
 
     get(...params)
     {
-        console.log('GET');
         const _this = this;
+        const t1 = performance.now();
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function()
         {
             if (xhr.readyState == 4 && xhr.status == 200)
             {
-                console.log('DATA');
+                const t2 = performance.now();
+                console.log('DATA', Math.round(t2 - t1));
                 _this.process(xhr.responseText);
+                const t3 = performance.now();
+                console.log('PROC', Math.round(t3 - t2));
             }
         }
         xhr.open('GET', this.url('_get', ...params), true);
@@ -151,12 +151,10 @@ class Menu extends Usr
         const bd = document.body;
         for (const [cnr, ttl, cl] of entries)
         {
-            console.log('menu', cnr, ttl, cl);
             const a = tLink(ttl, undefined);
             a.onclick = function() { _this.view(cnr); }
             if (cl)
             {
-                console.log(cl);
                 a.classList.add(cl);
                 if      (cl == 'y') post.push(a);
                 else if (cl == 'x') done.push(a);
@@ -244,9 +242,7 @@ class Items extends Usr
 
     process(txt)
     {
-        const data = JSON.parse(txt);
-        const [ uid, cnr, hl, cl, entries ] = data;
-        console.log('Items', cnr, hl);
+        const [ uid, cnr, hl, cl, entries ] = JSON.parse(txt);
         const _this = this;
         this.cnr = cnr;
         const bd = document.body;
@@ -288,7 +284,6 @@ class Items extends Usr
 
     note(inr, cl)
     {
-        console.log(inr, cl);
         this.send('_state', cl, this.cnr, inr);
         let cnt = { 'x':0, 'y':0};
         for (const i of this.items)
@@ -333,10 +328,7 @@ class ConfirmRemove extends Usr
         const a1 = iLink('back', dm);
         a1.onclick = function () { _this.hide(); }
         const a2 = iLink('remove', dm);
-        a2.onclick = function () {
-            console.log('clicked');
-            _this.go('remove', cnr);
-        }
+        a2.onclick = function () { _this.go('remove', cnr); }
         this.dc = dc;
     }
     hide() { this.dc.classList.remove('v'); }
@@ -353,11 +345,15 @@ class InputForm extends Usr
 
     process(txt)
     {
-        console.log('process derived');
         const _this = this;
         const frm = document.createElement('form');
         frm.action = 'save.php';
         frm.method = 'post';
+
+        textarea(frm, 50, 'txt', txt);
+
+        hidden(frm, 'uid', this.uid);
+        document.body.appendChild(frm);
 
         const d = div();
         d.className = 'mn bottom';
@@ -365,10 +361,5 @@ class InputForm extends Usr
         a.onclick = function() { _this.view(); }
         const b = iLink('save', d);
         b.onclick = function() { frm.submit(); }
-
-        textarea(frm, 50, 'txt', txt);
-
-        hidden(frm, 'uid', this.uid);
-        document.body.appendChild(frm);
     }
 }

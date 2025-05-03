@@ -2,7 +2,7 @@
 <?php
     require_once('usr.php');
     usr()->check();
-    require_once('view.php');
+    require_once('body.php');
 ?>
 <script src=view.js></script>
 <?php

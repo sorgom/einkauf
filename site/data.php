@@ -5,7 +5,6 @@ require_once('usr.php');
 class Fnc
 {
     protected static function isl(string $c) { return !(empty($c) || $c[0] == '#'); }
-    protected static function xpl(string $s) { return explode("\n", $s); }
     protected static function impl($a) { return implode("\n", $a); }
 }
 
@@ -125,12 +124,6 @@ class States extends DataObject
             if (preg_match($rx, $k)) unset($this->states[$k]);
         }
     }
-
-    public static function instance()
-    {
-        static $instance = new States(true);
-        return $instance;
-    }
 }
 
 class Data extends DataObject
@@ -205,11 +198,6 @@ class Data extends DataObject
         return $this->heads;
     }
 
-    public function head($cnr)
-    {
-        return $this->heads[$cnr];
-    }
-
     public function lines(int $cnr)
     {
         return $this->items[$cnr];
@@ -238,11 +226,8 @@ class Data extends DataObject
         $inr = 0;
         foreach ($this->items[$cnr] as $i)
         {
-            // $i = htmlentities($i);
-            if (empty($i))
-                $e = '';
-            else if ($i[0] == '#')
-                $e = substr($i, 2);
+            if (empty($i)) $e = '';
+            else if ($i[0] == '#') $e = substr($i, 2);
             else {
                 $e = [$i, states()->cl($cnr, $inr)];
                 ++$inr;
@@ -365,26 +350,18 @@ class Data extends DataObject
         }
         return trim(Fnc::impl($res)) . "\n";
     }
-
-    public function ctxt($cnr)
-    {
-        return Fnc::impl($this->items[$cnr]) . "\n";
-    }
-
-    public static function instance()
-    {
-        static $instance = new Data(true);
-        return $instance;
-    }
 }
 
+//  instances
 function states()
 {
-    return States::instance();
+    static $instance = new States(true);
+    return $instance;
 }
 function data()
 {
-    return Data::instance();
+    static $instance = new Data(true);
+    return $instance;
 }
 
 ?>

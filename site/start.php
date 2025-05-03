@@ -1,7 +1,8 @@
 
 <?php
-    require_once("view.php");
-    require_once("data.php");
+    require_once('body.php');
+    require_once('data.php');
+    require_once('dtxt.php');
     $reg = reg();
     do {
         $uid = strtoupper(dechex(rand(0xA0000000, 0xFFFFFFFF)));
@@ -9,18 +10,16 @@
     $reg->add($uid);
     $reg->save();
     usr()->set($uid);
-    $txt = file_get_contents('template/template.txt');
+    $txt = dtxt('template');
     $data = new Data();
     $data->set($txt);
     $data->save();
 ?>
 <div class=itxt><?php
-    $iFile = 'start.txt';
-    if (!file_exists($iFile)) $iFile = 'start_default.txt';
-    echo htmlentities(trim(file_get_contents($iFile)));
+    echo htmlentities(dtxt('start'));
 ?></div>
 <textarea class=line readonly autofocus spellcheck=false autofocus onFocus='this.select();this.setSelectionRange(0, 99999);'><?php
-echo $_SERVER['REQUEST_SCHEME']; echo '://'; echo $_SERVER['HTTP_HOST']; echo"?$uid";
+echo $_SERVER['REQUEST_SCHEME']; echo '://'; echo $_SERVER['HTTP_HOST']; echo "?$uid";
 ?></textarea>
 <div class='mn bottom'> <a class='enter' href=/?<?php echo $uid; ?>></a></div>
 </body></html>

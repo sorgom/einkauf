@@ -156,14 +156,15 @@ a.items {
     top: 0;
     left: 0;
     z-index: 5;
+
 }
+a.top { border-bottom: 0.1em solid var(--bg); }
 
 .bottom
 {
     position: fixed;
     left: 0;
     bottom: 0;
-    border-top: 1px solid var(--tc-heading);
     width: 100%;
 }
 
@@ -171,6 +172,11 @@ h2 {
     padding-left: var(--ml);
     font-size: 100%;
     color: var(--tc-heading);
+}
+
+hr {
+    border: none;
+    margin: 1em;
 }
 
 div.mn {
@@ -182,14 +188,9 @@ div.mn {
 }
 div.mn > a {
     flex-grow: 1;
-    margin-left: 0.1em;
-    height: 1.2em;
-    background-size: 1em;
+    height: 2em;
     background-repeat: no-repeat;
     background-position: center;
-}
-div.mn > a:nth-child(1) {
-    margin-left: 0;
 }
 
 .reset      { background-image: url('img/reset.svg'); }
@@ -206,7 +207,6 @@ textarea.txt {
     width: 95%;
     height: 90%;
     font-family: serif;
-    /* font-stretch: normal; */
     font-size: 1em;
     padding: 1em 0 2em 1em;
     color: var(--tc);
