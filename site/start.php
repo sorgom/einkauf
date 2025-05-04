@@ -21,5 +21,5 @@
 <textarea class=line readonly autofocus spellcheck=false autofocus onFocus='this.select();this.setSelectionRange(0, 99999);'><?php
 echo $_SERVER['REQUEST_SCHEME']; echo '://'; echo $_SERVER['HTTP_HOST']; echo "?$uid";
 ?></textarea>
-<div class='mn bottom'> <a class='enter' href=/?<?php echo $uid; ?>></a></div>
+<div class='mn bottom'> <a class='i enter' href=/?<?php echo $uid; ?>></a></div>
 </body></html>

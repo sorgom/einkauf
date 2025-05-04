@@ -5,19 +5,14 @@
     --mtr: 0.5em;
     --hr: 1.2em;
 
-    --bg-light: white;
     --tc: black;
     --tc-done: #666;
-    --tc-out: orange;
     --tc-heading: #BBB;
     --tc-link: blue;
     --tc-low: #666;
     --bg: white;
     --bg-button: #DDD;
     --bg-button-out: #AAA;
-    --bg-done: lightgreen;
-    --bg-out: orange;
-    --bg-alert: rgb(255, 83, 83);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -92,29 +87,25 @@ a.a2 {
     position: absolute;
     top: var(--mtr);
     right: 0;
-    z-index: 3;
     width: var(--mr);
     height: var(--hr);
     background-color: var(--bg-button-out);
     border-radius: 0.25em 0 0 0.25em;
 }
 
-a.items {
-    margin-bottom: 1em;
-}
 .item {
     position: relative;
     margin-bottom: 1em;
 }
 
-.top {
+a.top {
     position: sticky;
     top: 0;
     left: 0;
-    z-index: 5;
-
+    z-index: 1;
+    margin-bottom: 1em;
+    border-bottom: 0.1em solid var(--bg);
 }
-a.top { border-bottom: 0.1em solid var(--bg); }
 
 .bottom
 {
@@ -122,6 +113,7 @@ a.top { border-bottom: 0.1em solid var(--bg); }
     left: 0;
     bottom: 0;
     width: 100%;
+    z-index: 1;
 }
 
 h2 {
@@ -140,7 +132,7 @@ div.mn {
     flex-direction: row;
     justify-content: left;
     width: 100%;
-    z-index: 5;
+    z-index: 1;
     background-color: var(--bg);
 }
 a.i {
@@ -177,29 +169,30 @@ textarea.txt {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 2;
     width: 100%;
     height: 100vh;
-    z-index: 4;
-    background-color: transparent;
     display: flex;
     flex-direction: column;
-    justify-content:end;
-    visibility: hidden;
+    justify-content: end;
     padding-bottom: 3em;
+    background-color: transparent;
+    visibility: hidden;
 }
 #conf.v {
     visibility: visible;
 }
 #conf a {
     height: 3em;
-    margin: 3em;
+    margin: 1em;
+    margin-bottom: 3em;
+    background-color: var(--bg);
     border: solid 0.1em var(--tc);
     border-radius: 0.5em;
-    /* box-shadow: 5px 5px 15px black; */
 }
 
 .itxt {
-    white-space: break-spaces;
+    white-space: pre-wrap;
     font-size: 60%;
     margin: 1em;
 }

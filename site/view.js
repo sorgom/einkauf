@@ -68,17 +68,6 @@ function hidden(par, name, val)
     return ip;
 }
 
-function sClass(obj)
-{
-    const cll = obj.classList;
-    return cll.contains('y') ? 'y' : cll.contains('x') ? 'x' : '';
-}
-
-function reset(e)
-{
-    e.classList.remove('x', 'y');
-}
-
 class Usr
 {
     uid;
@@ -189,7 +178,7 @@ class Toggle
     }
     cl()
     {
-        return this.cll.contains('y') ? 'y' : this.cll.contains('x') ? 'x' : '';
+        return this.has('y') ? 'y' : this.has('x') ? 'x' : '';
     }
     x()
     {
@@ -199,7 +188,11 @@ class Toggle
     y()
     {
         if (this.cll.contains('x')) this.set('y');
-        else this.cll.toggle('x');
+        else this.cll.toggle('y');
+    }
+    has(cl)
+    {
+        return this.cll.contains(cl);
     }
 }
 
@@ -207,8 +200,7 @@ class Item
 {
     par;
     inr;
-    di;
-    cl = '';
+    tgl;
     constructor(par, inr, data)
     {
         const _this = this;
@@ -217,48 +209,31 @@ class Item
         const [ttl, cl ] = data;
         const di = div();
         di.className = 'item';
-        if (cl)
-        {
-            di.classList.add(cl);
-            this.cl = cl;
-        }
+        this.tgl = new Toggle(di, cl);
         const a1 = tLink(ttl, di);
         a1.className = 'a1';
-        a1.onclick = function() { _this.x(); }
+        a1.onclick = function()
+        {
+            _this.tgl.x();
+            _this.note();
+        }
         const a2 = anc(di);
         a2.className = 'a2';
-        a2.onclick = function() { _this.y(); }
-        this.di = di;
+        a2.onclick = function()
+        {
+            _this.tgl.y();
+            _this.note();
+        }
     }
-    icl()
+    toggle()
     {
-        return this.cl;
-    }
-    x()
-    {
-        if (this.di.classList.contains('y')) this.reset();
-        else this.di.classList.toggle('x');
-        this.cl = sClass(this.di);
-        this.note();
-    }
-    y()
-    {
-        if (this.di.classList.contains('x')) this.reset();
-        this.di.classList.toggle('y');
-        this.cl = sClass(this.di);
-        this.note();
+        return this.tgl;
     }
     note()
     {
-        this.par.note(this.inr, this.cl);
+        this.par.note(this.inr, this.tgl.cl());
     }
-    reset()
-    {
-        reset(this.di);
-        // this.di.classList.remove('x');
-        // this.di.classList.remove('y');
-        console.log('reset:', this.di.className);
-    }
+
 }
 
 class Items extends Usr
@@ -266,7 +241,6 @@ class Items extends Usr
     cnr;
     top;
     items = [];
-    cl = '';
     conf;
     constructor(uid, cnr)
     {
@@ -282,18 +256,14 @@ class Items extends Usr
         const bd = document.body;
         const a = tLink(hl, bd);
         a.classList.add('items', 'top');
-        if (cl) {
-            a.classList.add(cl);
-            this.cl = cl;
-        }
         a.onclick = function() { _this.view(); }
-        this.top = a;
+        this.top = new Toggle(a, cl);
         let inr = 0;
         for (const e of entries)
         {
             if (Array.isArray(e))
             {
-                this.items.push(new Item(this, inr, e));
+                this.items.push(new Item(this, inr, e).toggle());
                 ++inr;
             }
             else if (e)
@@ -319,31 +289,32 @@ class Items extends Usr
     note(inr, cl)
     {
         this.send('_state', cl, this.cnr, inr);
-        let cnt = { 'x':0, 'y':0};
-        for (const i of this.items)
+        const clo = this.top.cl();
+        this.top.clear();
+        let cln = ';'
+        if (cl)
         {
-            console.log(i.inr, i.icl());
-            ++cnt[i.icl()];
+            let cnt = { 'x':0, 'y':0};
+            for (const i of this.items)
+            {
+                ++cnt[i.cl()];
+            }
+            const cx = cnt['x'];
+            const cy = cnt['y'];
+            console.log('log:', cx, cy);
+            cln = cx + cy < this.items.length ? '' : cy > 0 ? 'y' : 'x';
+            this.top.set(cln);
         }
-        const cx = cnt['x'];
-        const cy = cnt['y'];
-        console.log('log:', cx, cy);
-        const cln = cx + cy < this.items.length ? '' : cy > 0 ? 'y' : 'x';
-        const clo = this.cl;
         if (cln != clo)
         {
-            if (clo) this.top.classList.remove(clo);
-            if (cln) this.top.classList.add(cln);
-            this.cl = cln;
             this.send('_state', cln, this.cnr);
         }
     }
 
     reset()
     {
-        console.log('reset:', this.items.length);
-        reset(this.top);
-        for (const i of this.items) i.reset();
+        this.top.clear();
+        for (const i of this.items) i.clear();
         this.send('_reset', this.cnr);
     }
 }
@@ -360,6 +331,7 @@ class ConfirmRemove extends Usr
         dc.onclick = function () { _this.hide(); }
         const di = div(dc);
         const a1 = iLink('remove', di);
+        a1.classList.add('conf');
         a1.onclick = function () { _this.go('remove', cnr); }
         this.dc = dc;
     }
