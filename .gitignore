@@ -2,6 +2,6 @@ tmp
 tmp.*
 temp
 logs
-site/data/*.*
-!template.*
-imprint.txt
+site/data
+*.txt
+!*.default.txt
