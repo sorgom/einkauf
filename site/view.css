@@ -185,7 +185,6 @@ textarea.txt {
 #conf a {
     height: 3em;
     margin: 1em;
-    margin-bottom: 3em;
     background-color: var(--bg);
     border: solid 0.1em var(--tc);
     border-radius: 0.5em;

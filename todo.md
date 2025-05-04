@@ -1,6 +1,5 @@
 # TODO
-## decision
-### css selectors
+## css selectors
 - class based
 - get rid of where placed selectors
     - look at remove confirmation
@@ -23,7 +22,7 @@ provide shortcuts
 ## layout / css
 - confirm remove:
     - center vertically (appears below bottom on device)
-
+    - find out why width does not work
 
 ### good links
 - themes
