@@ -1,0 +1,107 @@
+Sample input for copy & paste
+@ Hochseekapitänskajütentürschlüsselmanufaktur
+Hochseekapitänskajütentürersatzschlüssel
+Zweitschlüssel für Hochseekapitänskajütentür um sicher zu gehen
+
+@ 1 item
+item 1
+
+@ 2 items
+item 1
+item 2
+
+@ 10 items
+item 1
+item 2
+item 3
+item 4
+item 5
+item 6
+item 7
+item 8
+item 9
+item 10
+@ 20 items
+item 1
+item 2
+item 3
+item 4
+item 5
+item 6
+item 7
+item 8
+item 9
+item 10
+item 11
+item 12
+item 13
+item 14
+item 15
+item 16
+item 17
+item 18
+item 19
+item 20
+@ empty 1
+@ chapter 1
+item 1
+item 2
+item 3
+@ chapter 2
+item 1
+item 2
+item 3
+@ chapter 3
+item 1
+item 2
+item 3
+@ chapter 4
+item 1
+item 2
+item 3
+@ chapter 5
+item 1
+item 2
+item 3
+@ chapter 6
+item 1
+item 2
+item 3
+@ chapter 7
+item 1
+item 2
+item 3
+@ chapter 8
+item 1
+item 2
+item 3
+@ chapter 9
+item 1
+item 2
+item 3
+@ chapter 10
+item 1
+item 2
+item 3
+@ chapter 11
+item 1
+item 2
+item 3
+@ chapter 12
+item 1
+@ chapter 13
+item 1
+@ chapter 14
+item 1
+@ chapter 15
+item 1
+@ chapter 16
+item 1
+@ chapter 17
+item 1
+@ chapter 18
+item 1
+@ chapter 19
+item 1
+@ chapter 20
+item 1

@@ -36,7 +36,7 @@ function tLink(ttl, par=document.body)
 function iLink(cl, par=document.body)
 {
     let a = anc(par);
-    a.className = cl;
+    a.className = 'i ' + cl;
     return a;
 }
 
@@ -170,6 +170,39 @@ class Menu extends Usr
     }
 }
 
+class Toggle
+{
+    cll;
+    constructor(elem, cl)
+    {
+        this.cll = elem.classList;
+        this.set(cl);
+    }
+    set(cl)
+    {
+        this.clear();
+        if (cl) this.cll.add(cl);
+    }
+    clear()
+    {
+        this.cll.remove('x', 'y');
+    }
+    cl()
+    {
+        return this.cll.contains('y') ? 'y' : this.cll.contains('x') ? 'x' : '';
+    }
+    x()
+    {
+        if (this.cll.contains('y')) this.clear();
+        else this.cll.toggle('x');
+    }
+    y()
+    {
+        if (this.cll.contains('x')) this.set('y');
+        else this.cll.toggle('x');
+    }
+}
+
 class Item
 {
     par;
@@ -197,23 +230,21 @@ class Item
         a2.onclick = function() { _this.y(); }
         this.di = di;
     }
-    cl()
+    icl()
     {
         return this.cl;
     }
     x()
     {
-        const cll = this.di.classList;
-        if (cll.contains('y')) cll.remove('y');
-        else cll.toggle('x');
+        if (this.di.classList.contains('y')) this.reset();
+        else this.di.classList.toggle('x');
         this.cl = sClass(this.di);
         this.note();
     }
     y()
     {
-        const cll = this.di.classList;
-        cll.remove('x');
-        cll.toggle('y');
+        if (this.di.classList.contains('x')) this.reset();
+        this.di.classList.toggle('y');
         this.cl = sClass(this.di);
         this.note();
     }
@@ -224,6 +255,9 @@ class Item
     reset()
     {
         reset(this.di);
+        // this.di.classList.remove('x');
+        // this.di.classList.remove('y');
+        console.log('reset:', this.di.className);
     }
 }
 
@@ -288,10 +322,12 @@ class Items extends Usr
         let cnt = { 'x':0, 'y':0};
         for (const i of this.items)
         {
-            ++cnt[i.cl];
+            console.log(i.inr, i.icl());
+            ++cnt[i.icl()];
         }
         const cx = cnt['x'];
         const cy = cnt['y'];
+        console.log('log:', cx, cy);
         const cln = cx + cy < this.items.length ? '' : cy > 0 ? 'y' : 'x';
         const clo = this.cl;
         if (cln != clo)
@@ -305,6 +341,7 @@ class Items extends Usr
 
     reset()
     {
+        console.log('reset:', this.items.length);
         reset(this.top);
         for (const i of this.items) i.reset();
         this.send('_reset', this.cnr);
@@ -322,17 +359,19 @@ class ConfirmRemove extends Usr
         dc.id = 'conf';
         dc.onclick = function () { _this.hide(); }
         const di = div(dc);
-        p(ttl, di);
-        const dm = div(di);
-        dm.className = 'mn';
-        const a1 = iLink('back', dm);
-        a1.onclick = function () { _this.hide(); }
-        const a2 = iLink('remove', dm);
-        a2.onclick = function () { _this.go('remove', cnr); }
+        const a1 = iLink('remove', di);
+        a1.onclick = function () { _this.go('remove', cnr); }
         this.dc = dc;
     }
-    hide() { this.dc.classList.remove('v'); }
-    show() { this.dc.classList.add('v'); }
+    hide()
+    {
+        this.dc.classList.remove('v');
+    }
+    show()
+    {
+        console.log('CONF show');
+        this.dc.classList.add('v');
+    }
 }
 
 class InputForm extends Usr

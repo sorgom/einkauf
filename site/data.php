@@ -215,7 +215,7 @@ class Data extends DataObject
         {
             if (!empty($i))
             {
-                $res[] = [ $cnr, htmlentities($this->heads[$cnr]), states()->cl($cnr) ];
+                $res[] = [ $cnr, $this->heads[$cnr], states()->cl($cnr) ];
             }
         }
         return [ usr()->uid(), $res ];

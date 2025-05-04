@@ -4,57 +4,26 @@
     --ml: 1em;
     --mtr: 0.5em;
     --hr: 1.2em;
+
     --bg-light: white;
-    --bg-dark: black;
-    --bg-middle: #888;
+    --tc: black;
+    --tc-done: #666;
+    --tc-out: orange;
+    --tc-heading: #BBB;
+    --tc-link: blue;
+    --tc-low: #666;
+    --bg: white;
+    --bg-button: #DDD;
+    --bg-button-out: #AAA;
+    --bg-done: lightgreen;
+    --bg-out: orange;
+    --bg-alert: rgb(255, 83, 83);
 }
 
-/*
-    icon based buttons:
-    light background
-    invert in dark mode
-    -> only dark icons required
- */
-div.mn {
-    background-color: var(--bg-light);
-}
-
- @media (prefers-color-scheme: light) {
-    :root {
-        --tc: black;
-        --tc-done: lightgreen;
-        --tc-out: orange;
-        --tc-heading: #BBB;
-        --tc-link: blue;
-        --tc-low: #666;
-        --bg: white;
-        --bg-button: rgb(236, 236, 236);
-        --bg-done: lightgreen;
-        --bg-out: orange;
-        --bg-alert: rgb(255, 83, 83);
-    }
-}
 @media (prefers-color-scheme: dark) {
-    div.mn {
+    html { filter: invert(100%); }
+    .itxt > a {
         filter: invert(100%);
-    }
-    :root {
-        --tc: white;
-        --tc-done: green;
-        --tc-out: darkred;
-        --tc-heading: grey;
-        --tc-link: blue;
-        --tc-low: #AAA;
-        --bg: var(--bg-dark);
-        /* --bg-button: rgb(7, 47, 64); */
-        --bg-button: #444;
-        --bg-done: rgb(7, 76, 37);
-        /* --bg-out: rgb(195, 110, 0); */
-        --bg-out: darkred;
-        --bg-alert: rgb(186, 51, 51);
-
-        /* --bg-out: rgb(98, 4, 7);
-        --bg-alert: rgb(130, 91, 8); */
     }
 }
 
@@ -64,6 +33,7 @@ div.mn {
     font-family: sans-serif;
     color: var(--tc);
 }
+
 @media (orientation: landscape) {
     body { font-size: 3em; }
 }
@@ -71,10 +41,6 @@ div.mn {
 @media (orientation: portrait) {
     body { font-size: 4.5em; }
     * { font-stretch: condensed; }
-    div.imprint {
-        font-size: 50%;
-    }
-
 }
 body {
     background-color: var(--bg);
@@ -110,32 +76,16 @@ a.p {
     margin-bottom: 0.1em;
 }
 
-a.p.x {
-    /* background-color: var(--bg-done); */
+.x p {
     text-decoration: line-through;
+    color: var(--tc-done);
 }
-a.p.y {
-    /* background-color: var(--bg-out); */
-    /* font-style: italic; */
+.y p {
     text-decoration: underline;
+    color: var(--tc-done);
 }
-/*  links with txt color
-    - items
-*/
 a.a1 {
     margin-right: var(--mr);
-}
-.a1 > p {
-    color: var(--tc);
-}
-.x > .a1 > p {
-    /* color: var(--tc-done); */
-    text-decoration: line-through;
-}
-.y > .a1 > p {
-    /* color: var(--tc-out); */
-    /* font-style: italic; */
-    text-decoration: underline;
 }
 /* items: small links right */
 a.a2 {
@@ -145,7 +95,7 @@ a.a2 {
     z-index: 3;
     width: var(--mr);
     height: var(--hr);
-    background-color: var(--bg-out);
+    background-color: var(--bg-button-out);
     border-radius: 0.25em 0 0 0.25em;
 }
 
@@ -191,8 +141,9 @@ div.mn {
     justify-content: left;
     width: 100%;
     z-index: 5;
+    background-color: var(--bg);
 }
-div.mn > a {
+a.i {
     flex-grow: 1;
     height: 2em;
     background-repeat: no-repeat;
@@ -228,31 +179,23 @@ textarea.txt {
     left: 0;
     width: 100%;
     height: 100vh;
-    z-index: 8;
+    z-index: 4;
     background-color: transparent;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content:end;
     visibility: hidden;
+    padding-bottom: 3em;
 }
 #conf.v {
     visibility: visible;
 }
-#conf > div {
-    margin: 2%;
-    background-color: var(--bg);
-    border: solid 2px var(--bg-alert);
-    box-shadow: 5px 5px 15px black;
-}
-#conf > div > p {
-    background-color: var(--bg-alert);
-    padding: 0.1em 0.5em 0.1em 0.5em;
-    line-height: 90%;
-    overflow-x: clip;
-    text-align: center;
-}
-a.p.conf {
-    padding-left: 0.05em;
+#conf a {
+    height: 3em;
+    margin: 3em;
+    border: solid 0.1em var(--tc);
+    border-radius: 0.5em;
+    /* box-shadow: 5px 5px 15px black; */
 }
 
 .itxt {
