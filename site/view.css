@@ -174,7 +174,7 @@ textarea.txt {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: center;
     padding-bottom: 3em;
     background-color: transparent;
     visibility: hidden;

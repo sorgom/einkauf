@@ -3,49 +3,27 @@
 ### css selectors
 - class based
 - get rid of where placed selectors
-    - link with p: class tLink -> flex
-    - tLink in items: class a1 -> width
+    - look at remove confirmation
 
-    - link in menu as is
-    - link on top -> no image
-        - position by #ch
-    - standard text link: padding
-    - items text link: padding right 0
-        - paint the boxes
-            - maybe by padding within link?
+## Data
+- do not transfer states of postponed
+    - after edit - set(txt)
+    - after delete
+- provide shortcuts
+    - save without re-scan
+## States
+provide shortcuts
+- remove
+- insert
 
- -> JS
-tLink -> class tLink
+## support
+- test text generator py
+    - every entry must be unique and understandable
 
-### items
-- div[a1[p[]] a2]
-- color of p
-- margin
-### menu
-- a[p[]]
-- bg-color of a x / y
-### heading
-- a#ch.[p[]]
-- bg-color of a x / y
+## layout / css
+- confirm remove:
+    - center vertically (appears below bottom on device)
 
-
-### chapters' list
-
-### editing
-- pure text edit
-- form by js
-- think: get contents by request
-    - find out -> json?
-### chapters' list
-- no toolbox
--
-
-## features
-
-
-## layout
-### chapter display
-- bottom menu reset, remove, up
 
 ### good links
 - themes
@@ -53,13 +31,8 @@ tLink -> class tLink
     - [CSS Dark Mode](https://www.mediaevent.de/css/darkmode.html)
     - [CSS dark mode invert](https://www.rechnerhaus.de/blog/css-dark-mode-mit-zwei-zeilen-code)
 
-### menu
-- edit sticky ?
-### items
-### input
-## oop
 ## data
-- get rid of concatenations
+- get rid of concatenations?
 
 ### rename
 
