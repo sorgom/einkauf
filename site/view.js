@@ -97,43 +97,13 @@ class Usr
         xhr.send(null);
         const t2 = performance.now();
     }
-
-    process() {}
-
-    get(...params)
-    {
-        const _this = this;
-        const t1 = performance.now();
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function()
-        {
-            if (xhr.readyState == 4 && xhr.status == 200)
-            {
-                const t2 = performance.now();
-                console.log('DATA', Math.round(t2 - t1));
-                _this.process(xhr.responseText);
-                const t3 = performance.now();
-                console.log('PROC', Math.round(t3 - t2));
-            }
-        }
-        xhr.open('GET', this.url('_get', ...params), true);
-        xhr.send(null);
-    }
 }
-
 
 class Menu extends Usr
 {
-    constructor(uid)
+    constructor(uid, entries)
     {
         super(uid);
-        this.get('menu');
-    }
-
-    process(txt)
-    {
-        const data = JSON.parse(txt);
-        const [ uid, entries ] = data;
         const _this = this;
         let done = [];
         let post = [];
@@ -242,15 +212,10 @@ class Items extends Usr
     top;
     items = [];
     conf;
-    constructor(uid, cnr)
+    constructor(uid, data)
     {
         super(uid);
-        this.get('items', cnr);
-    }
-
-    process(txt)
-    {
-        const [ uid, cnr, hl, cl, entries ] = JSON.parse(txt);
+        const [ cnr, hl, cl, entries ] = data;
         const _this = this;
         this.cnr = cnr;
         const bd = document.body;
@@ -283,7 +248,6 @@ class Items extends Usr
         a3.onclick = function() { _this.view(); }
 
         this.conf = new ConfirmRemove(uid, cnr, hl);
-
     }
 
     note(inr, cl)
@@ -322,7 +286,7 @@ class Items extends Usr
 // remove chapter confirmation
 class ConfirmRemove extends Usr
 {
-    constructor(uid, cnr, ttl)
+    constructor(uid, cnr)
     {
         super(uid);
         const _this = this;
@@ -348,14 +312,9 @@ class ConfirmRemove extends Usr
 
 class InputForm extends Usr
 {
-    constructor(uid)
+    constructor(uid, txt)
     {
         super(uid);
-        this.get('txt');
-    }
-
-    process(txt)
-    {
         const _this = this;
         const frm = document.createElement('form');
         frm.action = 'save.php';

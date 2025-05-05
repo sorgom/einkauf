@@ -45,7 +45,10 @@ body {
     background-color: var(--bg);
     padding-bottom: 3em;
 }
-
+::selection {
+    color: white;
+    background-color: #888;
+}
 a {
     display: block;
     text-decoration: none;
@@ -164,8 +167,8 @@ textarea.txt {
     font-family: serif;
     font-size: 1em;
     padding: 1em 0 2em 1em;
-    color: var(--tc);
-    background-color: var(--bg);
+    /* color: var(--tc); */
+    /* background-color: var(--bg); */
     resize: none;
     overflow-x: clip;
     animation: 1s blink step-end infinite;

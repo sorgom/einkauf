@@ -1,25 +1,28 @@
 
 <?php
-    require_once('usr.php');
+    require_once('data.php');
     usr()->check();
     require_once('body.php');
 ?>
 <script src=view.js></script>
 <?php
     $x = usr()->param();
-    $uid = usr()->uid();
-    $uid = "'$uid'";
+    $data = NULL;
     switch ($x)
     {
         case NULL:
-            $obj = "Menu($uid)";
+            data()->menuData($data);
+            $obj = 'Menu';
             break;
         case 'e':
-            $obj = "InputForm($uid)";
+            data()->txt($data);
+            $obj = 'InputForm';
             break;
         default:
-            $obj = "Items($uid,$x)";
+            data()->ItemData($data, $x);
+            $obj = 'Items';
     }
+    $uid = usr()->uid();
 ?>
-<script>new <?php echo $obj; ?>;</script>
+<script>new <?php echo "$obj('$uid', "; echo json_encode($data); echo ');' ?>;</script>
 </body></html>

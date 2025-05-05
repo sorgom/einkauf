@@ -158,34 +158,19 @@ class Data extends DataObject
         $this->_save(json_encode([$this->heads, $this->items, $this->notes]));
     }
 
-    public function heads()
+    function menuData(&$data)
     {
-        return $this->heads;
-    }
-
-    public function lines(int $cnr)
-    {
-        return $this->has($cnr) ? $this->items[$cnr] : [];
-    }
-
-    public function items(int $cnr)
-    {
-        return $this->has($cnr) ? self::toItems($this->items[$cnr], 'Fnc::isl') : [];
-    }
-
-    function menuData()
-    {
-        $res = [];
+        $data = [];
         foreach($this->items as $cnr => $i)
         {
             if (!empty($i))
             {
-                $res[] = [ $cnr, $this->heads[$cnr], states()->cl($cnr) ];
+                $data[] = [ $cnr, $this->heads[$cnr], states()->cl($cnr) ];
             }
         }
-        return [ usr()->uid(), $res ];
     }
-    function ItemData(int $cnr)
+
+    function ItemData(&$data, int $cnr)
     {
         if ($this->has($cnr))
         {
@@ -201,9 +186,36 @@ class Data extends DataObject
                 }
                 $res[] = $e;
             }
-            return [ usr()->uid(), $cnr, $this->heads[$cnr], states()->cl($cnr), $res];
+            $data = [ $cnr, $this->heads[$cnr], states()->cl($cnr), $res];
         }
-        else return [ usr()->uid(), $cnr, 'NN', '', []];
+        else $data = [ $cnr, 'NN', '', []];
+    }
+
+    public function txt(&$data)
+    {
+        $res = [$this->notes, ''];
+        foreach ($this->heads as $cnr => $head)
+        {
+            $res[] = "@ $head";
+            $res[] = Fnc::impl($this->items[$cnr]);
+            $res[] = '';
+        }
+        $data = trim(Fnc::impl($res)) . "\n";
+    }
+
+    public function heads()
+    {
+        return $this->heads;
+    }
+
+    public function lines(int $cnr)
+    {
+        return $this->has($cnr) ? $this->items[$cnr] : [];
+    }
+
+    public function items(int $cnr)
+    {
+        return $this->has($cnr) ? self::toItems($this->items[$cnr], 'Fnc::isl') : [];
     }
 
     public function given()
@@ -270,18 +282,6 @@ class Data extends DataObject
             states()->save();
             $this->save();
         }
-    }
-
-    public function txt()
-    {
-        $res = [$this->notes, ''];
-        foreach ($this->heads as $cnr => $head)
-        {
-            $res[] = "@ $head";
-            $res[] = Fnc::impl($this->items[$cnr]);
-            $res[] = '';
-        }
-        return trim(Fnc::impl($res)) . "\n";
     }
 
     private static function toItems($a)
