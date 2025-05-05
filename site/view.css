@@ -1,4 +1,6 @@
 :root {
+    touch-action: pan-x pan-y;
+    height: 100%;
     --mr: 1em;
     --mh: 1.6em;
     --ml: 1em;

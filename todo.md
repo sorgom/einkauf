@@ -1,4 +1,7 @@
 # TODO
+## bugs
+- links remain highlighted
+
 ## css selectors
 - class based
 - get rid of where placed selectors
