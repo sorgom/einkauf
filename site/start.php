@@ -13,7 +13,6 @@
     $txt = dtxt('template');
     $data = new Data();
     $data->set($txt);
-    $data->save();
 ?>
 <div class=itxt><?php
     echo htmlentities(dtxt('start'));
