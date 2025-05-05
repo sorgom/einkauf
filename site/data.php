@@ -256,10 +256,10 @@ class Data extends DataObject
         {
             $post = [];
             $states = states();
-            $lines = $this->lines($cnr);
-            foreach ($lines as $inr => $line)
+            $items = $this->items($cnr);
+            foreach ($items as $inr => $i)
             {
-                if ($states->cl($cnr, $inr) == 'y') $post[] = $line;
+                if ($states->cl($cnr, $inr) == 'y') $post[] = $i;
             }
             $this->items[$cnr] = [];
             if (!empty($post))

@@ -24,6 +24,8 @@
     }
 }
 
+html { -webkit-tap-highlight-color:transparent; }
+
 * {
     margin:0;
     padding: 0;
@@ -47,6 +49,8 @@ body {
 a {
     display: block;
     text-decoration: none;
+    /* fixes chrome on android text size */
+    text-size-adjust: none;
 }
 a:hover { cursor: pointer; }
 
