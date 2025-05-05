@@ -36,7 +36,7 @@ function tLink(ttl, par=document.body)
 function iLink(cl, par=document.body)
 {
     let a = anc(par);
-    a.className = cl;
+    a.className = 'i ' + cl;
     return a;
 }
 
@@ -68,17 +68,6 @@ function hidden(par, name, val)
     return ip;
 }
 
-function sClass(obj)
-{
-    const cll = obj.classList;
-    return cll.contains('y') ? 'y' : cll.contains('x') ? 'x' : '';
-}
-
-function reset(e)
-{
-    e.classList.remove('x', 'y');
-}
-
 class Usr
 {
     uid;
@@ -108,43 +97,13 @@ class Usr
         xhr.send(null);
         const t2 = performance.now();
     }
-
-    process() {}
-
-    get(...params)
-    {
-        const _this = this;
-        const t1 = performance.now();
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function()
-        {
-            if (xhr.readyState == 4 && xhr.status == 200)
-            {
-                const t2 = performance.now();
-                console.log('DATA', Math.round(t2 - t1));
-                _this.process(xhr.responseText);
-                const t3 = performance.now();
-                console.log('PROC', Math.round(t3 - t2));
-            }
-        }
-        xhr.open('GET', this.url('_get', ...params), true);
-        xhr.send(null);
-    }
 }
-
 
 class Menu extends Usr
 {
-    constructor(uid)
+    constructor(uid, entries)
     {
         super(uid);
-        this.get('menu');
-    }
-
-    process(txt)
-    {
-        const data = JSON.parse(txt);
-        const [ uid, entries ] = data;
         const _this = this;
         let done = [];
         let post = [];
@@ -170,12 +129,48 @@ class Menu extends Usr
     }
 }
 
+class Toggle
+{
+    cll;
+    constructor(elem, cl)
+    {
+        this.cll = elem.classList;
+        this.set(cl);
+    }
+    set(cl)
+    {
+        this.clear();
+        if (cl) this.cll.add(cl);
+    }
+    clear()
+    {
+        this.cll.remove('x', 'y');
+    }
+    cl()
+    {
+        return this.has('y') ? 'y' : this.has('x') ? 'x' : '';
+    }
+    x()
+    {
+        if (this.cll.contains('y')) this.clear();
+        else this.cll.toggle('x');
+    }
+    y()
+    {
+        if (this.cll.contains('x')) this.set('y');
+        else this.cll.toggle('y');
+    }
+    has(cl)
+    {
+        return this.cll.contains(cl);
+    }
+}
+
 class Item
 {
     par;
     inr;
-    di;
-    cl = '';
+    tgl;
     constructor(par, inr, data)
     {
         const _this = this;
@@ -184,47 +179,31 @@ class Item
         const [ttl, cl ] = data;
         const di = div();
         di.className = 'item';
-        if (cl)
-        {
-            di.classList.add(cl);
-            this.cl = cl;
-        }
+        this.tgl = new Toggle(di, cl);
         const a1 = tLink(ttl, di);
         a1.className = 'a1';
-        a1.onclick = function() { _this.x(); }
+        a1.onclick = function()
+        {
+            _this.tgl.x();
+            _this.note();
+        }
         const a2 = anc(di);
         a2.className = 'a2';
-        a2.onclick = function() { _this.y(); }
-        this.di = di;
+        a2.onclick = function()
+        {
+            _this.tgl.y();
+            _this.note();
+        }
     }
-    cl()
+    toggle()
     {
-        return this.cl;
-    }
-    x()
-    {
-        const cll = this.di.classList;
-        if (cll.contains('y')) cll.remove('y');
-        else cll.toggle('x');
-        this.cl = sClass(this.di);
-        this.note();
-    }
-    y()
-    {
-        const cll = this.di.classList;
-        cll.remove('x');
-        cll.toggle('y');
-        this.cl = sClass(this.di);
-        this.note();
+        return this.tgl;
     }
     note()
     {
-        this.par.note(this.inr, this.cl);
+        this.par.note(this.inr, this.tgl.cl());
     }
-    reset()
-    {
-        reset(this.di);
-    }
+
 }
 
 class Items extends Usr
@@ -232,34 +211,24 @@ class Items extends Usr
     cnr;
     top;
     items = [];
-    cl = '';
     conf;
-    constructor(uid, cnr)
+    constructor(uid, data)
     {
         super(uid);
-        this.get('items', cnr);
-    }
-
-    process(txt)
-    {
-        const [ uid, cnr, hl, cl, entries ] = JSON.parse(txt);
+        const [ cnr, hl, cl, entries ] = data;
         const _this = this;
         this.cnr = cnr;
         const bd = document.body;
         const a = tLink(hl, bd);
         a.classList.add('items', 'top');
-        if (cl) {
-            a.classList.add(cl);
-            this.cl = cl;
-        }
         a.onclick = function() { _this.view(); }
-        this.top = a;
+        this.top = new Toggle(a, cl);
         let inr = 0;
         for (const e of entries)
         {
             if (Array.isArray(e))
             {
-                this.items.push(new Item(this, inr, e));
+                this.items.push(new Item(this, inr, e).toggle());
                 ++inr;
             }
             else if (e)
@@ -279,34 +248,37 @@ class Items extends Usr
         a3.onclick = function() { _this.view(); }
 
         this.conf = new ConfirmRemove(uid, cnr, hl);
-
     }
 
     note(inr, cl)
     {
         this.send('_state', cl, this.cnr, inr);
-        let cnt = { 'x':0, 'y':0};
-        for (const i of this.items)
+        const clo = this.top.cl();
+        this.top.clear();
+        let cln = ';'
+        if (cl)
         {
-            ++cnt[i.cl];
+            let cnt = { 'x':0, 'y':0};
+            for (const i of this.items)
+            {
+                ++cnt[i.cl()];
+            }
+            const cx = cnt['x'];
+            const cy = cnt['y'];
+            console.log('log:', cx, cy);
+            cln = cx + cy < this.items.length ? '' : cy > 0 ? 'y' : 'x';
+            this.top.set(cln);
         }
-        const cx = cnt['x'];
-        const cy = cnt['y'];
-        const cln = cx + cy < this.items.length ? '' : cy > 0 ? 'y' : 'x';
-        const clo = this.cl;
         if (cln != clo)
         {
-            if (clo) this.top.classList.remove(clo);
-            if (cln) this.top.classList.add(cln);
-            this.cl = cln;
             this.send('_state', cln, this.cnr);
         }
     }
 
     reset()
     {
-        reset(this.top);
-        for (const i of this.items) i.reset();
+        this.top.clear();
+        for (const i of this.items) i.clear();
         this.send('_reset', this.cnr);
     }
 }
@@ -314,7 +286,7 @@ class Items extends Usr
 // remove chapter confirmation
 class ConfirmRemove extends Usr
 {
-    constructor(uid, cnr, ttl)
+    constructor(uid, cnr)
     {
         super(uid);
         const _this = this;
@@ -322,29 +294,27 @@ class ConfirmRemove extends Usr
         dc.id = 'conf';
         dc.onclick = function () { _this.hide(); }
         const di = div(dc);
-        p(ttl, di);
-        const dm = div(di);
-        dm.className = 'mn';
-        const a1 = iLink('back', dm);
-        a1.onclick = function () { _this.hide(); }
-        const a2 = iLink('remove', dm);
-        a2.onclick = function () { _this.go('remove', cnr); }
+        const a1 = iLink('remove', di);
+        a1.classList.add('conf');
+        a1.onclick = function () { _this.go('remove', cnr); }
         this.dc = dc;
     }
-    hide() { this.dc.classList.remove('v'); }
-    show() { this.dc.classList.add('v'); }
+    hide()
+    {
+        this.dc.classList.remove('v');
+    }
+    show()
+    {
+        console.log('CONF show');
+        this.dc.classList.add('v');
+    }
 }
 
 class InputForm extends Usr
 {
-    constructor(uid)
+    constructor(uid, txt)
     {
         super(uid);
-        this.get('txt');
-    }
-
-    process(txt)
-    {
         const _this = this;
         const frm = document.createElement('form');
         frm.action = 'save.php';

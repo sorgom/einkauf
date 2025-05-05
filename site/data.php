@@ -131,6 +131,7 @@ class Data extends DataObject
     private array $heads = [];
     private array $items = [];
     private string $notes = '';
+    private string $ps = '?';
 
     public function __construct(bool $load=false)
     {
@@ -148,49 +149,58 @@ class Data extends DataObject
             // compatibility
             // was: heads, items
             // now: heads, items, notes
-            $a = json_decode($data, true);
-            $this->heads = $a[0];
-            $this->items = $a[1];
-            if (count($a) > 2) $this->notes = $a[2];
+            [$this->heads, $this->items, $this->notes] = [... json_decode($data, true), ''];
         }
     }
 
     public function save()
     {
-        //  re-assign states to new order
-        $oData   = new Data(true);
-        $oStates = states();
-        $nStates = new States();
-        if ($oStates->given() && $oData->given())
+        $this->_save(json_encode([$this->heads, $this->items, $this->notes]));
+    }
+
+    function menuData(&$data)
+    {
+        $data = [];
+        foreach($this->items as $cnr => $i)
         {
-            $map = new States();
-            foreach ($oData->heads() as $cnr => $head)
+            if (!empty($i))
             {
-                foreach ($oData->items($cnr) as $inr => $line)
-                {
-                    $map->set($oStates->cl($cnr, $inr), $head, $line);
-                }
-            }
-            foreach ($this->heads as $cnr => $head)
-            {
-                $items = $this->items($cnr);
-                if (!empty($items))
-                {
-                    $all = true;
-                    $cst = 'x';
-                    foreach ($items as $inr => $line)
-                    {
-                        $c = $map->cl($head, $line);
-                        if ($all && $c) $cst = $c == 'y' ? 'y' : $cst;
-                        else $all = false;
-                        $nStates->set($map->cl($head, $line), $cnr, $inr);
-                    }
-                    if ($all) $nStates->set($cst, $cnr);
-                }
+                $data[] = [ $cnr, $this->heads[$cnr], states()->cl($cnr) ];
             }
         }
-        $this->_save(json_encode([$this->heads, $this->items, $this->notes]));
-        $nStates->save();
+    }
+
+    function ItemData(&$data, int $cnr)
+    {
+        if ($this->has($cnr))
+        {
+            $res = [];
+            $inr = 0;
+            foreach ($this->items[$cnr] as $i)
+            {
+                if (empty($i)) $e = '';
+                else if ($i[0] == '#') $e = substr($i, 2);
+                else {
+                    $e = [$i, states()->cl($cnr, $inr)];
+                    ++$inr;
+                }
+                $res[] = $e;
+            }
+            $data = [ $cnr, $this->heads[$cnr], states()->cl($cnr), $res];
+        }
+        else $data = [ $cnr, 'NN', '', []];
+    }
+
+    public function txt(&$data)
+    {
+        $res = [$this->notes, ''];
+        foreach ($this->heads as $cnr => $head)
+        {
+            $res[] = "@ $head";
+            $res[] = Fnc::impl($this->items[$cnr]);
+            $res[] = '';
+        }
+        $data = trim(Fnc::impl($res)) . "\n";
     }
 
     public function heads()
@@ -200,41 +210,12 @@ class Data extends DataObject
 
     public function lines(int $cnr)
     {
-        return $this->items[$cnr];
+        return $this->has($cnr) ? $this->items[$cnr] : [];
     }
 
     public function items(int $cnr)
     {
-        return array_values(array_filter($this->items[$cnr], 'Fnc::isl'));
-    }
-
-    function menuData()
-    {
-        $res = [];
-        foreach($this->items as $cnr => $i)
-        {
-            if (!empty($i))
-            {
-                $res[] = [ $cnr, htmlentities($this->heads[$cnr]), states()->cl($cnr) ];
-            }
-        }
-        return [ usr()->uid(), $res ];
-    }
-    function ItemData($cnr)
-    {
-        $res = [];
-        $inr = 0;
-        foreach ($this->items[$cnr] as $i)
-        {
-            if (empty($i)) $e = '';
-            else if ($i[0] == '#') $e = substr($i, 2);
-            else {
-                $e = [$i, states()->cl($cnr, $inr)];
-                ++$inr;
-            }
-            $res[] = $e;
-        }
-        return [ usr()->uid(), $cnr, $this->heads[$cnr], states()->cl($cnr), $res];
+        return $this->has($cnr) ? self::toItems($this->items[$cnr], 'Fnc::isl') : [];
     }
 
     public function given()
@@ -242,9 +223,70 @@ class Data extends DataObject
         return !(empty($this->heads));
     }
 
-    private static function clean(string &$text)
+    public function set(string &$text)
     {
-        return trim(preg_replace('/^ *| *$/m', '', preg_replace('/\r\n|\r/', "\n", str_replace("\t", ' ', $text))));
+        $this->heads = [$this->ps];
+        $this->items = [[]];
+        $this->notes = '';
+
+        $txt = self::clean($text);
+
+        $rx = '/^@ *(.+)\n?/m';
+
+        if (preg_match_all($rx, $txt, $m))
+        {
+            $post = [];
+            $ttls = $m[1];
+            $data = array_map('trim', preg_split($rx, $txt));
+            $this->notes = array_shift($data);
+            foreach ($data as $cnr => $txt)
+            {
+                $item = self::txt2item($txt);
+                $ttl  = $ttls[$cnr];
+                if ($ttl == $this->ps)
+                {
+                    $post[] = $item;
+                }
+                else
+                {
+                    $this->heads[] = $ttl;
+                    $this->items[] = $item;
+                }
+            }
+            if (!empty($post))
+                $this->items[0] = self::toItems(array_unique(array_merge(... $post)));
+        }
+        else $this->notes = $txt;
+
+        $this->restate();
+        $this->save();
+    }
+
+    public function remove(int $cnr)
+    {
+        if ($this->has($cnr))
+        {
+            $post = [];
+            $states = states();
+            $items = $this->items($cnr);
+            foreach ($items as $inr => $i)
+            {
+                if ($states->cl($cnr, $inr) == 'y') $post[] = $i;
+            }
+            $this->items[$cnr] = [];
+            if (!empty($post))
+                $this->items[0] = array_unique(array_merge($post, $this->items[0]));
+
+            states()->reset($cnr);
+            if ($cnr != 0) states()->reset(0);
+            states()->save();
+            $this->save();
+        }
+    }
+
+    private static function toItems($a)
+    {
+        return array_values(array_filter($a, 'Fnc::isl'));
     }
 
     private static function txt2item(string $txt)
@@ -276,79 +318,53 @@ class Data extends DataObject
         return $item;
     }
 
-    public function set(string &$text)
+    private function has(int $cnr)
     {
-        $this->heads = [];
-        $this->items = [];
-        $this->notes = '';
-
-        $txt = self::clean($text);
-
-        $rx = '/^@ *(.+)\n?/m';
-
-        if (preg_match_all($rx, $txt, $m))
-        {
-            $post = [];
-            $ttls = $m[1];
-            $data = array_map('trim', preg_split($rx, $txt));
-            $this->notes = array_shift($data);
-            foreach ($data as $cnr => $txt)
-            {
-                $item = self::txt2item($txt);
-                $ttl  = $ttls[$cnr];
-                if ('...' == $ttl)
-                {
-                    $post = array_merge($post, array_filter($item, 'Fnc::isl'));
-                }
-                else
-                {
-                    $this->heads[] = $ttl;
-                    $this->items[] = $item;
-                }
-            }
-            if (!empty($post))
-            {
-                $this->heads[] = '...';
-                $this->items[] = array_unique($post);
-            }
-        }
-        else $this->notes = $txt;
+        return ($cnr >= 0) && (count($this->heads) > $cnr);
     }
 
-    public function remove(int $cnr)
+    private static function clean(string &$text)
     {
-        $post = [];
-        $states = states();
-        $lines = $this->lines($cnr);
-        foreach ($lines as $inr => $line)
-        {
-            if ($states->cl($cnr, $inr) == 'y') $post[] = $line;
-        }
-        array_splice($this->heads, $cnr, 1);
-        array_splice($this->items, $cnr, 1);
-        if (!empty($post))
-        {
-            if (end($this->heads) == '...')
-            {
-                $post = array_unique(array_merge($post, end($this->items)));
-                array_pop($this->items);
-            }
-            else $this->heads[] = '...';
-
-            $this->items[] = $post;
-        }
+        return trim(preg_replace('/^ *| *$/m', '', preg_replace('/\r\n|\r/', "\n", str_replace("\t", ' ', $text))));
     }
 
-    public function txt()
+    //  re-assign states to new order
+    private function restate()
     {
-        $res = [$this->notes, ''];
-        foreach ($this->heads as $cnr => $head)
+        $oData   = new Data(true);
+        $oStates = states();
+        $nStates = new States();
+        if ($oStates->given() && $oData->given())
         {
-            $res[] = "@ $head";
-            $res[] = Fnc::impl($this->items[$cnr]);
-            $res[] = '';
+            $map = new States();
+            foreach ($oData->heads() as $cnr => $head)
+            {
+                if ($cnr == 0) continue;
+                foreach ($oData->items($cnr) as $inr => $line)
+                {
+                    $map->set($oStates->cl($cnr, $inr), $head, $line);
+                }
+            }
+            foreach ($this->heads as $cnr => $head)
+            {
+                if ($cnr == 0) continue;
+                $items = $this->items($cnr);
+                if (!empty($items))
+                {
+                    $all = true;
+                    $cst = 'x';
+                    foreach ($items as $inr => $line)
+                    {
+                        $c = $map->cl($head, $line);
+                        if ($all && $c) $cst = $c == 'y' ? 'y' : $cst;
+                        else $all = false;
+                        $nStates->set($map->cl($head, $line), $cnr, $inr);
+                    }
+                    if ($all) $nStates->set($cst, $cnr);
+                }
+            }
         }
-        return trim(Fnc::impl($res)) . "\n";
+        $nStates->save();
     }
 }
 

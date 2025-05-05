@@ -13,7 +13,6 @@
     $txt = dtxt('template');
     $data = new Data();
     $data->set($txt);
-    $data->save();
 ?>
 <div class=itxt><?php
     echo htmlentities(dtxt('start'));
@@ -21,5 +20,5 @@
 <textarea class=line readonly autofocus spellcheck=false autofocus onFocus='this.select();this.setSelectionRange(0, 99999);'><?php
 echo $_SERVER['REQUEST_SCHEME']; echo '://'; echo $_SERVER['HTTP_HOST']; echo "?$uid";
 ?></textarea>
-<div class='mn bottom'> <a class='enter' href=/?<?php echo $uid; ?>></a></div>
+<div class='mn bottom'> <a class='i enter' href=/?<?php echo $uid; ?>></a></div>
 </body></html>

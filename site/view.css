@@ -1,62 +1,30 @@
 :root {
+    touch-action: pan-x pan-y;
+    height: 100%;
     --mr: 1em;
     --mh: 1.6em;
     --ml: 1em;
     --mtr: 0.5em;
     --hr: 1.2em;
-    --bg-light: white;
-    --bg-dark: black;
-    --bg-middle: #888;
+
+    --tc: black;
+    --tc-done: #666;
+    --tc-heading: #BBB;
+    --tc-link: blue;
+    --tc-low: #666;
+    --bg: white;
+    --bg-button: #DDD;
+    --bg-button-out: #AAA;
 }
 
-/*
-    icon based buttons:
-    light background
-    invert in dark mode
-    -> only dark icons required
- */
-div.mn {
-    background-color: var(--bg-light);
-}
-
- @media (prefers-color-scheme: light) {
-    :root {
-        --tc: black;
-        --tc-done: lightgreen;
-        --tc-out: orange;
-        --tc-heading: #BBB;
-        --tc-link: blue;
-        --tc-low: #666;
-        --bg: white;
-        --bg-button: rgb(236, 236, 236);
-        --bg-done: lightgreen;
-        --bg-out: orange;
-        --bg-alert: rgb(255, 83, 83);
-    }
-}
 @media (prefers-color-scheme: dark) {
-    div.mn {
+    html { filter: invert(100%); }
+    .itxt > a {
         filter: invert(100%);
     }
-    :root {
-        --tc: white;
-        --tc-done: green;
-        --tc-out: darkred;
-        --tc-heading: grey;
-        --tc-link: blue;
-        --tc-low: #AAA;
-        --bg: var(--bg-dark);
-        /* --bg-button: rgb(7, 47, 64); */
-        --bg-button: #444;
-        --bg-done: rgb(7, 76, 37);
-        /* --bg-out: rgb(195, 110, 0); */
-        --bg-out: darkred;
-        --bg-alert: rgb(186, 51, 51);
-
-        /* --bg-out: rgb(98, 4, 7);
-        --bg-alert: rgb(130, 91, 8); */
-    }
 }
+
+html { -webkit-tap-highlight-color:transparent; }
 
 * {
     margin:0;
@@ -64,6 +32,7 @@ div.mn {
     font-family: sans-serif;
     color: var(--tc);
 }
+
 @media (orientation: landscape) {
     body { font-size: 3em; }
 }
@@ -71,19 +40,20 @@ div.mn {
 @media (orientation: portrait) {
     body { font-size: 4.5em; }
     * { font-stretch: condensed; }
-    div.imprint {
-        font-size: 50%;
-    }
-
 }
 body {
     background-color: var(--bg);
     padding-bottom: 3em;
 }
-
+::selection {
+    color: white;
+    background-color: #888;
+}
 a {
     display: block;
     text-decoration: none;
+    /* fixes chrome on android text size */
+    text-size-adjust: none;
 }
 a:hover { cursor: pointer; }
 
@@ -110,55 +80,41 @@ a.p {
     margin-bottom: 0.1em;
 }
 
-a.p.x {
-    background-color: var(--bg-done);
-}
-a.p.y {
-    background-color: var(--bg-out);
-}
-/*  links with txt color
-    - items
-*/
-a.a1 {
-    margin-right: var(--mr);
-}
-.a1 > p {
-    color: var(--tc);
-}
-.x > .a1 > p {
+.x p {
+    text-decoration: line-through;
     color: var(--tc-done);
 }
-.y > .a1 > p {
-    color: var(--tc-out);
+.y p {
+    text-decoration: underline;
+    color: var(--tc-done);
+}
+a.a1 {
+    margin-right: var(--mr);
 }
 /* items: small links right */
 a.a2 {
     position: absolute;
     top: var(--mtr);
     right: 0;
-    z-index: 3;
     width: var(--mr);
     height: var(--hr);
-    background-color: var(--bg-out);
+    background-color: var(--bg-button-out);
     border-radius: 0.25em 0 0 0.25em;
 }
 
-a.items {
-    margin-bottom: 1em;
-}
 .item {
     position: relative;
     margin-bottom: 1em;
 }
 
-.top {
+a.top {
     position: sticky;
     top: 0;
     left: 0;
-    z-index: 5;
-
+    z-index: 1;
+    margin-bottom: 1em;
+    border-bottom: 0.1em solid var(--bg);
 }
-a.top { border-bottom: 0.1em solid var(--bg); }
 
 .bottom
 {
@@ -166,6 +122,7 @@ a.top { border-bottom: 0.1em solid var(--bg); }
     left: 0;
     bottom: 0;
     width: 100%;
+    z-index: 1;
 }
 
 h2 {
@@ -184,9 +141,10 @@ div.mn {
     flex-direction: row;
     justify-content: left;
     width: 100%;
-    z-index: 5;
+    z-index: 1;
+    background-color: var(--bg);
 }
-div.mn > a {
+a.i {
     flex-grow: 1;
     height: 2em;
     background-repeat: no-repeat;
@@ -209,8 +167,8 @@ textarea.txt {
     font-family: serif;
     font-size: 1em;
     padding: 1em 0 2em 1em;
-    color: var(--tc);
-    background-color: var(--bg);
+    /* color: var(--tc); */
+    /* background-color: var(--bg); */
     resize: none;
     overflow-x: clip;
     animation: 1s blink step-end infinite;
@@ -220,37 +178,29 @@ textarea.txt {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 2;
     width: 100%;
     height: 100vh;
-    z-index: 8;
-    background-color: transparent;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-bottom: 3em;
+    background-color: transparent;
     visibility: hidden;
 }
 #conf.v {
     visibility: visible;
 }
-#conf > div {
-    margin: 2%;
+#conf a {
+    height: 3em;
+    margin: 1em;
     background-color: var(--bg);
-    border: solid 2px var(--bg-alert);
-    box-shadow: 5px 5px 15px black;
-}
-#conf > div > p {
-    background-color: var(--bg-alert);
-    padding: 0.1em 0.5em 0.1em 0.5em;
-    line-height: 90%;
-    overflow-x: clip;
-    text-align: center;
-}
-a.p.conf {
-    padding-left: 0.05em;
+    border: solid 0.1em var(--tc);
+    border-radius: 0.5em;
 }
 
 .itxt {
-    white-space: break-spaces;
+    white-space: pre-wrap;
     font-size: 60%;
     margin: 1em;
 }
