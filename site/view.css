@@ -62,7 +62,6 @@ a > p {
     overflow-x: clip;
 }
 
-/* text link: a containing p */
 a.p, a.a1 {
     display: flex;
     flex-direction: column;
@@ -71,10 +70,6 @@ a.p, a.a1 {
     padding: 0.05em;
     padding-left: var(--ml);
 }
-/*  links with bg color
-    - top
-    - menu
-*/
 a.p {
     background-color: var(--bg-button);
     margin-bottom: 0.1em;
@@ -136,6 +131,13 @@ hr {
     margin: 1em;
 }
 
+div.listing {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    min-height: 65vh;
+}
+
 div.mn {
     display: flex;
     flex-direction: row;
@@ -167,8 +169,6 @@ textarea.txt {
     font-family: serif;
     font-size: 1em;
     padding: 1em 0 2em 1em;
-    /* color: var(--tc); */
-    /* background-color: var(--bg); */
     resize: none;
     overflow-x: clip;
     animation: 1s blink step-end infinite;

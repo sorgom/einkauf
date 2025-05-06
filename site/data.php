@@ -21,7 +21,7 @@ abstract class DataObject extends Fnc
     {
         if (file_exists($this->file)) unlink($this->file);
     }
-    protected function _save(mixed $cont)
+    protected function _save(string &$cont)
     {
         if (!is_dir(self::$dir)) mkdir(self::$dir);
         file_put_contents($this->file, $cont);
@@ -56,8 +56,8 @@ class States extends DataObject
     }
     public function save()
     {
-        if (empty($this->states)) $this->_delete();
-        else $this->_save(json_encode($this->states));
+        $js = json_encode($this->states);
+        $this->_save($js);
     }
 
     public function given()
@@ -88,18 +88,7 @@ class States extends DataObject
     public function cl(... $ids)
     {
         $id = implode('.', $ids);
-        $cl = '';
-        if (isset($this->states[$id]))
-        {
-            // this is compatibility
-            // former state was 1 for done
-            // now it's:
-            // x for done
-            // y for postponed
-            $v = $this->states[$id];
-            $cl = $v == 1 ? 'x' : $v;
-        }
-        return $cl;
+        return isset($this->states[$id]) ? $this->states[$id] : '';
     }
 
     public function set($val, ...$ids)
@@ -141,21 +130,20 @@ class Data extends DataObject
 
     public function load()
     {
-        $this->heads = [];
-        $this->items = [];
-        $this->notes = '';
         if ($this->_load($data))
+            [$this->heads, $this->items, $this->notes] = json_decode($data, true);
+        else
         {
-            // compatibility
-            // was: heads, items
-            // now: heads, items, notes
-            [$this->heads, $this->items, $this->notes] = [... json_decode($data, true), ''];
+            $this->heads = [];
+            $this->items = [];
+            $this->notes = '';
         }
     }
 
     public function save()
     {
-        $this->_save(json_encode([$this->heads, $this->items, $this->notes]));
+        $js = json_encode([$this->heads, $this->items, $this->notes]);
+        $this->_save($js);
     }
 
     function menuData(&$data)
@@ -206,11 +194,6 @@ class Data extends DataObject
     public function heads()
     {
         return $this->heads;
-    }
-
-    public function lines(int $cnr)
-    {
-        return $this->has($cnr) ? $this->items[$cnr] : [];
     }
 
     public function items(int $cnr)

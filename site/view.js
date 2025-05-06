@@ -79,6 +79,7 @@ class Usr
     }
     url(trg, ...params)
     {
+        // console.log('url', params.join(','));
         return trg + '.php?' + [ this.uid, ...params].join(this.sep);
     }
     go(trg, ...params)
@@ -93,7 +94,9 @@ class Usr
     send(trg, ...params)
     {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', this.url(trg, ...params), true);
+        const url = this.url(trg, ...params);
+        console.log('send', url)
+        xhr.open('GET', url, true);
         xhr.send(null);
         const t2 = performance.now();
     }
@@ -107,7 +110,8 @@ class Menu extends Usr
         const _this = this;
         let done = [];
         let post = [];
-        const bd = document.body;
+        const dl = div();
+        dl.className = 'listing';
         for (const [cnr, ttl, cl] of entries)
         {
             const a = tLink(ttl, undefined);
@@ -118,11 +122,11 @@ class Menu extends Usr
                 if      (cl == 'y') post.push(a);
                 else if (cl == 'x') done.push(a);
             }
-            else bd.appendChild(a);
+            else dl.appendChild(a);
         }
-        for (const a of post) bd.appendChild(a);
-        for (const a of done) bd.appendChild(a);
-        const d = div(bd);
+        for (const a of post) dl.appendChild(a);
+        for (const a of done) dl.appendChild(a);
+        const d = div();
         d.className = 'mn bottom';
         const a = iLink('edit', d);
         a.onclick = function() { _this.view('e'); }
@@ -168,16 +172,16 @@ class Toggle
 
 class Item
 {
-    par;
+    ctrl;
     inr;
     tgl;
-    constructor(par, inr, data)
+    constructor(ctrl, inr, data, par)
     {
         const _this = this;
-        this.par = par;
+        this.ctrl = ctrl;
         this.inr = inr;
         const [ttl, cl ] = data;
-        const di = div();
+        const di = div(par);
         di.className = 'item';
         this.tgl = new Toggle(di, cl);
         const a1 = tLink(ttl, di);
@@ -201,7 +205,7 @@ class Item
     }
     note()
     {
-        this.par.note(this.inr, this.tgl.cl());
+        this.ctrl.note(this.inr, this.tgl.cl());
     }
 
 }
@@ -218,25 +222,30 @@ class Items extends Usr
         const [ cnr, hl, cl, entries ] = data;
         const _this = this;
         this.cnr = cnr;
-        const bd = document.body;
-        const a = tLink(hl, bd);
+
+
+        const dl = div();
+        dl.className = 'listing';
+
+        const a = tLink(hl, dl);
         a.classList.add('items', 'top');
         a.onclick = function() { _this.view(); }
         this.top = new Toggle(a, cl);
+
         let inr = 0;
         for (const e of entries)
         {
             if (Array.isArray(e))
             {
-                this.items.push(new Item(this, inr, e).toggle());
+                this.items.push(new Item(this, inr, e, dl).toggle());
                 ++inr;
             }
             else if (e)
             {
-                const h = make('h2', bd);
+                const h = make('h2', dl);
                 h.innerText = e;
             }
-            else make('hr', bd);
+            else make('hr', dl);
         }
         const d = div();
         d.className = 'mn bottom';
@@ -252,10 +261,11 @@ class Items extends Usr
 
     note(inr, cl)
     {
+        console.log('note', cl, this.cnr, inr);
         this.send('_state', cl, this.cnr, inr);
         const clo = this.top.cl();
         this.top.clear();
-        let cln = ';'
+        let cln = ''
         if (cl)
         {
             let cnt = { 'x':0, 'y':0};
@@ -271,6 +281,7 @@ class Items extends Usr
         }
         if (cln != clo)
         {
+            console.log('cln:', cln);
             this.send('_state', cln, this.cnr);
         }
     }
