@@ -174,7 +174,7 @@ textarea.txt {
     animation: 1s blink step-end infinite;
 }
 /* confirm button  */
-#conf {
+div.confirm {
     position: fixed;
     top: 0;
     left: 0;
@@ -188,10 +188,10 @@ textarea.txt {
     background-color: transparent;
     visibility: hidden;
 }
-#conf.v {
+div.confirm.v {
     visibility: visible;
 }
-#conf a {
+a.confirm {
     height: 3em;
     margin: 1em;
     background-color: var(--bg);

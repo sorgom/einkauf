@@ -250,13 +250,14 @@ class Items extends Usr
         const d = div();
         d.className = 'mn bottom';
         const a1 = iLink('remove', d);
-        a1.onclick = function() { _this.conf.show(); }
+        a1.onclick = function() { _this.conf_remove.show(); }
         const a2 = iLink('reset', d);
-        a2.onclick = function() { _this.reset(); }
+        a2.onclick = function() { _this.conf_reset.show(); }
         const a3 = iLink('up', d);
         a3.onclick = function() { _this.view(); }
 
-        this.conf = new ConfirmRemove(uid, cnr, hl);
+        this.conf_remove = new Confirm('remove', function () { _this.go('remove', cnr); });
+        this.conf_reset  = new Confirm('reset', function () { _this.reset(); });
     }
 
     note(inr, cl)
@@ -294,30 +295,27 @@ class Items extends Usr
     }
 }
 
-// remove chapter confirmation
-class ConfirmRemove extends Usr
+class Confirm
 {
-    constructor(uid, cnr)
+    constructor(cl, func)
     {
-        super(uid);
         const _this = this;
         const dc = div();
-        dc.id = 'conf';
+        dc.className = 'confirm';
         dc.onclick = function () { _this.hide(); }
         const di = div(dc);
-        const a1 = iLink('remove', di);
-        a1.classList.add('conf');
-        a1.onclick = function () { _this.go('remove', cnr); }
-        this.dc = dc;
+        const a = iLink(cl, di);
+        a.classList.add('confirm');
+        a.onclick = func;
+        this.cll = dc.classList;
     }
     hide()
     {
-        this.dc.classList.remove('v');
+        this.cll.remove('v');
     }
     show()
     {
-        console.log('CONF show');
-        this.dc.classList.add('v');
+        this.cll.add('v');
     }
 }
 
