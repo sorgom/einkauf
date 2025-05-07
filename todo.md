@@ -3,28 +3,10 @@
 - links remain highlighted
 
 ## css selectors
-- class based
-- get rid of where placed selectors
-    - look at remove confirmation
 
-## Data
-- do not transfer states of postponed
-    - after edit - set(txt)
-    - after delete
-- provide shortcuts
-    - save without re-scan
-## States
-provide shortcuts
-- remove
-- insert
-
-## support
-- test text generator py
-    - every entry must be unique and understandable
 
 ## layout / css
-- confirm remove:
-    - center vertically (appears below bottom on device)
+- remove:
     - find out why width does not work
 
 ### good links
@@ -35,6 +17,10 @@ provide shortcuts
 
 ## data
 - get rid of concatenations?
+
+## new login concept
+- form for email: welcome.php
+- generate email: mail.php
 
 ### rename
 

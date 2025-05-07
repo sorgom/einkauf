@@ -1,5 +1,4 @@
 from aiosmtpd.controller import Controller
-from pprint import pprint
 
 class Handler:
     async def handle_DATA(self, server, session, envelope):

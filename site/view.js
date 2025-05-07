@@ -329,7 +329,8 @@ class InputForm extends Usr
         frm.action = 'save.php';
         frm.method = 'post';
 
-        textarea(frm, 50, 'txt', txt);
+        const te = textarea(frm, 50, 'txt', txt);
+        te.autofocus = true;
 
         hidden(frm, 'uid', this.uid);
         document.body.appendChild(frm);
