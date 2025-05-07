@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1390 1701" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;">
+<g transform="matrix(1,0,0,1,-795.116,-1314.96)">
+<g transform="matrix(1,0,0,1,-1.13687e-13,-17.4075)">
+<path d="M1053.9,2867.66L1889.59,2867.66" style="fill:none;stroke:rgb(35,31,32);stroke-width:4.17px;"/>
+</g>
+<g transform="matrix(1,0,0,1,1.13687e-13,-1382.2)">
+<path d="M1053.9,2867.66L1889.59,2867.66" style="fill:none;stroke:rgb(35,31,32);stroke-width:4.17px;"/>
+</g>
+<g transform="matrix(1,0,0,1,0,505.161)">
+<rect x="1053.9" y="1724.41" width="835.689" height="148.205" style="fill:rgb(230,230,230);"/>
+<g transform="matrix(1,0,0,1,0,-289.959)">
+<text x="1129.91px" y="2113.7px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:66.667px;">
+REWE</text>
+<rect x="1129.91" y="2120.77" width="200" height="4.883"/>
+</g>
+</g>
+<g transform="matrix(1,0,0,1,0,317.255)">
+<rect x="1053.9" y="1724.41" width="835.689" height="148.205" style="fill:rgb(230,230,230);"/>
+<g transform="matrix(1,0,0,1,0,-289.959)">
+<text x="1129.91px" y="2113.7px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:66.667px;">
+Edeka</text>
+<rect x="1129.91" y="2096.45" width="189.03" height="3.32"/>
+</g>
+</g>
+<g transform="matrix(0.800001,0,0,1.25,860.705,324.056)">
+<rect x="656.658" y="1902.28" width="214.279" height="118.678" style="fill:none;"/>
+<g id="pen.svg" transform="matrix(0.281379,0,0,0.147309,759.647,1962.04)">
+<g transform="matrix(1,0,0,1,-400,-400)">
+<g transform="matrix(0.905197,0,0,0.905197,139.281,143.437)">
+<g id="pen">
+<g>
+<path d="M533.333,38.095C564.892,69.654 564.892,120.822 533.333,152.381L171.429,514.286L19.048,552.381L57.143,402.147L419.194,38.241C449.022,8.26 496.574,6.643 528.312,33.477L533.333,38.095Z" style="fill:none;stroke:black;stroke-width:40px;stroke-miterlimit:4;"/>
+<path d="M476.19,133.333L514.286,171.429" style="fill:none;stroke:black;stroke-width:40px;stroke-miterlimit:4;"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<path d="M1889.59,1534.3C1889.59,1418.99 1795.97,1325.38 1680.67,1325.38L1262.82,1325.38C1147.51,1325.38 1053.9,1418.99 1053.9,1534.3L1053.9,2796.27C1053.9,2911.58 1147.51,3005.2 1262.82,3005.2L1680.67,3005.2C1795.97,3005.2 1889.59,2911.58 1889.59,2796.27L1889.59,1534.3Z" style="fill:none;stroke:rgb(147,149,152);stroke-width:20.83px;"/>
+<path d="M902.255,2384.65L1386.03,2701.91" style="fill:none;stroke:rgb(35,31,32);stroke-width:4.17px;"/>
+<g transform="matrix(0.999495,-0.0317846,0.0317846,0.999495,606.689,-62.4732)">
+<path d="M902.255,2384.65L1386.03,2701.91" style="fill:none;stroke:rgb(35,31,32);stroke-width:4.17px;"/>
+</g>
+<g transform="matrix(1,0,0,1,1538.27,868.853)">
+<circle cx="539.629" cy="1725.92" r="107.14" style="fill:rgb(204,204,204);"/>
+<g transform="matrix(1,0,0,1,0,-1.50646)">
+<text x="511.125px" y="1770.65px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:125px;fill:rgb(35,31,32);">
+1</text>
+</g>
+</g>
+<g transform="matrix(1,0,0,1,362.627,660.244)">
+<circle cx="539.629" cy="1725.92" r="107.14" style="fill:rgb(204,204,204);"/>
+<g transform="matrix(1,0,0,1,0,-1.50646)">
+<text x="511.125px" y="1770.65px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:125px;fill:rgb(35,31,32);">
+2</text>
+</g>
+</g>
+</g>
+</svg>
