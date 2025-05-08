@@ -1,13 +1,17 @@
 # TODO
 ## bugs
-- links remain highlighted
-
+- form textarea jumps to end
 ## css selectors
 
 
 ## layout / css
-- remove:
-    - find out why width does not work
+### new buttons
+- edit
+    - clear
+- home instead of back
+
+## js
+- Form.clear()
 
 ### good links
 - themes
@@ -17,6 +21,7 @@
 
 ## data
 - get rid of concatenations?
+- when no data file written start with default txt
 
 ## new login concept
 - form for email: welcome.php

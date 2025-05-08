@@ -62,7 +62,7 @@ class T_Elem extends Elem
     }
 }
 
-class A extends Elem
+class Link extends Elem
 {
     constructor() { return super('a'); }
 }
@@ -72,7 +72,7 @@ class P extends T_Elem
     constructor(txt) { return super('p', txt); }
 }
 
-class AT extends A
+class TxtLink extends Link
 {
     constructor(txt)
     {
@@ -82,12 +82,24 @@ class AT extends A
     }
 }
 
-class AI extends A
+class ImgLink extends Link
 {
+    icl;
     constructor(cl)
     {
         super();
+        this.icl = cl;
         return this.class('i ' + cl);
+    }
+    set(cl)
+    {
+        if (cl != this.icl)
+        {
+            if (this.icl) this.remove(this.icl);
+            this.add(cl);
+            this.icl = cl;
+        }
+        return this;
     }
 }
 
@@ -95,7 +107,6 @@ class Div extends Elem
 {
     constructor() { return super('div'); }
 }
-
 
 class HR extends Elem
 {
@@ -153,14 +164,16 @@ class Hidden extends Elem
     }
 }
 
-class Usr
+class View
 {
     uid;
     sep = '-';
-
+    cnf;
     constructor(uid)
     {
         this.uid = uid;
+        this.cnf = new Confirm();
+        console.log('con', this.cnf);
     }
     url(trg, ...params)
     {
@@ -183,9 +196,45 @@ class Usr
         xhr.send(null);
         const t2 = performance.now();
     }
+
+    confirm(icl, func)
+    {
+        console.log('call', this.cnf);
+        this.cnf.show(icl, func);
+    }
 }
 
-class Menu extends Usr
+class Confirm
+{
+    dc;
+    ai;
+    constructor()
+    {
+        const _this = this;
+        const dc = new Div().class('conf_main').bd();
+        // darken layer
+        new Div().class('conf_bg').into(dc).click( function () {_this.hide(); });
+        // vertical layer
+        const d1 = new Div().class('conf_fg grow_up').into(dc).click( function () {_this.hide(); });
+        // horizontal center
+        const d2 = new Div().class('center').into(d1);
+        // image button
+        this.ai = new ImgLink('').into(d2);
+
+        this.dc = dc;
+    }
+    hide()
+    {
+        this.dc.remove('v');
+    }
+    show(icl, func)
+    {
+        this.ai.set(icl).click(func);
+        this.dc.add('v');
+    }
+}
+
+class Menu extends View
 {
     constructor(uid, entries)
     {
@@ -196,7 +245,7 @@ class Menu extends Usr
         const dl = new Div().class('listing').bd();
         for (const [cnr, ttl, cl] of entries)
         {
-            const a = new AT(ttl).class('p').add(cl).click(function() { _this.view(cnr); })
+            const a = new TxtLink(ttl).class('p').add(cl).click(function() { _this.view(cnr); })
             if (cl)
             {
                 if      (cl == 'y') post.push(a);
@@ -208,7 +257,7 @@ class Menu extends Usr
         for (const a of done) a.into(dl);
 
         const d = new Div().class('mn bottom').bd();
-        new AI('edit').into(d).click(function() { _this.view('e'); });
+        new ImgLink('edit').into(d).click(function() { _this.view('e'); });
     }
 }
 
@@ -258,14 +307,14 @@ class Item
         const [ttl, cl ] = data;
         const di = new Div().class('item').into(par);
         this.tgl = new Toggle(di, cl);
-        new AT(ttl).class('a1').into(di).click(
+        new TxtLink(ttl).class('a1').into(di).click(
             function()
             {
                 _this.tgl.x();
                 _this.note();
             }
         );
-        new A().class('a2').into(di).click(
+        new Link().class('a2').into(di).click(
             function()
             {
                 _this.tgl.y();
@@ -284,7 +333,7 @@ class Item
 
 }
 
-class Items extends Usr
+class Items extends View
 {
     cnr;
     top;
@@ -299,7 +348,7 @@ class Items extends Usr
 
         const dl = new Div().class('listing').bd();
 
-        const a = new AT(hl).class('p items top').into(dl).click(function() { _this.view(); });
+        const a = new TxtLink(hl).class('p items top').into(dl).click(function() { _this.view(); });
         this.top = new Toggle(a, cl);
 
         let inr = 0;
@@ -317,12 +366,16 @@ class Items extends Usr
             else new HR().into(dl);
         }
         const d = new Div().class('mn bottom').bd();
-        new AI('remove').into(d).click(function() { _this.conf_remove.show(); });
-        new AI('reset').into(d).click(function() { _this.conf_reset.show(); });
-        new AI('up').into(d).click(function() { _this.view(); });
+        new ImgLink('remove').into(d).click(function() {
+            _this.confirm('remove', function() {_this.remove(); })
+        });
+        new ImgLink('reset').into(d).click(function() {
+            _this.confirm('reset', function() {_this.reset(); })
+        });
+        new ImgLink('up').into(d).click(function() { _this.view(); });
 
-        this.conf_remove = new Confirm('remove', function () { _this.go('remove.php', cnr); });
-        this.conf_reset  = new Confirm('reset', function () { _this.reset(); });
+        // this.conf_remove = new Confirm('remove', function () { _this.go('remove.php', cnr); });
+        // this.conf_reset  = new Confirm('reset', function () { _this.reset(); });
     }
 
     note(inr, cl)
@@ -348,6 +401,10 @@ class Items extends Usr
             this.send('_state.php', cln, this.cnr);
         }
     }
+    remove()
+    {
+        this.go('remove.php', this.cnr);
+    }
     reset()
     {
         this.top.clear();
@@ -356,27 +413,7 @@ class Items extends Usr
     }
 }
 
-class Confirm
-{
-    constructor(cl, func)
-    {
-        const _this = this;
-        const dc = new Div().class('confirm').bd().click(function () { _this.hide(); });
-        const di = new Div().class('center').into(dc);
-        new AI(cl).add('confirm').into(di).click(func);
-        this.dc = dc;
-    }
-    hide()
-    {
-        this.dc.remove('v');
-    }
-    show()
-    {
-        this.dc.add('v');
-    }
-}
-
-class InputForm extends Usr
+class InputForm extends View
 {
     constructor(uid, txt)
     {
@@ -384,12 +421,12 @@ class InputForm extends Usr
         const _this = this;
         const frm = new Form('save.php').bd();
 
-        new TextArea('txt', 50).class('txt').focus().val(txt).into(frm);
+        new TextArea('txt', 50).class('txt').val(txt).into(frm).focus();
 
         new Hidden('uid', this.uid).into(frm);
 
         const d = new Div().class('mn bottom').bd();
-        new AI('back').into(d).click(function() { _this.view(); });
-        new AI('save').into(d).click(function() { frm.submit(); });
+        new ImgLink('back').into(d).click(function() { _this.view(); });
+        new ImgLink('save').into(d).click(function() { frm.submit(); });
     }
 }
