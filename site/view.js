@@ -15,7 +15,7 @@ class Elem
         this.elem.className = cl;
         return this;
     }
-    put(par)
+    into(par)
     {
         par.elem.appendChild(this.elem);
         return this;
@@ -33,7 +33,6 @@ class Elem
 
     add(cl)
     {
-        console.log('add:', '-' + cl + '-');
         if (cl) this.cll.add(cl);
         return this;
     }
@@ -65,18 +64,12 @@ class T_Elem extends Elem
 
 class A extends Elem
 {
-    constructor()
-    {
-        return super('a');
-    }
+    constructor() { return super('a'); }
 }
 
 class P extends T_Elem
 {
-    constructor(txt)
-    {
-        return super('p', txt);
-    }
+    constructor(txt) { return super('p', txt); }
 }
 
 class AT extends A
@@ -84,7 +77,7 @@ class AT extends A
     constructor(txt)
     {
         super();
-        new P(txt).put(this);
+        new P(txt).into(this);
         return this;
     }
 }
@@ -100,27 +93,18 @@ class AI extends A
 
 class Div extends Elem
 {
-    constructor()
-    {
-        return super('div');
-    }
+    constructor() { return super('div'); }
 }
 
 
 class HR extends Elem
 {
-    constructor()
-    {
-        return super('hr');
-    }
+    constructor() { return super('hr'); }
 
 }
 class H2 extends T_Elem
 {
-    constructor(txt)
-    {
-        return super('h2', txt);
-    }
+    constructor(txt) { return super('h2', txt); }
 }
 
 class Form extends Elem
@@ -139,9 +123,10 @@ class Form extends Elem
 
 class TextArea extends Elem
 {
-    constructor(rows)
+    constructor(name, rows)
     {
         super('textarea');
+        this.elem.name = name;
         this.elem.rows = rows;
         return this;
     }
@@ -168,7 +153,6 @@ class Hidden extends Elem
     }
 }
 
-
 class Usr
 {
     uid;
@@ -180,8 +164,7 @@ class Usr
     }
     url(trg, ...params)
     {
-        // console.log('url', params.join(','));
-        return trg + '.php?' + [ this.uid, ...params].join(this.sep);
+        return trg + '?' + [ this.uid, ...params].join(this.sep);
     }
     go(trg, ...params)
     {
@@ -189,8 +172,7 @@ class Usr
     }
     view(...params)
     {
-        const url = '/?' + [ this.uid, ...params].join(this.sep);
-        window.location.replace(url);
+        this.go('/', ...params);
     }
     send(trg, ...params)
     {
@@ -214,19 +196,19 @@ class Menu extends Usr
         const dl = new Div().class('listing').bd();
         for (const [cnr, ttl, cl] of entries)
         {
-            console.log('cl:', '-' + cl + '-');
             const a = new AT(ttl).class('p').add(cl).click(function() { _this.view(cnr); })
             if (cl)
             {
                 if      (cl == 'y') post.push(a);
                 else if (cl == 'x') done.push(a);
             }
-            else a.put(dl);
+            else a.into(dl);
         }
-        for (const a of post) a.put(dl);
-        for (const a of done) a.put(dl);
+        for (const a of post) a.into(dl);
+        for (const a of done) a.into(dl);
+
         const d = new Div().class('mn bottom').bd();
-        new AI('edit').put(d).click(function() { _this.view('e'); });
+        new AI('edit').into(d).click(function() { _this.view('e'); });
     }
 }
 
@@ -274,16 +256,16 @@ class Item
         this.ctrl = ctrl;
         this.inr = inr;
         const [ttl, cl ] = data;
-        const di = new Div().class('item').put(par);
+        const di = new Div().class('item').into(par);
         this.tgl = new Toggle(di, cl);
-        new AT(ttl).class('a1').put(di).click(
+        new AT(ttl).class('a1').into(di).click(
             function()
             {
                 _this.tgl.x();
                 _this.note();
             }
         );
-        new A().class('a2').put(di).click(
+        new A().class('a2').into(di).click(
             function()
             {
                 _this.tgl.y();
@@ -317,7 +299,7 @@ class Items extends Usr
 
         const dl = new Div().class('listing').bd();
 
-        const a = new AT(hl).class('p items top').put(dl).click(function() { _this.view(); });
+        const a = new AT(hl).class('p items top').into(dl).click(function() { _this.view(); });
         this.top = new Toggle(a, cl);
 
         let inr = 0;
@@ -330,23 +312,22 @@ class Items extends Usr
             }
             else if (e)
             {
-                new H2(e).put(dl);
+                new H2(e).into(dl);
             }
-            else new HR().put(dl);
+            else new HR().into(dl);
         }
         const d = new Div().class('mn bottom').bd();
-        new AI('remove').put(d).click(function() { _this.conf_remove.show(); });
-        new AI('reset').put(d).click(function() { _this.conf_reset.show(); });
-        new AI('up').put(d).click(function() { _this.view(); });
+        new AI('remove').into(d).click(function() { _this.conf_remove.show(); });
+        new AI('reset').into(d).click(function() { _this.conf_reset.show(); });
+        new AI('up').into(d).click(function() { _this.view(); });
 
-        this.conf_remove = new Confirm('remove', function () { _this.go('remove', cnr); });
+        this.conf_remove = new Confirm('remove', function () { _this.go('remove.php', cnr); });
         this.conf_reset  = new Confirm('reset', function () { _this.reset(); });
     }
 
     note(inr, cl)
     {
-        console.log('note', cl, this.cnr, inr);
-        this.send('_state', cl, this.cnr, inr);
+        this.send('_state.php', cl, this.cnr, inr);
         const clo = this.top.cl();
         this.top.clear();
         let cln = ''
@@ -359,22 +340,19 @@ class Items extends Usr
             }
             const cx = cnt['x'];
             const cy = cnt['y'];
-            console.log('log:', cx, cy);
             cln = cx + cy < this.items.length ? '' : cy > 0 ? 'y' : 'x';
             this.top.set(cln);
         }
         if (cln != clo)
         {
-            console.log('cln:', cln);
-            this.send('_state', cln, this.cnr);
+            this.send('_state.php', cln, this.cnr);
         }
     }
-
     reset()
     {
         this.top.clear();
         for (const i of this.items) i.clear();
-        this.send('_reset', this.cnr);
+        this.send('_reset.php', this.cnr);
     }
 }
 
@@ -384,8 +362,8 @@ class Confirm
     {
         const _this = this;
         const dc = new Div().class('confirm').bd().click(function () { _this.hide(); });
-        const di = new Div().class('center').put(dc);
-        new AI(cl).add('confirm').put(di).click(func);
+        const di = new Div().class('center').into(dc);
+        new AI(cl).add('confirm').into(di).click(func);
         this.dc = dc;
     }
     hide()
@@ -406,12 +384,12 @@ class InputForm extends Usr
         const _this = this;
         const frm = new Form('save.php').bd();
 
-        new TextArea(50).class('txt').focus().val(txt).put(frm);
+        new TextArea('txt', 50).class('txt').focus().val(txt).into(frm);
 
-        new Hidden('uid', this.uid).put(frm);
+        new Hidden('uid', this.uid).into(frm);
 
         const d = new Div().class('mn bottom').bd();
-        new AI('back').put(d).click(function() { _this.view(); });
-        new AI('save').put(d).click(function() { frm.submit(); });
+        new AI('back').into(d).click(function() { _this.view(); });
+        new AI('save').into(d).click(function() { frm.submit(); });
     }
 }

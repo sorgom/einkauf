@@ -24,5 +24,5 @@
     }
     $uid = usr()->uid();
 ?>
-<script>new <?php echo "$obj('$uid', "; echo json_encode($data); echo ');' ?>;</script>
+<script>new <?php echo "$obj('$uid', "; echo json_encode($data); echo ')' ?>;</script>
 </body></html>

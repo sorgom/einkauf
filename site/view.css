@@ -240,9 +240,7 @@ input.em {
 }
 input.i {
     display: block;
-    /* flex-grow: 0; */
     width: 3em;
-    /* height: 2em; */
     font-size: inherit;
     border: none;
     background-color: var(--bg);
