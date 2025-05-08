@@ -197,10 +197,10 @@ class View
         const t2 = performance.now();
     }
 
-    confirm(icl, func)
+    confirmLink(icl, func)
     {
-        console.log('call', this.cnf);
-        this.cnf.show(icl, func);
+        const _this = this;
+        return new ImgLink(icl).click(function() { _this.cnf.show(icl, func); });
     }
 }
 
@@ -364,12 +364,8 @@ class Items extends View
             else new HR().into(dl);
         }
         const d = new Div().class('mn bottom').bd();
-        new ImgLink('remove').into(d).click(function() {
-            _this.confirm('remove', function() {_this.remove(); })
-        });
-        new ImgLink('reset').into(d).click(function() {
-            _this.confirm('reset', function() {_this.reset(); })
-        });
+        this.confirmLink('remove', function() { _this.remove(); }).into(d);
+        this.confirmLink('reset',  function() { _this.reset();  }).into(d);
         new ImgLink('up').into(d).click(function() { _this.view(); });
     }
 
@@ -381,20 +377,14 @@ class Items extends View
         let cln = ''
         if (cl)
         {
-            let cnt = { 'x':0, 'y':0};
-            for (const i of this.items)
-            {
-                ++cnt[i.cl()];
-            }
+            let cnt = {'x':0, 'y':0};
+            for (const i of this.items) ++cnt[i.cl()];
             const cx = cnt['x'];
             const cy = cnt['y'];
             cln = cx + cy < this.items.length ? '' : cy > 0 ? 'y' : 'x';
             this.top.set(cln);
         }
-        if (cln != clo)
-        {
-            this.send('_state.php', cln, this.cnr);
-        }
+        if (cln != clo) this.send('_state.php', cln, this.cnr);
     }
     remove()
     {

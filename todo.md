@@ -1,6 +1,7 @@
 # TODO
 ## bugs
 - form textarea jumps to end
+    - solved by order
 ## css selectors
 
 
@@ -27,6 +28,5 @@
 - form for email: welcome.php
 - generate email: mail.php
 
-### rename
-
-### remove
+## general
+- shell export function

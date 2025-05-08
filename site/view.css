@@ -186,8 +186,7 @@ textarea.txt {
     overflow-x: clip;
     animation: 1s blink step-end infinite;
 }
-/* confirm button  */
-div.confirm {
+/* div.confirm {
     position: fixed;
     top: 0;
     left: 0;
@@ -210,7 +209,7 @@ a.confirm {
     background-color: var(--bg);
     border: solid 0.1em var(--tc);
     border-radius: 0.5em;
-}
+} */
 
 div.conf_main {
     visibility: hidden;
