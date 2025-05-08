@@ -330,7 +330,6 @@ class Item
     {
         this.ctrl.note(this.inr, this.tgl.cl());
     }
-
 }
 
 class Items extends View
@@ -338,7 +337,6 @@ class Items extends View
     cnr;
     top;
     items = [];
-    conf;
     constructor(uid, data)
     {
         super(uid);
@@ -373,9 +371,6 @@ class Items extends View
             _this.confirm('reset', function() {_this.reset(); })
         });
         new ImgLink('up').into(d).click(function() { _this.view(); });
-
-        // this.conf_remove = new Confirm('remove', function () { _this.go('remove.php', cnr); });
-        // this.conf_reset  = new Confirm('reset', function () { _this.reset(); });
     }
 
     note(inr, cl)
