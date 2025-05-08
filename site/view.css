@@ -206,8 +206,10 @@ div.confirm.v {
     visibility: visible;
 }
 a.confirm {
+    flex-grow: 0;
     height: 3em;
-    margin: 1em;
+    width: 5em;
+    /* margin: 1em; */
     background-color: var(--bg);
     border: solid 0.1em var(--tc);
     border-radius: 0.5em;

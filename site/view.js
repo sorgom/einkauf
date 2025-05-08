@@ -1,72 +1,173 @@
 'use strict';
 
-
-function make(what, par=document.body)
+class Elem
 {
-    let e = document.createElement(what);
-    if (par) par.appendChild(e);
-    return e;
+    elem;
+    cll;
+    constructor(what)
+    {
+        this.elem = document.createElement(what);
+        this.cll = this.elem.classList;
+        return this;
+    }
+    class(cl)
+    {
+        this.elem.className = cl;
+        return this;
+    }
+    put(par)
+    {
+        par.elem.appendChild(this.elem);
+        return this;
+    }
+    bd()
+    {
+        document.body.appendChild(this.elem);
+        return this;
+    }
+    click(func)
+    {
+        this.elem.onclick = func;
+        return this;
+    }
+
+    add(cl)
+    {
+        console.log('add:', '-' + cl + '-');
+        if (cl) this.cll.add(cl);
+        return this;
+    }
+    remove(... cl)
+    {
+        this.cll.remove(... cl);
+        return this;
+    }
+    toggle(cl)
+    {
+        this.cll.toggle(cl);
+        return this;
+    }
+    has(cl)
+    {
+        return this.cll.contains(cl);
+    }
 }
 
-function div(par=document.body)
+class T_Elem extends Elem
 {
-    return make('div', par);
+    constructor(what, txt)
+    {
+        super(what);
+        this.elem.innerText = txt;
+        return this;
+    }
 }
 
-function p(ttl, par=document.body)
+class A extends Elem
 {
-    let p = make('p', par);
-    p.innerText = ttl;
-    return p;
+    constructor()
+    {
+        return super('a');
+    }
 }
 
-function anc(par)
+class P extends T_Elem
 {
-    return make('a', par);
+    constructor(txt)
+    {
+        return super('p', txt);
+    }
 }
 
-function tLink(ttl, par=document.body)
+class AT extends A
 {
-    let a = anc(par);
-    a.className = 'p';
-    p(ttl, a);
-    return a;
+    constructor(txt)
+    {
+        super();
+        new P(txt).put(this);
+        return this;
+    }
 }
 
-function iLink(cl, par=document.body)
+class AI extends A
 {
-    let a = anc(par);
-    a.className = 'i ' + cl;
-    return a;
+    constructor(cl)
+    {
+        super();
+        return this.class('i ' + cl);
+    }
 }
 
-function bLink(par=document.body)
+class Div extends Elem
 {
-    let a = iLink('back', par);
-    a.onclick = function () { history.back(); }
-    return a;
+    constructor()
+    {
+        return super('div');
+    }
 }
 
-function textarea(par, rows, name, val)
+
+class HR extends Elem
 {
-    let ta = document.createElement('textarea');
-    ta.rows = rows;
-    ta.name = name;
-    ta.value = val;
-    ta.className = name;
-    par.appendChild(ta);
-    return ta;
+    constructor()
+    {
+        return super('hr');
+    }
+
+}
+class H2 extends T_Elem
+{
+    constructor(txt)
+    {
+        return super('h2', txt);
+    }
 }
 
-function hidden(par, name, val)
+class Form extends Elem
 {
-    let ip = document.createElement('input');
-    ip.type = 'hidden';
-    ip.name = name;
-    ip.value = val;
-    par.appendChild(ip);
-    return ip;
+    constructor(action, method='post')
+    {
+        super('form');
+        this.elem.action = action;
+        this.elem.method = method;
+    }
+    submit()
+    {
+        this.elem.submit();
+    }
 }
+
+class TextArea extends Elem
+{
+    constructor(rows)
+    {
+        super('textarea');
+        this.elem.rows = rows;
+        return this;
+    }
+    val(v)
+    {
+        this.elem.value = v;
+        return this;
+    }
+    focus(f=true)
+    {
+        this.elem.autofocus = f;
+        return this;
+    }
+}
+class Hidden extends Elem
+{
+    constructor(name, val)
+    {
+        super('input');
+        this.elem.type = 'hidden';
+        this.elem.name = name;
+        this.elem.value = val;
+        return this;
+    }
+}
+
 
 class Usr
 {
@@ -110,63 +211,55 @@ class Menu extends Usr
         const _this = this;
         let done = [];
         let post = [];
-        const dl = div();
-        dl.className = 'listing';
+        const dl = new Div().class('listing').bd();
         for (const [cnr, ttl, cl] of entries)
         {
-            const a = tLink(ttl, undefined);
-            a.onclick = function() { _this.view(cnr); }
+            console.log('cl:', '-' + cl + '-');
+            const a = new AT(ttl).class('p').add(cl).click(function() { _this.view(cnr); })
             if (cl)
             {
-                a.classList.add(cl);
                 if      (cl == 'y') post.push(a);
                 else if (cl == 'x') done.push(a);
             }
-            else dl.appendChild(a);
+            else a.put(dl);
         }
-        for (const a of post) dl.appendChild(a);
-        for (const a of done) dl.appendChild(a);
-        const d = div();
-        d.className = 'mn bottom';
-        const a = iLink('edit', d);
-        a.onclick = function() { _this.view('e'); }
+        for (const a of post) a.put(dl);
+        for (const a of done) a.put(dl);
+        const d = new Div().class('mn bottom').bd();
+        new AI('edit').put(d).click(function() { _this.view('e'); });
     }
 }
 
 class Toggle
 {
-    cll;
+    elem;
     constructor(elem, cl)
     {
-        this.cll = elem.classList;
-        this.set(cl);
+        this.elem = elem;
+        elem.add(cl);
     }
     set(cl)
     {
         this.clear();
-        if (cl) this.cll.add(cl);
+        this.elem.add(cl);
     }
     clear()
     {
-        this.cll.remove('x', 'y');
+        this.elem.remove('x', 'y');
     }
     cl()
     {
-        return this.has('y') ? 'y' : this.has('x') ? 'x' : '';
+        return this.elem.has('y') ? 'y' : this.elem.has('x') ? 'x' : '';
     }
     x()
     {
-        if (this.cll.contains('y')) this.clear();
-        else this.cll.toggle('x');
+        if (this.elem.has('y')) this.clear();
+        else this.elem.toggle('x');
     }
     y()
     {
-        if (this.cll.contains('x')) this.set('y');
-        else this.cll.toggle('y');
-    }
-    has(cl)
-    {
-        return this.cll.contains(cl);
+        if (this.elem.has('x')) this.set('y');
+        else this.elem.toggle('y');
     }
 }
 
@@ -181,23 +274,22 @@ class Item
         this.ctrl = ctrl;
         this.inr = inr;
         const [ttl, cl ] = data;
-        const di = div(par);
-        di.className = 'item';
+        const di = new Div().class('item').put(par);
         this.tgl = new Toggle(di, cl);
-        const a1 = tLink(ttl, di);
-        a1.className = 'a1';
-        a1.onclick = function()
-        {
-            _this.tgl.x();
-            _this.note();
-        }
-        const a2 = anc(di);
-        a2.className = 'a2';
-        a2.onclick = function()
-        {
-            _this.tgl.y();
-            _this.note();
-        }
+        new AT(ttl).class('a1').put(di).click(
+            function()
+            {
+                _this.tgl.x();
+                _this.note();
+            }
+        );
+        new A().class('a2').put(di).click(
+            function()
+            {
+                _this.tgl.y();
+                _this.note();
+            }
+        );
     }
     toggle()
     {
@@ -223,13 +315,9 @@ class Items extends Usr
         const _this = this;
         this.cnr = cnr;
 
+        const dl = new Div().class('listing').bd();
 
-        const dl = div();
-        dl.className = 'listing';
-
-        const a = tLink(hl, dl);
-        a.classList.add('items', 'top');
-        a.onclick = function() { _this.view(); }
+        const a = new AT(hl).class('p items top').put(dl).click(function() { _this.view(); });
         this.top = new Toggle(a, cl);
 
         let inr = 0;
@@ -242,19 +330,14 @@ class Items extends Usr
             }
             else if (e)
             {
-                const h = make('h2', dl);
-                h.innerText = e;
+                new H2(e).put(dl);
             }
-            else make('hr', dl);
+            else new HR().put(dl);
         }
-        const d = div();
-        d.className = 'mn bottom';
-        const a1 = iLink('remove', d);
-        a1.onclick = function() { _this.conf_remove.show(); }
-        const a2 = iLink('reset', d);
-        a2.onclick = function() { _this.conf_reset.show(); }
-        const a3 = iLink('up', d);
-        a3.onclick = function() { _this.view(); }
+        const d = new Div().class('mn bottom').bd();
+        new AI('remove').put(d).click(function() { _this.conf_remove.show(); });
+        new AI('reset').put(d).click(function() { _this.conf_reset.show(); });
+        new AI('up').put(d).click(function() { _this.view(); });
 
         this.conf_remove = new Confirm('remove', function () { _this.go('remove', cnr); });
         this.conf_reset  = new Confirm('reset', function () { _this.reset(); });
@@ -300,22 +383,18 @@ class Confirm
     constructor(cl, func)
     {
         const _this = this;
-        const dc = div();
-        dc.className = 'confirm';
-        dc.onclick = function () { _this.hide(); }
-        const di = div(dc);
-        const a = iLink(cl, di);
-        a.classList.add('confirm');
-        a.onclick = func;
-        this.cll = dc.classList;
+        const dc = new Div().class('confirm').bd().click(function () { _this.hide(); });
+        const di = new Div().class('center').put(dc);
+        new AI(cl).add('confirm').put(di).click(func);
+        this.dc = dc;
     }
     hide()
     {
-        this.cll.remove('v');
+        this.dc.remove('v');
     }
     show()
     {
-        this.cll.add('v');
+        this.dc.add('v');
     }
 }
 
@@ -325,21 +404,14 @@ class InputForm extends Usr
     {
         super(uid);
         const _this = this;
-        const frm = document.createElement('form');
-        frm.action = 'save.php';
-        frm.method = 'post';
+        const frm = new Form('save.php').bd();
 
-        const te = textarea(frm, 50, 'txt', txt);
-        te.autofocus = true;
+        new TextArea(50).class('txt').focus().val(txt).put(frm);
 
-        hidden(frm, 'uid', this.uid);
-        document.body.appendChild(frm);
+        new Hidden('uid', this.uid).put(frm);
 
-        const d = div();
-        d.className = 'mn bottom';
-        const a = iLink('back', d);
-        a.onclick = function() { _this.view(); }
-        const b = iLink('save', d);
-        b.onclick = function() { frm.submit(); }
+        const d = new Div().class('mn bottom').bd();
+        new AI('back').put(d).click(function() { _this.view(); });
+        new AI('save').put(d).click(function() { frm.submit(); });
     }
 }
