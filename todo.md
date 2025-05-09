@@ -10,7 +10,7 @@
 - edit
     - clear
 - home instead of back
-
+- buttons menu right when landscape?
 ## js
 - Form.clear()
 

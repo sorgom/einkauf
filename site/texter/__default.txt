@@ -1,0 +1,50 @@
+=== email
+E-Mail
+
+=== welcome 1
+Willkommen.
+
+Du benötigst nur einem Link, um loszulegen.
+
+An welche E-Mail-Adresse sollen wir deinen Link senden?
+
+=== welcome 2
+Deine E-Mail-Adresse wird nirgends gespeichert.
+
+=== mail subject
+Dein Link
+
+=== mail sent
+Den Link haben wir an
+<b>##MAIL</b>
+gesendet.
+
+Hier geht's los.
+<a href=##LINK>##LINK</a>
+
+=== mail failed
+Das Mail an
+<b>##MAIL</b>
+hat leider nicht funktioniert.
+
+Bookmarke am besten gleich den Link.
+
+Hier geht's los.
+<a href=##LINK>##LINK</a>
+
+=== imprint
+No imprint provided.
+
+=== template
+@ Top 1
+item 1
+item 2
+# heading
+item 3
+
+@ Top 2
+item 1.1
+item 1.2
+
+item 2.1
+item 2.2

@@ -38,11 +38,6 @@ class Register
         unset($this->uids[$uid]);
     }
 
-    public static function instance()
-    {
-        static $instance = new Register(true);
-        return $instance;
-    }
     private static function check()
     {
         if (!is_dir(self::$dir)) mkdir(self::$dir);
@@ -61,11 +56,6 @@ class Usr
     private array $params = [];
     private static string $sep = '-';
 
-    public static function instance()
-    {
-        static $instance = new Usr();
-        return $instance;
-    }
 
     public function set(string $uid)
     {
@@ -84,7 +74,7 @@ class Usr
 
     public function check()
     {
-        if (!$this->valid) header('Location: hello.php');
+        if (!$this->valid) header('Location: welcome.php');
     }
 
     public function go(string $php)
@@ -96,17 +86,17 @@ class Usr
         header("Location: /?" . implode(self::$sep, [ $this->uid, ...$params]));
     }
 
-    function param(int $n=0)
+    public function param(int $n=0)
     {
         return count($this->params) > $n ? $this->params[$n] : NULL;
     }
 
-    function params()
+    public function params()
     {
         return $this->params;
     }
 
-    private function __construct()
+    public function __construct()
     {
         if ($_POST)
         {
@@ -130,10 +120,13 @@ class Usr
 
 function usr()
 {
-    return Usr::instance();
+    static $instance = new Usr();
+    return $instance;
 }
+
 function reg()
 {
-    return Register::instance();
+    static $instance = new Register(true);
+    return $instance;
 }
 ?>

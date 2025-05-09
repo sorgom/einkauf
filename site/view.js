@@ -169,11 +169,13 @@ class View
     uid;
     sep = '-';
     cnf;
+    mnu;
     constructor(uid)
     {
         this.uid = uid;
         this.cnf = new Confirm();
         console.log('con', this.cnf);
+        this.mnu = new Div().class('mn bottom').bd();
     }
     url(trg, ...params)
     {
@@ -200,7 +202,11 @@ class View
     confirmLink(icl, func)
     {
         const _this = this;
-        return new ImgLink(icl).click(function() { _this.cnf.show(icl, func); });
+        new ImgLink(icl).into(this.mnu).click(function() { _this.cnf.show(icl, func); });
+    }
+    mnuLink(icl, func)
+    {
+        new ImgLink(icl).into(this.mnu).click(func);
     }
 }
 
@@ -246,18 +252,14 @@ class Menu extends View
         for (const [cnr, ttl, cl] of entries)
         {
             const a = new TxtLink(ttl).class('p').add(cl).click(function() { _this.view(cnr); })
-            if (cl)
-            {
-                if      (cl == 'y') post.push(a);
-                else if (cl == 'x') done.push(a);
-            }
+            if      (cl == 'y') post.push(a);
+            else if (cl == 'x') done.push(a);
             else a.into(dl);
         }
         for (const a of post) a.into(dl);
         for (const a of done) a.into(dl);
 
-        const d = new Div().class('mn bottom').bd();
-        new ImgLink('edit').into(d).click(function() { _this.view('e'); });
+        this.mnuLink('edit', function() { _this.view('e'); });
     }
 }
 
@@ -357,16 +359,12 @@ class Items extends View
                 this.items.push(new Item(this, inr, e, dl).toggle());
                 ++inr;
             }
-            else if (e)
-            {
-                new H2(e).into(dl);
-            }
+            else if (e) new H2(e).into(dl);
             else new HR().into(dl);
         }
-        const d = new Div().class('mn bottom').bd();
-        this.confirmLink('remove', function() { _this.remove(); }).into(d);
-        this.confirmLink('reset',  function() { _this.reset();  }).into(d);
-        new ImgLink('up').into(d).click(function() { _this.view(); });
+        this.confirmLink('remove', function() { _this.remove(); });
+        this.confirmLink('reset',  function() { _this.reset();  });
+        this.mnuLink('up', function() { _this.view(); });
     }
 
     note(inr, cl)
@@ -410,8 +408,7 @@ class InputForm extends View
 
         new Hidden('uid', this.uid).into(frm);
 
-        const d = new Div().class('mn bottom').bd();
-        new ImgLink('back').into(d).click(function() { _this.view(); });
-        new ImgLink('save').into(d).click(function() { frm.submit(); });
+        this.mnuLink('back', function() { _this.view(); });
+        this.mnuLink('save', function() { frm.submit(); });
     }
 }
