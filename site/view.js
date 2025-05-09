@@ -364,7 +364,7 @@ class Items extends View
         }
         this.confirmLink('remove', function() { _this.remove(); });
         this.confirmLink('reset',  function() { _this.reset();  });
-        this.mnuLink('up', function() { _this.view(); });
+        this.mnuLink('home', function() { _this.view(); });
     }
 
     note(inr, cl)
@@ -408,7 +408,7 @@ class InputForm extends View
 
         new Hidden('uid', this.uid).into(frm);
 
-        this.mnuLink('back', function() { _this.view(); });
+        this.mnuLink('home', function() { _this.view(); });
         this.mnuLink('save', function() { frm.submit(); });
     }
 }
