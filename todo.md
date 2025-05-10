@@ -4,13 +4,24 @@
     - solved by order
 ## css selectors
 
+## logics
+- reset confirm if something to reset
 
 ## layout / css
+### bottom menu
+- centered
+- elements
+    - fixed with
+    - flex-grow: 0
+
+### confirm
+- check: filter blur: no effect
+- less opacity
 ### new buttons
 - edit
     - clear
-- home instead of back
 - buttons menu right when landscape?
+- home button is not intuitive: go back to _back_ and _up_
 ## js
 - Form.clear()
 
@@ -21,12 +32,8 @@
     - [CSS dark mode invert](https://www.rechnerhaus.de/blog/css-dark-mode-mit-zwei-zeilen-code)
 
 ## data
-- get rid of concatenations?
-- when no data file written start with default txt
 
 ## new login concept
-- form for email: welcome.php
-- generate email: mail.php
 
 ## general
 - shell export function
