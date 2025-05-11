@@ -9,10 +9,10 @@
 <script src=view.js></script>
 
 <?php
-    function jsNew($class, $uid, &$data)
+    function jsView($class, $uid, &$data)
     {
         echo "<script>new $class('$uid', ";
         echo json_encode($data);
-        echo ');</script>';
+        echo ');</script></body></html>';
     }
 ?>

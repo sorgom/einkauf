@@ -1,8 +1,7 @@
 
 <?php
-    require_once('body.php');
+    require_once('view.php');
     require_once('usr.php');
-    // require_once('texter.php');
 
     $addr = $_POST['em'];
 
@@ -30,17 +29,9 @@
     function ignore_errors(... $params) {}
     set_error_handler('ignore_errors');
 
-    $success = false;
-    $success = @mail($addr, $subject, $link, $header);
+    $ok = false;
+    $ok = @mail($addr, $subject, $link, $header);
 
-    $data = [$success, $addr, $link];
-    jsNew('StartInfo', $uid, $data);
+    $data = [$ok, $addr, $link];
+    jsView('StartInfo', $uid, $data);
 ?>
-<div class='grow_up itxt'>
-    <?php if ($success) { ?>
-        <div class='ico ok'><?php echo $addr; ?></div>
-    <?php } else { ?>
-        <div class='ico nok'><?php echo $addr; ?></div>
-    <?php } ?>
-    <div class='ico go'><a href=<?php echo $link; ?> class=keep><?php echo $link; ?></a></div>
-</div>

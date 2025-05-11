@@ -77,15 +77,11 @@ class T_Elem extends Elem
     }
 }
 
-class Link extends Elem
-{
-    constructor() { return super('a'); }
-}
-
-class P extends Elem
-{
-    constructor() { return super('p'); }
-}
+class Link extends Elem { constructor() { return super('a'); } }
+class P    extends Elem { constructor() { return super('p'); } }
+class Div  extends Elem { constructor() { return super('div'); } }
+class HR   extends Elem { constructor() { return super('hr'); } }
+class H2   extends Elem { constructor() { return super('h2'); } }
 
 class TxtLink extends Link
 {
@@ -116,21 +112,6 @@ class ImgLink extends Link
         }
         return this;
     }
-}
-
-class Div extends Elem
-{
-    constructor() { return super('div'); }
-}
-
-class HR extends Elem
-{
-    constructor() { return super('hr'); }
-
-}
-class H2 extends Elem
-{
-    constructor() { return super('h2'); }
 }
 
 class Form extends Elem
@@ -179,19 +160,14 @@ class Input extends Elem
     }
 }
 
-
 class View
 {
     uid;
     sep = '-';
-    cnf;
-    mnu;
     constructor(uid)
     {
         this.uid = uid;
-        this.cnf = new Confirm();
         console.log('con', this.cnf);
-        this.mnu = new Div().class('mn bottom').body();
     }
     url(trg, ...params)
     {
@@ -213,6 +189,19 @@ class View
         xhr.open('GET', url, true);
         xhr.send(null);
         const t2 = performance.now();
+    }
+}
+
+
+class MainView extends View
+{
+    cnf;
+    mnu;
+    constructor(uid)
+    {
+        super(uid);
+        this.cnf = new Confirm();
+        this.mnu = new Div().class('mn bottom').body();
     }
 
     confirmLink(icl, func)
@@ -256,7 +245,7 @@ class Confirm
     }
 }
 
-class Menu extends View
+class Menu extends MainView
 {
     constructor(uid, entries)
     {
@@ -350,7 +339,7 @@ class Item
     }
 }
 
-class Items extends View
+class Items extends MainView
 {
     cnr;
     top;
@@ -412,7 +401,7 @@ class Items extends View
     }
 }
 
-class InputForm extends View
+class InputForm extends MainView
 {
     txa;
     constructor(uid, txt)
@@ -446,15 +435,14 @@ class WelcomeForm
 
 class StartInfo extends View
 {
-    constructor(uid)
+    constructor(uid, data)
     {
-        super(uid, $data);
+        super(uid);
+        const _this = this;
         const [ok, addr, link] = data;
-        const url = this.url('/');
-        console.log(url);
         const dgr = new Div().class('grow_up itxt').body();
-        new Div.class('ico ' + ok ? 'ok' : 'nok').txt(addr).into(dgr);
-        const dgo = new Div.class('ico go').into(dgr);
-        new Link().class('keep').txt(link).into(dgo);
+        new Div().class('ico ' + (ok ? 'ok' : 'nok')).txt(addr).into(dgr);
+        const dgo = new Div().class('ico go').into(dgr);
+        new Link().class('keep').txt(link).into(dgo).click( function() { _this.view(); });
     }
 }

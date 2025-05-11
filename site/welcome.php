@@ -1,6 +1,5 @@
 <?php
-require_once('body.php');
+require_once('view.php');
 $data = [];
-jsNew('WelcomeForm', '', $data)
+jsView('WelcomeForm', '', $data)
 ?>
-</body></html>

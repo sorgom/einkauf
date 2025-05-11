@@ -2,7 +2,7 @@
 <?php
 require_once('usr.php');
 usr()->check();
-require_once('body.php');
+require_once('view.php');
 require_once('data.php');
 $x = usr()->param();
 $data = NULL;
@@ -20,6 +20,5 @@ switch ($x)
         data()->ItemData($data, $x);
         $class = 'Items';
 }
-jsNew($class, usr()->uid(), $data);
+jsView($class, usr()->uid(), $data);
 ?>
-</body></html>

@@ -162,6 +162,7 @@ div.mn {
     height: 2em;
     background-repeat: no-repeat;
     background-position: center;
+    background-size: 1.5em;
 }
 a.i {
     flex-grow: 1;
@@ -170,14 +171,11 @@ a.i {
 .i.back     { background-image: url('img/back.svg'); }
 .i.clear    { background-image: url('img/clear.svg'); }
 .i.edit     { background-image: url('img/pen.svg'); }
-.i.enter    { background-image: url('img/enter.svg'); }
 .i.forward  { background-image: url('img/forward.svg'); }
 .i.home     { background-image: url('img/list.svg'); }
-.i.imprint  { background-image: url('img/paragraph.svg'); }
 .i.remove   { background-image: url('img/trash.svg'); }
 .i.reset    { background-image: url('img/reset.svg'); }
 .i.save     { background-image: url('img/save.svg'); }
-.i.up       { background-image: url('img/up.svg'); }
 .i.view     { background-image: url('img/eye.svg'); }
 
 textarea.txt {
