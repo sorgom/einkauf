@@ -125,12 +125,9 @@ class Data extends UsrData
     {
         if ($this->_load($data))
             [$this->heads, $this->items, $this->notes] = json_decode($data, true);
-        else
-        {
-            require_once('texter.php');
-            texter()->get($txt, 'template');
+
+        else if (fnc\load($txt, 'template.txt'))
             $this->set($txt);
-        }
     }
 
     public function save()
@@ -217,7 +214,7 @@ class Data extends UsrData
             $this->notes = array_shift($data);
             foreach ($data as $cnr => $txt)
             {
-                $item = self::txt2item($txt);
+                $item = self::txt2lines($txt);
                 $ttl  = $ttls[$cnr];
                 if ($ttl == $this->ps)
                 {
@@ -265,9 +262,9 @@ class Data extends UsrData
         return array_values(array_filter($a, 'fnc\isi'));
     }
 
-    private static function txt2item(string $txt)
+    private static function txt2lines(string $txt)
     {
-        $lines = explode("\n", $txt);
+        $lines = fnc\expl($txt);
         $lSet = false;
         $lOk  = false;
         $item = [];

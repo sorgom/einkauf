@@ -2,7 +2,7 @@
 <?php
     require_once('body.php');
     require_once('usr.php');
-    require_once('texter.php');
+    // require_once('texter.php');
 
     $addr = $_POST['em'];
 
@@ -20,9 +20,7 @@
 
     $link = "$prt://$req?$uid";
 
-    texter()->get($subject, 'mail subject');
-
-    $message = $link;
+    $subject = $srv;
     $header = array(
         'From' => "Wellcome <welcome@$srv>",
         'Reply-To' => "no-reply@$srv",
@@ -33,11 +31,16 @@
     set_error_handler('ignore_errors');
 
     $success = false;
-    $success = @mail($addr, $subject, $message, $header);
+    $success = @mail($addr, $subject, $link, $header);
 
-    texter()->get($txt, $success ? 'mail sent' : 'mail failed');
-    $txt = str_replace('##MAIL', $addr, str_replace('##LINK', $link, $txt));
+    $data = [$success, $addr, $link];
+    jsNew('StartInfo', $uid, $data);
 ?>
-<div class=grow_up>
-<div class=itxt><?php echo $txt; ?></div>
+<div class='grow_up itxt'>
+    <?php if ($success) { ?>
+        <div class='ico ok'><?php echo $addr; ?></div>
+    <?php } else { ?>
+        <div class='ico nok'><?php echo $addr; ?></div>
+    <?php } ?>
+    <div class='ico go'><a href=<?php echo $link; ?> class=keep><?php echo $link; ?></a></div>
 </div>

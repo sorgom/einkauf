@@ -20,7 +20,7 @@ class Elem
         par.elem.appendChild(this.elem);
         return this;
     }
-    bd()
+    body()
     {
         document.body.appendChild(this.elem);
         return this;
@@ -28,6 +28,21 @@ class Elem
     click(func)
     {
         this.elem.onclick = func;
+        return this;
+    }
+    autofocus()
+    {
+        this.elem.autofocus = true;
+        return this;
+    }
+    txt(txt)
+    {
+        this.elem.innerText = txt;
+        return this;
+    }
+    focus()
+    {
+        this.elem.focus();
         return this;
     }
 
@@ -67,9 +82,9 @@ class Link extends Elem
     constructor() { return super('a'); }
 }
 
-class P extends T_Elem
+class P extends Elem
 {
-    constructor(txt) { return super('p', txt); }
+    constructor() { return super('p'); }
 }
 
 class TxtLink extends Link
@@ -77,7 +92,7 @@ class TxtLink extends Link
     constructor(txt)
     {
         super();
-        new P(txt).into(this);
+        new P().txt(txt).into(this);
         return this;
     }
 }
@@ -113,9 +128,9 @@ class HR extends Elem
     constructor() { return super('hr'); }
 
 }
-class H2 extends T_Elem
+class H2 extends Elem
 {
-    constructor(txt) { return super('h2', txt); }
+    constructor() { return super('h2'); }
 }
 
 class Form extends Elem
@@ -146,23 +161,24 @@ class TextArea extends Elem
         this.elem.value = v;
         return this;
     }
-    focus(f=true)
-    {
-        this.elem.autofocus = f;
-        return this;
-    }
 }
-class Hidden extends Elem
+class Input extends Elem
 {
-    constructor(name, val)
+    constructor(type, name='', val='')
     {
         super('input');
-        this.elem.type = 'hidden';
+        this.elem.type = type;
         this.elem.name = name;
         this.elem.value = val;
         return this;
     }
+    required()
+    {
+        this.elem.required = true;
+        return this;
+    }
 }
+
 
 class View
 {
@@ -175,7 +191,7 @@ class View
         this.uid = uid;
         this.cnf = new Confirm();
         console.log('con', this.cnf);
-        this.mnu = new Div().class('mn bottom').bd();
+        this.mnu = new Div().class('mn bottom').body();
     }
     url(trg, ...params)
     {
@@ -217,7 +233,7 @@ class Confirm
     constructor()
     {
         const _this = this;
-        const dc = new Div().class('conf_main').bd();
+        const dc = new Div().class('conf_main').body();
         // darken layer
         new Div().class('conf_bg').into(dc).click( function () {_this.hide(); });
         // vertical layer
@@ -248,7 +264,7 @@ class Menu extends View
         const _this = this;
         let done = [];
         let post = [];
-        const dl = new Div().class('listing').bd();
+        const dl = new Div().class('listing').body();
         for (const [cnr, ttl, cl] of entries)
         {
             const a = new TxtLink(ttl).class('p').add(cl).click(function() { _this.view(cnr); })
@@ -346,7 +362,7 @@ class Items extends View
         const _this = this;
         this.cnr = cnr;
 
-        const dl = new Div().class('listing').bd();
+        const dl = new Div().class('listing').body();
 
         const a = new TxtLink(hl).class('p items top').into(dl).click(function() { _this.view(); });
         this.top = new Toggle(a, cl);
@@ -359,7 +375,7 @@ class Items extends View
                 this.items.push(new Item(this, inr, e, dl).toggle());
                 ++inr;
             }
-            else if (e) new H2(e).into(dl);
+            else if (e) new H2(e).txt(e).into(dl);
             else new HR().into(dl);
         }
         this.confirmLink('remove', function() { _this.remove(); });
@@ -398,17 +414,47 @@ class Items extends View
 
 class InputForm extends View
 {
+    txa;
     constructor(uid, txt)
     {
         super(uid);
         const _this = this;
-        const frm = new Form('save.php').bd();
+        const frm = new Form('save.php').body();
 
-        new TextArea('txt', 50).class('txt').val(txt).into(frm).focus();
+        this.txa = new TextArea('txt', 50).class('txt').val(txt).into(frm).autofocus();
 
-        new Hidden('uid', this.uid).into(frm);
+        new Input('hidden', 'uid', this.uid).into(frm);
 
+        this.confirmLink('clear', function() { _this.txa.val('').focus(); });
         this.mnuLink('home', function() { _this.view(); });
         this.mnuLink('save', function() { frm.submit(); });
+    }
+}
+
+class WelcomeForm
+{
+    constructor()
+    {
+        const frm = new Form('start.php').body();
+        const dgr = new Div().class('grow_up').into(frm);
+        const dcn = new Div().class('center').into(dgr);
+        const din = new Div().into(dcn);
+        new Input('email', 'em').required().autofocus().class('em').into(din);
+        new Input('submit').class('i forward').into(din);
+    }
+}
+
+class StartInfo extends View
+{
+    constructor(uid)
+    {
+        super(uid, $data);
+        const [ok, addr, link] = data;
+        const url = this.url('/');
+        console.log(url);
+        const dgr = new Div().class('grow_up itxt').body();
+        new Div.class('ico ' + ok ? 'ok' : 'nok').txt(addr).into(dgr);
+        const dgo = new Div.class('ico go').into(dgr);
+        new Link().class('keep').txt(link).into(dgo);
     }
 }

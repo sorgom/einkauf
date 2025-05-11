@@ -15,11 +15,12 @@
     --bg: white;
     --bg-button: #DDD;
     --bg-button-out: #AAA;
+
 }
 
 @media (prefers-color-scheme: dark) {
     html { filter: invert(100%); }
-    .itxt > a {
+    .keep {
         filter: invert(100%);
     }
 }
@@ -166,16 +167,18 @@ a.i {
     flex-grow: 1;
 }
 
-.i.reset    { background-image: url('img/reset.svg'); }
-.i.remove   { background-image: url('img/trash.svg'); }
-.i.edit     { background-image: url('img/pen.svg'); }
-.i.view     { background-image: url('img/eye.svg'); }
 .i.back     { background-image: url('img/back.svg'); }
+.i.clear    { background-image: url('img/clear.svg'); }
+.i.edit     { background-image: url('img/pen.svg'); }
+.i.enter    { background-image: url('img/enter.svg'); }
+.i.forward  { background-image: url('img/forward.svg'); }
 .i.home     { background-image: url('img/list.svg'); }
 .i.imprint  { background-image: url('img/paragraph.svg'); }
-.i.up       { background-image: url('img/up.svg'); }
+.i.remove   { background-image: url('img/trash.svg'); }
+.i.reset    { background-image: url('img/reset.svg'); }
 .i.save     { background-image: url('img/save.svg'); }
-.i.enter    { background-image: url('img/enter.svg'); }
+.i.up       { background-image: url('img/up.svg'); }
+.i.view     { background-image: url('img/eye.svg'); }
 
 textarea.txt {
     width: 95%;
@@ -221,13 +224,32 @@ div.conf_fg a {
 }
 
 .itxt {
-    white-space: pre-wrap;
-    font-size: 60%;
-    margin: 1em;
+    margin: 0 10% 0 10%;
 }
-.itxt > a {
+.itxt * {
+    font-size: inherit;
+}
+
+a.keep {
     color: var(--tc-link);
 }
+div.ico {
+    padding: 0 0 1em 1.4em;
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-image: url('img/checked.svg');
+    background-size: 1em;
+}
+.ico.ok {
+    background-image: url('img/ico_ok.svg');
+}
+.ico.nok {
+    background-image: url('img/ico_nok.svg');
+}
+.ico.go {
+    background-image: url('img/ico_go.svg');
+}
+
 
 textarea.line {
     width: 80%;
@@ -245,11 +267,8 @@ input.em {
 }
 input.i {
     display: block;
-    width: 3em;
+    width: 80%;
     font-size: inherit;
     border: none;
     background-color: var(--bg);
-    border: solid 1px var(--tc);
-    border-radius: 0.5em;
-    margin-top: 0.1em;
 }
