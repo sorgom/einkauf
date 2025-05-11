@@ -427,7 +427,7 @@ class WelcomeForm
         const frm = new Form('start.php').body();
         const dgr = new Div().class('grow_up').into(frm);
         const dcn = new Div().class('center').into(dgr);
-        const din = new Div().into(dcn);
+        const din = new Div().class('mail_form').into(dcn);
         new Input('email', 'em').required().autofocus().class('em').into(din);
         new Input('submit').class('i forward').into(din);
     }

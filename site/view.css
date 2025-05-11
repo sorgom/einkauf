@@ -258,15 +258,23 @@ textarea.line {
 input.em {
     display: block;
     font-size: inherit;
-    width: 80%;
     margin: 0.1em;
     padding: 0.1em;
     text-align: center;
 }
 input.i {
     display: block;
-    width: 80%;
+    width: 100%;
     font-size: inherit;
     border: none;
     background-color: var(--bg);
+}
+
+div.mail_form {
+    background-image: url('img/mail.svg');
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 2.5em;
+    padding-top: 2.5em;
+    margin-top: 0.5em;
 }
