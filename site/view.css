@@ -1,17 +1,21 @@
 :root {
+    /* prevents from zoom by touch */
     touch-action: pan-x pan-y;
     height: 100%;
+    /* prevents from links being highlighted due to the above */
+    -webkit-tap-highlight-color: transparent;
+
     --mr: 1em;
     --mh: 1.6em;
     --ml: 1em;
+    --mhd: 0.5em;
     --mtr: 0.5em;
     --hr: 1.2em;
 
     --tc: black;
-    --tc-done: #666;
-    --tc-heading: #BBB;
+    --tc-done: #AAA;
+    --tc-heading: #888;
     --tc-link: blue;
-    --tc-low: #666;
     --bg: white;
     --bg-button: #DDD;
     --bg-button-out: #AAA;
@@ -24,8 +28,6 @@
         filter: invert(100%);
     }
 }
-
-html { -webkit-tap-highlight-color:transparent; }
 
 * {
     margin:0;
@@ -122,9 +124,11 @@ a.top {
 }
 
 h2 {
-    padding-left: var(--ml);
+    padding-left: var(--mhd);
     font-size: 100%;
+    font-style: italic;
     color: var(--tc-heading);
+    margin-bottom: 0.3em;
 }
 
 hr {
@@ -158,7 +162,7 @@ div.mn {
     background-color: var(--bg);
 }
 
-.i{
+.i {
     height: 2em;
     background-repeat: no-repeat;
     background-position: center;
