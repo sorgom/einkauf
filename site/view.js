@@ -201,7 +201,7 @@ class MainView extends View
     {
         super(uid);
         this.cnf = new Confirm();
-        this.mnu = new Div().class('mn bottom').body();
+        this.mnu = new Div().class('mn bottom');
     }
 
     confirmLink(icl, func)
@@ -263,7 +263,7 @@ class Menu extends MainView
         }
         for (const a of post) a.into(dl);
         for (const a of done) a.into(dl);
-
+        this.mnu.into(dl);
         this.mnuLink('edit', function() { _this.view('e'); });
     }
 }
@@ -289,15 +289,19 @@ class Toggle
     {
         return this.elem.has('y') ? 'y' : this.elem.has('x') ? 'x' : '';
     }
-    x()
+    click()
     {
-        if (this.elem.has('y')) this.clear();
-        else this.elem.toggle('x');
-    }
-    y()
-    {
-        if (this.elem.has('x')) this.set('y');
-        else this.elem.toggle('y');
+        switch (this.cl())
+        {
+        case 'x':
+            this.set('y');
+            break;
+        case 'y':
+            this.clear();
+            break;
+        default:
+            this.set('x');
+        }
     }
 }
 
@@ -312,22 +316,12 @@ class Item
         this.ctrl = ctrl;
         this.inr = inr;
         const [ttl, cl ] = data;
-        const di = new Div().class('item').into(par);
-        this.tgl = new Toggle(di, cl);
-        new TxtLink(ttl).class('a1').into(di).click(
-            function()
-            {
-                _this.tgl.x();
-                _this.note();
-            }
-        );
-        new Link().class('a2').into(di).click(
-            function()
-            {
-                _this.tgl.y();
-                _this.note();
-            }
-        );
+        const a = new TxtLink(ttl).class('p item').into(par);
+        this.tgl = new Toggle(a, cl);
+        a.click(function() {
+            _this.tgl.click();
+            _this.note();
+        });
     }
     toggle()
     {
@@ -367,6 +361,7 @@ class Items extends MainView
             else if (e) new H2(e).txt(e).into(dl);
             else new HR().into(dl);
         }
+        this.mnu.into(dl);
         this.confirmLink('remove', function() { _this.remove(); });
         this.confirmLink('reset',  function() { _this.reset();  });
         this.mnuLink('home', function() { _this.view(); });
@@ -414,6 +409,7 @@ class InputForm extends MainView
 
         new Input('hidden', 'uid', this.uid).into(frm);
 
+        this.mnu.body();
         this.confirmLink('clear', function() { _this.txa.val('').focus(); });
         this.mnuLink('home', function() { _this.view(); });
         this.mnuLink('save', function() { frm.submit(); });
