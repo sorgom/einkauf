@@ -184,14 +184,20 @@ class View
     send(trg, ...params)
     {
         var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            // In local files, status is 0 upon success in Mozilla Firefox
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                const status = xhr.status;
+                if (status === 0 || (status >= 200 && status < 400))
+                    console.log('done');
+            }
+        }
         const url = this.url(trg, ...params);
         console.log('send', url)
         xhr.open('GET', url, true);
         xhr.send(null);
-        const t2 = performance.now();
     }
 }
-
 
 class MainView extends View
 {
@@ -274,7 +280,7 @@ class Toggle
     constructor(elem, cl)
     {
         this.elem = elem;
-        elem.add(cl);
+        this.set(cl);
     }
     set(cl)
     {

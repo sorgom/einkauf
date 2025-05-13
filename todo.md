@@ -6,7 +6,7 @@
 
 ## logics
 - reset confirm if something to reset
-
+- wait for request return before class change
 ## layout / css
 ### bottom menu
 - centered
@@ -15,11 +15,7 @@
     - flex-grow: 0
 
 ### confirm
-- check: filter blur: no effect
-- less opacity
 ### new buttons
-- edit
-    - clear
 - buttons menu right when landscape?
 - home button is not intuitive: go back to _back_ and _up_
 ## js
