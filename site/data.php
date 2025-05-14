@@ -1,5 +1,4 @@
 <?php
-
 require_once('usr.php');
 require_once('fnc.php');
 
