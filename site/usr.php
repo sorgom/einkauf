@@ -1,10 +1,9 @@
 <?php
-
+require_once('fnc.php');
 class Register
 {
     private static string $dir  = 'data';
     private static string $file = 'data/reg.json';
-    private static string $log  = 'data/.log';
     private array $uids = [];
 
     public function __construct(bool $load=false)
@@ -13,14 +12,14 @@ class Register
     }
     public function save()
     {
-        self::check();
-        file_put_contents(self::$file, json_encode($this->uids));
+        $json = json_encode($this->uids);
+        fnc\save(self::$file, $json);
     }
     public function load()
     {
-        $ok = file_exists(self::$file);
-        if ($ok) $this->uids = json_decode(file_get_contents(self::$file), true);
-        return $ok;
+        if (fnc\load($json, self::$file))
+            $this->uids = json_decode($json, true);
+        else $this->uids = [];
     }
 
     public function has(string $uid)
@@ -28,24 +27,29 @@ class Register
         return isset($this->uids[$uid]);
     }
 
-    public function add(string $uid)
+    public function check(string $uid, string $pwd)
     {
-        return $this->uids[$uid] = 1;
+        $ret = false;
+        if ($this->has($uid))
+        {
+            $val = $this->uids[$uid];
+            $ret = gettype($val) == 'string' ?
+                hash_equals($val, crypt($pwd, $val)) : true;
+        }
+        return $ret;
+    }
+
+    public function add(string $uid, string $pwd='')
+    {
+        if ($pwd)
+            $this->uids[$uid] = password_hash($pwd, PASSWORD_BCRYPT);
+        else
+            $this->uids[$uid] = 0;
     }
 
     public function remove(string &$uid)
     {
         unset($this->uids[$uid]);
-    }
-
-    private static function check()
-    {
-        if (!is_dir(self::$dir)) mkdir(self::$dir);
-    }
-    public static function log(mixed $message)
-    {
-        self::check();
-        error_log(serialize($message) . "\n", 3, self::$log);
     }
 }
 
@@ -73,7 +77,11 @@ class Usr
 
     public function check()
     {
-        if (!$this->valid()) header('Location: welcome.php');
+        if (!$this->valid()) $this->welcome();
+    }
+    public static function welcome()
+    {
+        header('Location: welcome.php');
     }
 
     public function go(string $php)

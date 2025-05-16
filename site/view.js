@@ -431,8 +431,12 @@ class WelcomeForm
         const frm = new Form('start.php').body();
         const dgr = new Div().class('grow_up').into(frm);
         const dcn = new Div().class('center').into(dgr);
-        const din = new Div().class('mail_form').into(dcn);
-        new Input('email', 'em').required().autofocus().class('em').into(din);
+        const din = new Div().into(dcn);
+        const dem = new Div().class('form mail').into(din);
+        new Input('email', 'em').required().autofocus().class('frm').into(dem);
+        const dpw = new Div().class('form pwd').into(din);
+        new Input('password', 'pwd1').class('frm pwd').into(dpw);
+        new Input('password', 'pwd2').class('frm pwd spc').into(dpw);
         new Input('submit').class('i forward').into(din);
     }
 }
