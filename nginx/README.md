@@ -1,14 +1,19 @@
 # run todo PHP server locally on nginx
 ## required installation
-you need a folder with PATH environment set to it
+you need a folder or two folders with PATH environment set to it
 
 containing
 - from nginx download:
     - nginx.exe
 - from PHP download:
-    - php8ts.dll
     - php-cgi.exe
     - php.ini
+    - php8ts.dll
+    - php_openssl.dll
+
+### php.ini
+- enable openssl:
+``extension=./php_openssl.dll``
 
 ## start, state, stop
 than in this ngnix folder

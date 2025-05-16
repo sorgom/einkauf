@@ -167,7 +167,6 @@ class View
     constructor(uid)
     {
         this.uid = uid;
-        console.log('con', this.cnf);
     }
     url(trg, ...params)
     {
@@ -181,22 +180,26 @@ class View
     {
         this.go('/', ...params);
     }
-    send(trg, ...params)
+    sendX(task, data)
     {
         var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = () => {
+        xhr.onload = () => {
             // In local files, status is 0 upon success in Mozilla Firefox
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 const status = xhr.status;
                 if (status === 0 || (status >= 200 && status < 400))
-                    console.log('done');
+                {
+                    // TODO: evaluate response
+                    // - go to login if not 'OK'
+                    console.log('response: "' + xhr.responseText + '"');
+                }
             }
         }
-        const url = this.url(trg, ...params);
-        console.log('send', url)
-        xhr.open('GET', url, true);
-        xhr.send(null);
+        xhr.open('POST', '_states.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+        xhr.send(JSON.stringify([this.uid, task, data]));
     }
+
 }
 
 class MainView extends View
@@ -375,9 +378,7 @@ class Items extends MainView
 
     note(inr, cl)
     {
-        this.send('_state.php', cl, this.cnr, inr);
         const clo = this.top.cl();
-        this.top.clear();
         let cln = ''
         if (cl)
         {
@@ -388,7 +389,8 @@ class Items extends MainView
             cln = cx + cy < this.items.length ? '' : cy > 0 ? 'y' : 'x';
             this.top.set(cln);
         }
-        if (cln != clo) this.send('_state.php', cln, this.cnr);
+        else this.top.clear();
+        this.sendX('state', [this.cnr, inr, cln, cl]);
     }
     remove()
     {
@@ -398,7 +400,7 @@ class Items extends MainView
     {
         this.top.clear();
         for (const i of this.items) i.clear();
-        this.send('_reset.php', this.cnr);
+        this.sendX('reset', this.cnr);
     }
 }
 

@@ -9,11 +9,11 @@ namespace fnc;
 
     function expl(string $a) { return explode("\n", $a); }
 
-    function save(string $file, string &$cont)
+    function save(string $file, string &$cont, int $flags = 0)
     {
         $dir = dirname($file);
         if (!is_dir($dir)) mkdir($dir);
-        file_put_contents($file, $cont);
+        file_put_contents($file, $cont, $flags);
     }
 
     function load(mixed &$cont, string $file)

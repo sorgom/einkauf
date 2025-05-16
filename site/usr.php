@@ -52,7 +52,6 @@ class Register
 class Usr
 {
     private string $uid = '';
-    private bool $valid = false;
     private array $params = [];
     private static string $sep = '-';
 
@@ -64,7 +63,7 @@ class Usr
 
     public function valid()
     {
-        return $this->valid;
+        return reg()->has($this->uid);
     }
 
     public function uid()
@@ -74,7 +73,7 @@ class Usr
 
     public function check()
     {
-        if (!$this->valid) header('Location: welcome.php');
+        if (!$this->valid()) header('Location: welcome.php');
     }
 
     public function go(string $php)
@@ -110,10 +109,6 @@ class Usr
                 $this->params = explode(self::$sep, $ps[0]);
                 $this->uid = array_shift($this->params);
             }
-        }
-        if ($this->uid)
-        {
-            $this->valid = reg()->has($this->uid);
         }
     }
 }
