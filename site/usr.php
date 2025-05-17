@@ -106,7 +106,7 @@ class Usr
 
     public function check()
     {
-        if (!$this->valid) $this->welcome();
+        if (!$this->valid) self::welcome();
         // logger()->log('check', $this->hash);
         if ($this->isEncrypted())
         {
@@ -116,7 +116,7 @@ class Usr
                 isset($_SESSION['uid']) &&
                 isset($_SESSION['pwd']) &&
                 $_SESSION['uid'] == $this->uid
-            )) $this->go('login');
+            )) $this->login();
             $this->pwd = $_SESSION['pwd'];
         }
     }
@@ -130,7 +130,14 @@ class Usr
 
     public static function welcome()
     {
+        fnc\clearSession();
         header('Location: welcome.php');
+    }
+
+    private function login()
+    {
+        fnc\clearSession();
+        $this->go('login');
     }
 
     public function go(string $php)

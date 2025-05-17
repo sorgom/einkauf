@@ -28,4 +28,8 @@ namespace fnc;
         $trg = trim(preg_replace('/  +/', ' ', preg_replace('/^ *| *$/m', '', preg_replace('/\r\n|\r/', "\n", str_replace("\t", ' ', $src)))));
     }
 
+    function clearSession()
+    {
+        if (session_status() == PHP_SESSION_ACTIVE) session_destroy();
+    }
 ?>
