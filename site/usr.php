@@ -99,14 +99,19 @@ class Usr
         return $this->uid;
     }
 
+    public function pwd()
+    {
+        return $this->pwd;
+    }
+
     public function check()
     {
         if (!$this->valid) $this->welcome();
-        logger()->log('check', $this->hash);
+        // logger()->log('check', $this->hash);
         if ($this->isEncrypted())
         {
             session_start();
-            logger()->log('check', $_SESSION);
+            // logger()->log('check', $_SESSION);
             if (!(
                 isset($_SESSION['uid']) &&
                 isset($_SESSION['pwd']) &&

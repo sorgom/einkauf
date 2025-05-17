@@ -454,3 +454,18 @@ class StartInfo extends View
         new Link().class('keep').txt(link).into(dgo).click( function() { _this.view(); });
     }
 }
+
+class LoginForm extends View
+{
+    constructor(uid)
+    {
+        super(uid);
+        const frm = new Form('login.php').body();
+        new Input('hidden', 'uid', this.uid).into(frm);
+        const dgr = new Div().class('grow_up').into(frm);
+        const dcn = new Div().class('center').into(dgr);
+        const dpw = new Div().class('form pwd').into(dcn);
+        new Input('password', 'pwd').required().autofocus().class('frm pwd').into(dpw);
+        new Input('submit').class('i forward').into(dpw);
+    }
+}

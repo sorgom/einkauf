@@ -1,6 +1,8 @@
 <?php
 require_once('usr.php');
 require_once('fnc.php');
+require_once('logger.php');
+
 
 abstract class UsrData
 {
@@ -15,10 +17,12 @@ abstract class UsrData
     }
     protected function _save(string &$cont)
     {
+        logger()->log('->', $this->file);
         fnc\save($this->file, $cont);
     }
     protected function _load(&$cont)
     {
+        logger()->log('<-', $this->file);
         return fnc\load($cont, $this->file);
     }
     protected function data()
@@ -32,7 +36,7 @@ class States extends UsrData
     private array $states = [];
     public function __construct(bool $load=false)
     {
-        parent::__construct('log.json');
+        parent::__construct('log');
         if ($load) $this->load();
     }
     public function load()
@@ -116,23 +120,34 @@ class Data extends UsrData
 
     public function __construct(bool $load=false)
     {
-        parent::__construct('data.json');
+        parent::__construct('data');
         if ($load) $this->load();
     }
 
     public function load()
     {
         if ($this->_load($data))
+        {
+            if (usr()->isEncrypted())
+            {
+                require_once('crypter.php');
+                crypter()->decode($data, usr()->pwd(), $data);
+            }
             [$this->heads, $this->items, $this->notes] = json_decode($data, true);
-
+        }
         else if (fnc\load($txt, 'template.txt'))
             $this->set($txt);
     }
 
     public function save()
     {
-        $js = json_encode([$this->heads, $this->items, $this->notes]);
-        $this->_save($js);
+        $data = json_encode([$this->heads, $this->items, $this->notes]);
+        if (usr()->isEncrypted())
+        {
+            require_once('crypter.php');
+            crypter()->encode($data, usr()->pwd(), $data);
+        }
+        $this->_save($data);
     }
 
     function menuData(&$data)
