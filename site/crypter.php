@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-require_once('view.php');
 require_once('fnc.php');
 
 class Crypter
@@ -22,15 +21,6 @@ class Crypter
     {
         $trg = openssl_decrypt(substr($bin, $this->ivSize), self::$algo, $key, 0, substr($bin, 0, $this->ivSize));
     }
-//  TODO password hash and check
-// $pwd = 'Test123';
-// var_dump($pwd);
-// $hash = password_hash($pwd, PASSWORD_DEFAULT);
-// var_dump($hash);
-
-// $ok = hash_equals($hash, crypt($pwd, $hash));
-// var_dump($ok);
-
 }
 
 function crypter()

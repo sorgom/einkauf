@@ -1,6 +1,5 @@
 
 <?php
-    require_once('view.php');
     require_once('usr.php');
 
     $addr = $_POST['em'];
@@ -14,6 +13,13 @@
     } while ($reg->has($uid));
     $reg->add($uid, $pwd1);
     $reg->save();
+
+    if ($pwd1)
+    {
+        session_start();
+        $_SESSION['uid'] = $uid;
+        $_SESSION['pwd'] = $pwd1;
+    }
 
     $srv = $_SERVER['SERVER_NAME'];
     $req = $_SERVER['HTTP_HOST'];
@@ -36,5 +42,6 @@
     $ok = @mail($addr, $subject, $link, $header);
 
     $data = [$ok, $addr, $link];
+    require_once('view.php');
     jsView('StartInfo', $uid, $data);
 ?>

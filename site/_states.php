@@ -4,7 +4,7 @@ require_once('logger.php');
 [$uid, $task, $data] = json_decode(file_get_contents('php://input'), true);
 usr()->set($uid);
 $res = 'NOK';
-if (usr()->valid())
+if (usr()->isValid())
 {
     require_once('data.php');
     switch ($task)

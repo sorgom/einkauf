@@ -4,9 +4,15 @@ require_once('fnc.php');
 class Logger
 {
     private static string $file = 'data/.log';
-    public function log(mixed $data)
+    public function log(mixed ...$data)
     {
-        $str = var_export($data, true) . "\n";
+        $res = [];
+        foreach($data as $d)
+        {
+            $res[] = var_export($data, true);
+        }
+        $res[] = '';
+        $str = fnc\impl($res);
         fnc\save(self::$file, $str, FILE_APPEND);
     }
 }

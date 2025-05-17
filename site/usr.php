@@ -1,5 +1,7 @@
 <?php
 require_once('fnc.php');
+require_once('logger.php');
+//  user register
 class Register
 {
     private static string $dir  = 'data';
@@ -39,12 +41,25 @@ class Register
         return $ret;
     }
 
+    public function retrieve(string $uid, mixed &$hash)
+    {
+        $ret = false;
+        $hash = NULL;
+        if (isset($this->uids[$uid]))
+        {
+            $ret = true;
+            $val = $this->uids[$uid];
+            if (gettype($val) == 'string') $hash = $val;
+        }
+        return $ret;
+    }
+
     public function add(string $uid, string $pwd='')
     {
-        if ($pwd)
-            $this->uids[$uid] = password_hash($pwd, PASSWORD_BCRYPT);
-        else
-            $this->uids[$uid] = 0;
+        $val = 1;
+        if ($pwd) $val = password_hash($pwd, PASSWORD_BCRYPT);
+        $this->uids[$uid] = $val;
+        logger()->log(['add', $uid, $val]);
     }
 
     public function remove(string &$uid)
@@ -53,21 +68,30 @@ class Register
     }
 }
 
+//  representation of current user
 class Usr
 {
     private string $uid = '';
     private array $params = [];
     private static string $sep = '-';
-
+    private mixed $hash = NULL;
+    private string $pwd = '';
+    private bool $valid = false;
 
     public function set(string $uid)
     {
         $this->uid = $uid;
+        $this->valid = reg()->retrieve($this->uid, $this->hash);
     }
 
-    public function valid()
+    public function isEncrypted()
     {
-        return reg()->has($this->uid);
+        return !is_null($this->hash);
+    }
+
+    public function isValid() : bool
+    {
+        return $this->valid;
     }
 
     public function uid()
@@ -77,8 +101,21 @@ class Usr
 
     public function check()
     {
-        if (!$this->valid()) $this->welcome();
+        if (!$this->valid) $this->welcome();
+        logger()->log('check', $this->hash);
+        if ($this->isEncrypted())
+        {
+            session_start();
+            logger()->log('check', $_SESSION);
+            if (!(
+                isset($_SESSION['uid']) &&
+                isset($_SESSION['pwd']) &&
+                $_SESSION['uid'] == $this->uid
+            )) $this->go('login');
+            $this->pwd = $_SESSION['pwd'];
+        }
     }
+
     public static function welcome()
     {
         header('Location: welcome.php');
@@ -118,6 +155,8 @@ class Usr
                 $this->uid = array_shift($this->params);
             }
         }
+        if ($this->uid)
+            $this->valid = reg()->retrieve($this->uid, $this->hash);
     }
 }
 
