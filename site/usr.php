@@ -116,6 +116,13 @@ class Usr
         }
     }
 
+    public function checkPwd(string $pwd)
+    {
+        return is_null($this->hash) ? true :
+            hash_equals($this->hash, crypt($pwd, $this->hash));
+    }
+
+
     public static function welcome()
     {
         header('Location: welcome.php');
