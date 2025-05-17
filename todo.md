@@ -33,3 +33,21 @@
 
 ## general
 - shell export function
+
+## encryption
+### sign in new user
+- start session after sign in
+    - $uid
+    - $pwd
+
+### regular page
+- check if password required
+``usr()->isEncrypted()?``
+- if so
+    - session_start
+    - $_SESSION['uid'] must match
+    - $_SESSION['pwd'] must exist
+    - OK
+        - usr()->setPwd()
+    - NOK
+        - -> login
