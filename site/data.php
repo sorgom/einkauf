@@ -131,7 +131,7 @@ class Data extends UsrData
             if (usr()->isEncrypted())
             {
                 require_once('crypter.php');
-                crypter()->decode($data, usr()->pwd(), $data);
+                crypter()->decode($data, usr()->key(), $data);
             }
             [$this->heads, $this->items, $this->notes] = json_decode($data, true);
         }
@@ -145,21 +145,22 @@ class Data extends UsrData
         if (usr()->isEncrypted())
         {
             require_once('crypter.php');
-            crypter()->encode($data, usr()->pwd(), $data);
+            crypter()->encode($data, usr()->key(), $data);
         }
         $this->_save($data);
     }
 
     function menuData(&$data)
     {
-        $data = [];
+        $entries = [];
         foreach($this->items as $cnr => $i)
         {
             if (!empty($i))
             {
-                $data[] = [ $cnr, $this->heads[$cnr], states()->cl($cnr) ];
+                $entries[] = [ $cnr, $this->heads[$cnr], states()->cl($cnr) ];
             }
         }
+        $data = [usr()->isEncrypted(), $entries];
     }
 
     function ItemData(&$data, int $cnr)

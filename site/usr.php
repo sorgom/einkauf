@@ -29,18 +29,6 @@ class Register
         return isset($this->uids[$uid]);
     }
 
-    public function check(string $uid, string $pwd)
-    {
-        $ret = false;
-        if ($this->has($uid))
-        {
-            $val = $this->uids[$uid];
-            $ret = gettype($val) == 'string' ?
-                hash_equals($val, crypt($pwd, $val)) : true;
-        }
-        return $ret;
-    }
-
     public function retrieve(string $uid, mixed &$hash)
     {
         $ret = false;
@@ -75,7 +63,7 @@ class Usr
     private array $params = [];
     private static string $sep = '-';
     private mixed $hash = NULL;
-    private string $pwd = '';
+    private string $key = '';
     private bool $valid = false;
 
     public function set(string $uid)
@@ -99,9 +87,9 @@ class Usr
         return $this->uid;
     }
 
-    public function pwd()
+    public function key()
     {
-        return $this->pwd;
+        return $this->key;
     }
 
     public function check()
@@ -114,19 +102,19 @@ class Usr
             // logger()->log('check', $_SESSION);
             if (!(
                 isset($_SESSION['uid']) &&
-                isset($_SESSION['pwd']) &&
+                isset($_SESSION['key']) &&
                 $_SESSION['uid'] == $this->uid
             )) $this->login();
-            $this->pwd = $_SESSION['pwd'];
+            $this->key = $_SESSION['key'];
         }
     }
 
     public function checkPwd(string $pwd)
     {
-        return is_null($this->hash) ? true :
-            hash_equals($this->hash, crypt($pwd, $this->hash));
+        if (!(is_null($this->hash)
+            || hash_equals($this->hash, crypt($pwd, $this->hash))
+        )) $this->login();
     }
-
 
     public static function welcome()
     {

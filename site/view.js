@@ -256,9 +256,10 @@ class Confirm
 
 class Menu extends MainView
 {
-    constructor(uid, entries)
+    constructor(uid, data)
     {
         super(uid);
+        const [encr, entries] = data;
         const _this = this;
         let done = [];
         let post = [];
@@ -273,6 +274,7 @@ class Menu extends MainView
         for (const a of post) a.into(dl);
         for (const a of done) a.into(dl);
         this.mnu.into(dl);
+        if (encr) this.mnuLink('logout', function() { _this.go('logout'); });
         this.mnuLink('edit', function() { _this.view('e'); });
     }
 }
@@ -433,7 +435,7 @@ class WelcomeForm
         const dcn = new Div().class('center').into(dgr);
         const din = new Div().into(dcn);
         const dem = new Div().class('form mail').into(din);
-        new Input('email', 'em').required().autofocus().class('frm').into(dem);
+        new Input('email', 'em').autofocus().class('frm').into(dem);
         const dpw = new Div().class('form pwd').into(din);
         new Input('password', 'pwd1').class('frm pwd').into(dpw);
         new Input('password', 'pwd2').class('frm pwd spc').into(dpw);
@@ -449,7 +451,7 @@ class StartInfo extends View
         const _this = this;
         const [ok, addr, link] = data;
         const dgr = new Div().class('grow_up itxt').body();
-        new Div().class('ico ' + (ok ? 'ok' : 'nok')).txt(addr).into(dgr);
+        if (addr) new Div().class('ico ' + (ok ? 'ok' : 'nok')).txt(addr).into(dgr);
         const dgo = new Div().class('ico go').into(dgr);
         new Link().class('keep').txt(link).into(dgo).click( function() { _this.view(); });
     }
@@ -457,7 +459,7 @@ class StartInfo extends View
 
 class LoginForm extends View
 {
-    constructor(uid)
+    constructor(uid, data)
     {
         super(uid);
         const frm = new Form('login.php').body();

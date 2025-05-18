@@ -32,4 +32,9 @@ namespace fnc;
     {
         if (session_status() == PHP_SESSION_ACTIVE) session_destroy();
     }
+
+    function key(string $pwd)
+    {
+        return hash('sha256', $pwd);
+    }
 ?>
