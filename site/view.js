@@ -274,7 +274,7 @@ class Menu extends MainView
         for (const a of post) a.into(dl);
         for (const a of done) a.into(dl);
         this.mnu.into(dl);
-        if (encr) this.mnuLink('logout', function() { _this.go('logout'); });
+        if (encr) this.mnuLink('logout', function() { _this.go('logout.php'); });
         this.mnuLink('edit', function() { _this.view('e'); });
     }
 }

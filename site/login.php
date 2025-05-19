@@ -14,7 +14,7 @@ if ($_POST)
         usr()->checkPwd($pwd);
         session_start();
         $_SESSION['uid'] = $_POST['uid'];
-        $_SESSION['key'] = fnc\key($pwd1);
+        $_SESSION['key'] = fnc\key($pwd);
     }
     usr()->view();
 }
@@ -23,6 +23,5 @@ else
     require_once('view.php');
     $data = [];
     jsView('LoginForm', usr()->uid(), $data);
-
 }
 ?>

@@ -1,10 +1,9 @@
 <?php
 require_once('fnc.php');
-require_once('logger.php');
+
 //  user register
 class Register
 {
-    private static string $dir  = 'data';
     private static string $file = 'data/reg.json';
     private array $uids = [];
 
@@ -47,7 +46,7 @@ class Register
         $val = 1;
         if ($pwd) $val = password_hash($pwd, PASSWORD_BCRYPT);
         $this->uids[$uid] = $val;
-        logger()->log(['add', $uid, $val]);
+        // trace(['add', $uid, $val]);
     }
 
     public function remove(string &$uid)
@@ -95,11 +94,9 @@ class Usr
     public function check()
     {
         if (!$this->valid) self::welcome();
-        // logger()->log('check', $this->hash);
         if ($this->isEncrypted())
         {
             session_start();
-            // logger()->log('check', $_SESSION);
             if (!(
                 isset($_SESSION['uid']) &&
                 isset($_SESSION['key']) &&
@@ -122,7 +119,7 @@ class Usr
         header('Location: welcome.php');
     }
 
-    private function login()
+    public function login()
     {
         fnc\clearSession();
         $this->go('login');

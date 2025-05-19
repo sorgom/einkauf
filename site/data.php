@@ -1,7 +1,7 @@
 <?php
 require_once('usr.php');
 require_once('fnc.php');
-require_once('logger.php');
+// require_once('tracer.php');
 
 
 abstract class UsrData
@@ -17,12 +17,12 @@ abstract class UsrData
     }
     protected function _save(string &$cont)
     {
-        logger()->log('->', $this->file);
+        // trace('->', $this->file);
         fnc\save($this->file, $cont);
     }
     protected function _load(&$cont)
     {
-        logger()->log('<-', $this->file);
+        // trace('<-', $this->file);
         return fnc\load($cont, $this->file);
     }
     protected function data()

@@ -179,6 +179,7 @@ a.i {
 .i.edit     { background-image: url('img/pen.svg'); }
 .i.forward  { background-image: url('img/forward.svg'); }
 .i.home     { background-image: url('img/list.svg'); }
+.i.logout   { background-image: url('img/logout.svg'); }
 .i.remove   { background-image: url('img/trash.svg'); }
 .i.reset    { background-image: url('img/reset.svg'); }
 .i.save     { background-image: url('img/save.svg'); }
