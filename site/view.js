@@ -151,6 +151,7 @@ class Input extends Elem
         this.elem.type = type;
         this.elem.name = name;
         this.elem.value = val;
+        this.elem.autocomplete = 'off';
         return this;
     }
     required()
@@ -274,7 +275,7 @@ class Menu extends MainView
         for (const a of post) a.into(dl);
         for (const a of done) a.into(dl);
         this.mnu.into(dl);
-        if (encr) this.mnuLink('logout', function() { _this.go('logout.php'); });
+        if (encr) this.confirmLink('logout', function() { _this.go('logout.php'); });
         this.mnuLink('edit', function() { _this.view('e'); });
     }
 }
@@ -408,19 +409,19 @@ class Items extends MainView
 
 class InputForm extends MainView
 {
-    txa;
     constructor(uid, txt)
     {
         super(uid);
         const _this = this;
+        console.log('InputForm 7');
         const frm = new Form('save.php').body();
 
-        this.txa = new TextArea('txt', 50).class('txt').val(txt).into(frm).autofocus();
+        const txa = new TextArea('txt', 50).class('txt').val(txt).into(frm).autofocus();
 
         new Input('hidden', 'uid', this.uid).into(frm);
 
         this.mnu.body();
-        this.confirmLink('clear', function() { _this.txa.val('').focus(); });
+        this.confirmLink('clear', function() { txa.val('').focus(); });
         this.mnuLink('home', function() { _this.view(); });
         this.mnuLink('save', function() { frm.submit(); });
     }

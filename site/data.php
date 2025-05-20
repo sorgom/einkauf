@@ -1,7 +1,7 @@
 <?php
 require_once('usr.php');
 require_once('fnc.php');
-// require_once('tracer.php');
+require_once('tracer.php');
 
 
 abstract class UsrData
@@ -130,9 +130,11 @@ class Data extends UsrData
         {
             if (usr()->isEncrypted())
             {
+                trace('encrypted', usr()->key());
                 require_once('crypter.php');
                 crypter()->decode($data, usr()->key(), $data);
             }
+            trace('data', $data);
             [$this->heads, $this->items, $this->notes] = json_decode($data, true);
         }
         else if (fnc\load($txt, 'template.txt'))

@@ -1,5 +1,6 @@
 <?php
 require_once('fnc.php');
+require_once('tracer.php');
 
 //  user register
 class Register
@@ -117,10 +118,12 @@ class Usr
     {
         fnc\clearSession();
         header('Location: welcome.php');
+        exit;
     }
 
     public function login()
     {
+        trace('login!');
         fnc\clearSession();
         $this->go('login');
     }
@@ -128,10 +131,12 @@ class Usr
     public function go(string $php)
     {
         header("Location: $php.php?" . $this->uid);
+        exit;
     }
     public function view(... $params)
     {
         header("Location: /?" . implode(self::$sep, [ $this->uid, ...$params]));
+        exit;
     }
 
     public function param(int $n=0)

@@ -1,8 +1,10 @@
 <?php
 require_once('usr.php');
+require_once('tracer.php');
 if (!usr()->isValid()) Usr::welcome();
 if ($_POST)
 {
+    trace('encrypted:', usr()->isEncrypted());
     if (usr()->isEncrypted())
     {
         if (!(
