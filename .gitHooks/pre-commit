@@ -1,5 +1,15 @@
 #!/usr/bin/bash
 # use: git config core.hooksPath .gitHooks
+# go to the root of the git repo
+
+cd $(git rev-parse --show-toplevel)
+
+# save commit information
+date=$(date '+%Y-%m-%d %H:%M:%S')
+branch=$(git rev-parse --abbrev-ref HEAD)
+file='site/commit.txt';
+echo $branch,$date > $file
+git add $file
 
 # availabilty of python
 py=$(which py || which python || which python3)
@@ -9,8 +19,6 @@ then
   exit 0
 fi
 
-# go to the root of the git repo
-cd $(git rev-parse --show-toplevel)
 
 # path to sompy python scripts
 sompy=$(pwd)/submodules/sompy/somutil

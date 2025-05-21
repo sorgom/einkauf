@@ -77,7 +77,14 @@ class T_Elem extends Elem
     }
 }
 
-class Link extends Elem { constructor() { return super('a'); } }
+class Link extends Elem {
+    constructor() { return super('a'); }
+    href(url)
+    {
+        this.elem.href = url;
+        return this;
+    }
+}
 class P    extends Elem { constructor() { return super('p'); } }
 class Div  extends Elem { constructor() { return super('div'); } }
 class HR   extends Elem { constructor() { return super('hr'); } }
@@ -218,7 +225,7 @@ class MainView extends View
     confirmLink(icl, func)
     {
         const _this = this;
-        new ImgLink(icl).into(this.mnu).click(function() { _this.cnf.show(icl, func); });
+        new ImgLink(icl).into(this.mnu).click(() => { _this.cnf.show(icl, func); });
     }
     mnuLink(icl, func)
     {
@@ -235,9 +242,9 @@ class Confirm
         const _this = this;
         const dc = new Div().class('conf_main').body();
         // darken layer
-        new Div().class('conf_bg').into(dc).click( function () {_this.hide(); });
+        new Div().class('conf_bg').into(dc).click(()=>{_this.hide(); });
         // vertical layer
-        const d1 = new Div().class('conf_fg grow_up').into(dc).click( function () {_this.hide(); });
+        const d1 = new Div().class('conf_fg grow_up').into(dc).click(()=>{_this.hide(); });
         // horizontal center
         const d2 = new Div().class('center').into(d1);
         // image button
@@ -268,7 +275,7 @@ class Menu extends MainView
         const dl = new Div().class('listing').body();
         for (const [cnr, ttl, cl] of entries)
         {
-            const a = new TxtLink(ttl).class('p').add(cl).click(function() { _this.view(cnr); })
+            const a = new TxtLink(ttl).class('p').add(cl).click(()=>{ _this.view(cnr); })
             if      (cl == 'y') post.push(a);
             else if (cl == 'x') done.push(a);
             else a.into(dl);
@@ -276,8 +283,8 @@ class Menu extends MainView
         for (const a of post) a.into(dl);
         for (const a of done) a.into(dl);
         this.mnu.into(dl);
-        if (encr) this.confirmLink('logout', function() { _this.go('logout.php'); });
-        this.mnuLink('edit', function() { _this.view('e'); });
+        if (encr) this.confirmLink('logout',()=>{ _this.go('logout.php'); });
+        this.mnuLink('edit',()=>{ _this.view('e'); });
     }
 }
 
@@ -331,7 +338,7 @@ class Item
         const [ttl, cl ] = data;
         const a = new TxtLink(ttl).class('p item').into(par);
         this.tgl = new Toggle(a, cl);
-        a.click(function() {
+        a.click(()=>{
             _this.tgl.click();
             _this.note();
         });
@@ -360,7 +367,7 @@ class Items extends MainView
 
         const dl = new Div().class('listing').body();
 
-        const a = new TxtLink(hl).class('p items top').into(dl).click(function() { _this.view(); });
+        const a = new TxtLink(hl).class('p items top').into(dl).click(()=>{ _this.view(); });
         this.top = new Toggle(a, cl);
 
         let inr = 0;
@@ -375,9 +382,9 @@ class Items extends MainView
             else new HR().into(dl);
         }
         this.mnu.into(dl);
-        this.confirmLink('remove', function() { _this.remove(); });
-        this.confirmLink('reset',  function() { _this.reset();  });
-        this.mnuLink('home', function() { _this.view(); });
+        this.confirmLink('remove',()=>{ _this.remove(); });
+        this.confirmLink('reset',()=>{ _this.reset();  });
+        this.mnuLink('home',()=>{ _this.view(); });
     }
 
     note(inr, cl)
@@ -422,9 +429,9 @@ class InputForm extends MainView
         new Input('hidden', 'uid', this.uid).into(frm);
 
         this.mnu.body();
-        this.confirmLink('clear', function() { txa.val('').focus(); });
-        this.mnuLink('home', function() { _this.view(); });
-        this.mnuLink('save', function() { frm.submit(); });
+        this.confirmLink('clear',()=>{ txa.val('').focus(); });
+        this.mnuLink('home',()=>{ _this.view(); });
+        this.mnuLink('save',()=>{ frm.submit(); });
     }
 }
 
@@ -455,13 +462,13 @@ class StartInfo extends View
         const dgr = new Div().class('grow_up itxt').body();
         if (addr) new Div().class('ico ' + (ok ? 'ok' : 'nok')).txt(addr).into(dgr);
         const dgo = new Div().class('ico go').into(dgr);
-        new Link().class('keep').txt(link).into(dgo).click( function() { _this.view(); });
+        new Link().class('keep').txt(link).into(dgo).click(()=>{ _this.view(); });
     }
 }
 
 class LoginForm extends View
 {
-    constructor(uid, data)
+    constructor(uid, _)
     {
         super(uid);
         const frm = new Form('login.php').body();
@@ -471,5 +478,19 @@ class LoginForm extends View
         const dpw = new Div().class('form pwd').into(dcn);
         new Input('password', 'pwd').required().autofocus().class('frm pwd').into(dpw);
         new Input('submit').class('i forward').into(dpw);
+    }
+}
+
+class Imprint extends MainView
+{
+    constructor(uid, data)
+    {
+        super(uid);
+        const [txt, branch, date] = data;
+        new Div().class('imprint').body().txt(txt);
+        const db = Div().class('imprint').body();
+        new P().into(db).txt('this is open source');
+        new Link().href('https://github.com/sorgom/todo/tree/' + branch).txt('view on github');
+        new P().into(db).txt(commit);
     }
 }

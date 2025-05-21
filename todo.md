@@ -1,4 +1,7 @@
 # TODO
+## pre-commit
+- save branch and date
+- imprint
 ## bugs
 - form textarea jumps to end
     - solved by order
@@ -46,7 +49,7 @@
 - if so
     - session_start
     - $_SESSION['uid'] must match
-    - $_SESSION['pwd'] must exist
+    - $_SESSION['key'] must exist
     - OK
         - usr()->setPwd()
     - NOK
