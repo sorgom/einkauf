@@ -136,7 +136,6 @@ class Usr
 
     public function login()
     {
-        fnc\clearSession();
         $this->go('login');
     }
 
