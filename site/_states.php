@@ -1,10 +1,10 @@
 <?php
 require_once('usr.php');
-// require_once('tracer.php');
+require_once('tracer.php');
 [$uid, $task, $data] = json_decode(file_get_contents('php://input'), true);
 usr()->set($uid);
 $res = 'NOK';
-if (usr()->isValid())
+if (usr()->ok())
 {
     require_once('data.php');
     switch ($task)

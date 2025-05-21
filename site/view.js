@@ -183,6 +183,7 @@ class View
     }
     sendX(task, data)
     {
+        const _this = this;
         var xhr = new XMLHttpRequest();
         xhr.onload = () => {
             // In local files, status is 0 upon success in Mozilla Firefox
@@ -192,7 +193,7 @@ class View
                 {
                     // TODO: evaluate response
                     // - go to login if not 'OK'
-                    console.log('response: "' + xhr.responseText + '"');
+                    if (xhr.responseText != 'OK') _this.go('login.php');
                 }
             }
         }

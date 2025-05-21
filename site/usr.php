@@ -107,6 +107,20 @@ class Usr
         }
     }
 
+    public function ok()
+    {
+        $ok = $this->valid;
+        if ($ok && $this->isEncrypted())
+        {
+            session_start();
+            $ok = (
+                isset($_SESSION['uid']) &&
+                $_SESSION['uid'] == $this->uid
+            );
+        }
+        return $ok;
+    }
+
     public function checkPwd(string $pwd)
     {
         if (!(is_null($this->hash)
@@ -116,14 +130,12 @@ class Usr
 
     public static function welcome()
     {
-        fnc\clearSession();
         header('Location: welcome.php');
         exit;
     }
 
     public function login()
     {
-        trace('login!');
         fnc\clearSession();
         $this->go('login');
     }
