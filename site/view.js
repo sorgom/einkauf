@@ -182,7 +182,7 @@ class View
     }
     go(trg, ...params)
     {
-        window.location.replace(this.url(trg, ...params));
+        window.location.assign(this.url(trg, ...params));
     }
     view(...params)
     {
@@ -213,23 +213,30 @@ class View
 
 class MainView extends View
 {
-    cnf;
-    mnu;
+    _cnf = undefined;
+    _mnu = undefined;
     constructor(uid)
     {
         super(uid);
-        this.cnf = new Confirm();
-        this.mnu = new Div().class('mn bottom');
+        // this.cnf = new Confirm();
+        // this.mnu = new Div().class('mn bottom');
+    }
+
+    mnu()
+    {
+        if (this._mnu === undefined) this._mnu = new Div().class('mn bottom');
+        return this._mnu;
     }
 
     confirmLink(icl, func)
     {
+        if (this._cnf === undefined) this._cnf = new Confirm();
         const _this = this;
-        new ImgLink(icl).into(this.mnu).click(() => { _this.cnf.show(icl, func); });
+        new ImgLink(icl).into(this.mnu()).click(() => { _this._cnf.show(icl, func); });
     }
     mnuLink(icl, func)
     {
-        new ImgLink(icl).into(this.mnu).click(func);
+        new ImgLink(icl).into(this.mnu()).click(func);
     }
 }
 
@@ -282,7 +289,7 @@ class Menu extends MainView
         }
         for (const a of post) a.into(dl);
         for (const a of done) a.into(dl);
-        this.mnu.into(dl);
+        this.mnu().into(dl);
         if (encr) this.confirmLink('logout',()=>{ _this.go('logout.php'); });
         this.mnuLink('edit',()=>{ _this.view('e'); });
     }
@@ -381,7 +388,7 @@ class Items extends MainView
             else if (e) new H2(e).txt(e).into(dl);
             else new HR().into(dl);
         }
-        this.mnu.into(dl);
+        this.mnu().into(dl);
         this.confirmLink('remove',()=>{ _this.remove(); });
         this.confirmLink('reset',()=>{ _this.reset();  });
         this.mnuLink('home',()=>{ _this.view(); });
@@ -428,17 +435,18 @@ class InputForm extends MainView
 
         new Input('hidden', 'uid', this.uid).into(frm);
 
-        this.mnu.body();
+        this.mnu().body();
         this.confirmLink('clear',()=>{ txa.val('').focus(); });
         this.mnuLink('home',()=>{ _this.view(); });
         this.mnuLink('save',()=>{ frm.submit(); });
     }
 }
 
-class WelcomeForm
+class WelcomeForm extends MainView
 {
     constructor()
     {
+        super('');
         const frm = new Form('start.php').body();
         const dgr = new Div().class('grow_up').into(frm);
         const dcn = new Div().class('center').into(dgr);
@@ -449,6 +457,9 @@ class WelcomeForm
         new Input('password', 'pwd1').class('frm pwd').into(dpw);
         new Input('password', 'pwd2').class('frm pwd spc').into(dpw);
         new Input('submit').class('i forward').into(din);
+        this.mnu().body();
+        this.mnuLink('imprint', ()=>{ window.location.assign('imprint.php'); });
+
     }
 }
 
@@ -487,10 +498,16 @@ class Imprint extends MainView
     {
         super(uid);
         const [txt, branch, date] = data;
-        new Div().class('imprint').body().txt(txt);
-        const db = Div().class('imprint').body();
+        const dg = new Div().class('grow_up').body();
+        new Div().class('imprint').txt(txt).into(dg);
+        const db = new Div().class('imprint').into(dg);
         new P().into(db).txt('this is open source');
-        new Link().href('https://github.com/sorgom/todo/tree/' + branch).txt('view on github');
-        new P().into(db).txt(commit);
+        new Link().class('keep').href('https://github.com/sorgom/todo/tree/' + branch).txt('view on github').into(db);
+        const dc = new Div().class('imprint').into(dg);
+        new P().into(dc).txt('commit information');
+        new P().into(dc).txt('branch: ' + branch);
+        new P().into(dc).txt('date  : ' + date);
+        this.mnu().body();
+        this.mnuLink('back',()=>{ window.history.back(); });
     }
 }
