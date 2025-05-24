@@ -1,6 +1,6 @@
 #!/bin/bash
 #   =========================================
-#   count C++ lines of code
+#   count lines of code
 #   - with cloc tool
 #   - mark down format
 #   - without cloc tool headings
