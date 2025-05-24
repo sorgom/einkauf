@@ -9,8 +9,8 @@ JavaScript|1|31|6|471
 CSS|1|32|8|268
 SUM:|21|166|117|1546
 
-## support
+## img
 Language|files|blank|comment|code
 :-------|-------:|-------:|-------:|-------:
-Python|2|8|3|57
-SUM:|2|8|3|57
+SVG|17|0|0|332
+SUM:|17|0|0|332

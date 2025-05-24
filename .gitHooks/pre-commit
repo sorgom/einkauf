@@ -11,36 +11,32 @@ file='site/commit.txt';
 echo $branch,$date > $file
 git add $file
 
-# CLOC
-support/cloc.sh
-
 # availabilty of python
 py=$(which py || which python || which python3)
-if [[ -z $py ]]
+if [[ ! -z $py ]]
 then
-  echo "No python found"
-  exit 0
+  # path to sompy python scripts
+  sompy=$(pwd)/submodules/sompy/somutil
+
+  txts=()
+  svgs=()
+
+  for file in $(git diff-index --cached --name-only HEAD); do
+    if [[ -f $file ]]; then
+      if [[ $file == *.svg ]]; then svgs+=($file)
+      else txts+=($file)
+      fi
+    fi
+  done
+
+  echo txt: ${#txts[@]}
+  echo svg: ${#svgs[@]}
+
+  done1=$($py $sompy/cleanTxt.py -le ${txts[@]})
+  done2=$($py $sompy/cleanSvg.py -le ${svgs[@]})
+
+  for file in $done1 $done2; do git add $file; done
 fi
 
-
-# path to sompy python scripts
-sompy=$(pwd)/submodules/sompy/somutil
-
-txts=()
-svgs=()
-
-for file in $(git diff-index --cached --name-only HEAD); do
-  if [[ -f $file ]]; then
-    if [[ $file == *.svg ]]; then svgs+=($file)
-    else txts+=($file)
-    fi
-  fi
-done
-
-echo txt: ${#txts[@]}
-echo svg: ${#svgs[@]}
-
-done1=$($py $sompy/cleanTxt.py -le ${txts[@]})
-done2=$($py $sompy/cleanSvg.py -le ${svgs[@]})
-
-for file in $done1 $done2; do git add $file; done
+# CLOC
+support/cloc.sh

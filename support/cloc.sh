@@ -21,5 +21,5 @@ md=CLOC.md
 echo "# CLOC" > $md
 date +'%Y-%m-%d' >> $md
 clc site >> $md
-clc support py >> $md
+clc site/img svg >> $md
 git add $md
