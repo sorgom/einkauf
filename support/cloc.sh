@@ -23,4 +23,3 @@ date +'%Y-%m-%d' >> $md
 clc site >> $md
 clc support py >> $md
 git add $md
-cat $md
