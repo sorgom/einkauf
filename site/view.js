@@ -158,7 +158,7 @@ class Input extends Elem
         this.elem.type = type;
         this.elem.name = name;
         this.elem.value = val;
-        this.elem.autocomplete = 'off';
+        this.elem.autocomplete = 'on';
         return this;
     }
     required()
@@ -172,6 +172,9 @@ class View
 {
     uid;
     sep = '-';
+    _cnf = undefined;
+    _mnu = undefined;
+
     constructor(uid)
     {
         this.uid = uid;
@@ -198,7 +201,6 @@ class View
                 const status = xhr.status;
                 if (status === 0 || (status >= 200 && status < 400))
                 {
-                    // TODO: evaluate response
                     // - go to login if not 'OK'
                     if (xhr.responseText != 'OK') _this.go('login.php');
                 }
@@ -207,19 +209,6 @@ class View
         xhr.open('POST', '_states.php', true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
         xhr.send(JSON.stringify([this.uid, task, data]));
-    }
-
-}
-
-class MainView extends View
-{
-    _cnf = undefined;
-    _mnu = undefined;
-    constructor(uid)
-    {
-        super(uid);
-        // this.cnf = new Confirm();
-        // this.mnu = new Div().class('mn bottom');
     }
 
     mnu()
@@ -234,9 +223,14 @@ class MainView extends View
         const _this = this;
         new ImgLink(icl).into(this.mnu()).click(() => { _this._cnf.show(icl, func); });
     }
-    mnuLink(icl, func)
+    mnuLink(icl, func, conf=false)
     {
         new ImgLink(icl).into(this.mnu()).click(func);
+    }
+
+    imprint()
+    {
+        this.mnuLink('imprint', ()=>{ window.location.assign('imprint.php'); });
     }
 }
 
@@ -270,7 +264,7 @@ class Confirm
     }
 }
 
-class Menu extends MainView
+class Menu extends View
 {
     constructor(uid, data)
     {
@@ -290,8 +284,9 @@ class Menu extends MainView
         for (const a of post) a.into(dl);
         for (const a of done) a.into(dl);
         this.mnu().into(dl);
-        if (encr) this.confirmLink('logout',()=>{ _this.go('logout.php'); });
+        this.imprint();
         this.mnuLink('edit',()=>{ _this.view('e'); });
+        if (encr) this.confirmLink('logout', ()=>{ _this.go('logout.php'); });
     }
 }
 
@@ -360,7 +355,7 @@ class Item
     }
 }
 
-class Items extends MainView
+class Items extends View
 {
     cnr;
     top;
@@ -422,7 +417,7 @@ class Items extends MainView
     }
 }
 
-class InputForm extends MainView
+class InputForm extends View
 {
     constructor(uid, txt)
     {
@@ -442,7 +437,7 @@ class InputForm extends MainView
     }
 }
 
-class WelcomeForm extends MainView
+class WelcomeForm extends View
 {
     constructor()
     {
@@ -451,15 +446,14 @@ class WelcomeForm extends MainView
         const dgr = new Div().class('grow_up').into(frm);
         const dcn = new Div().class('center').into(dgr);
         const din = new Div().into(dcn);
-        const dem = new Div().class('form mail').into(din);
-        new Input('email', 'em').autofocus().class('frm').into(dem);
         const dpw = new Div().class('form pwd').into(din);
-        new Input('password', 'pwd1').class('frm pwd').into(dpw);
+        new Input('password', 'pwd1').class('frm pwd').autofocus().into(dpw);
         new Input('password', 'pwd2').class('frm pwd spc').into(dpw);
-        new Input('submit').class('i forward').into(din);
+        const dem = new Div().class('form mail').into(din);
+        new Input('email', 'em').class('frm').into(dem);
+        new Input('submit').class('i enter').into(din);
         this.mnu().body();
-        this.mnuLink('imprint', ()=>{ window.location.assign('imprint.php'); });
-
+        this.imprint();
     }
 }
 
@@ -474,6 +468,8 @@ class StartInfo extends View
         if (addr) new Div().class('ico ' + (ok ? 'ok' : 'nok')).txt(addr).into(dgr);
         const dgo = new Div().class('ico go').into(dgr);
         new Link().class('keep').txt(link).into(dgo).click(()=>{ _this.view(); });
+        this.mnu().body();
+        this.imprint();
     }
 }
 
@@ -492,7 +488,7 @@ class LoginForm extends View
     }
 }
 
-class Imprint extends MainView
+class Imprint extends View
 {
     constructor(uid, data)
     {
@@ -504,9 +500,9 @@ class Imprint extends MainView
         new P().into(db).txt('this is open source');
         new Link().class('keep').href('https://github.com/sorgom/todo/tree/' + branch).txt('view on github').into(db);
         const dc = new Div().class('imprint').into(dg);
-        new P().into(dc).txt('commit information');
+        // new P().into(dc).txt('commit information');
+        new P().into(dc).txt('commit: ' + date);
         new P().into(dc).txt('branch: ' + branch);
-        new P().into(dc).txt('date  : ' + date);
         this.mnu().body();
         this.mnuLink('back',()=>{ window.history.back(); });
     }

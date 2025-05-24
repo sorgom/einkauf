@@ -40,6 +40,7 @@ html {
     :root {
         --tc-done: rgb(80, 146, 80);
         --tc-out: coral;
+        --bg-button: #DDD;
     }
 }
 
@@ -60,6 +61,7 @@ html {
 }
 body {
     background-color: var(--bg);
+    padding-bottom: 2em;
 }
 ::selection {
     color: white;
@@ -104,7 +106,7 @@ a.item {
     margin-bottom: 0.5em;
 }
 
-a.top {
+.top {
     position: sticky;
     top: 0;
     left: 0;
@@ -115,7 +117,7 @@ a.top {
 
 .bottom
 {
-    position: sticky;
+    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -131,8 +133,8 @@ h2 {
 }
 
 hr {
-    border: none;
-    margin: 1em;
+    border: 1px solid var(--tc-heading);
+    margin: 0 1em 0.5em 1em;
 }
 
 div.listing, div.grow_up {
@@ -168,7 +170,7 @@ div.mn {
     height: 2em;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 1.5em;
+    background-size: 1.3em;
 }
 a.i {
     flex-grow: 1;
@@ -177,6 +179,7 @@ a.i {
 .i.back     { background-image: url('img/back.svg'); }
 .i.clear    { background-image: url('img/clear.svg'); }
 .i.edit     { background-image: url('img/pen.svg'); }
+.i.enter    { background-image: url('img/enter.svg'); }
 .i.forward  { background-image: url('img/forward.svg'); }
 .i.home     { background-image: url('img/list.svg'); }
 .i.imprint  { background-image: url('img/paragraph.svg'); }
@@ -262,9 +265,7 @@ input.frm {
     margin: 0.1em;
     padding: 0.1em;
     text-align: center;
-}
-.frm.spc {
-    margin-top: 0.5em;
+    margin-bottom: 0.5em;
 }
 .frm.pwd {
     border-radius: 0.3em;
@@ -275,16 +276,19 @@ input.i {
     font-size: inherit;
     margin-top: 0.5em;
     width: 100%;
-    border: none;
-    background-color: var(--bg);
+    /* border: none; */
+    border: 1px solid var(--tc);
+    background-color: transparent;
+
+    border-radius: 0.3em;
 }
 
 div.form {
     background-repeat: no-repeat;
     background-position: top center;
-    background-size: 2.5em;
-    padding-top: 2.5em;
-    margin-top: 0.5em;
+    background-size: 1.5em;
+    padding-top: 1.5em;
+    margin-bottom: 1em;
 }
 
 .form.mail {
