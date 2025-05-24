@@ -1,4 +1,5 @@
 <?php
+//  user register and current user instance
 require_once('fnc.php');
 require_once('tracer.php');
 
