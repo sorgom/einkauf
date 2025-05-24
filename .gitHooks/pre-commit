@@ -5,7 +5,7 @@
 cd $(git rev-parse --show-toplevel)
 
 # save commit information
-date=$(date '+%Y-%m-%d %H:%M:%S (UTC %:z)')
+date=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
 branch=$(git rev-parse --abbrev-ref HEAD)
 file='site/commit.txt';
 echo $branch,$date > $file

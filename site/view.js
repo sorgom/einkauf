@@ -498,10 +498,9 @@ class Imprint extends View
         new Div().class('imprint').txt(txt).into(dg);
         const db = new Div().class('imprint').into(dg);
         new P().into(db).txt('this is open source');
-        new Link().class('keep').href('https://github.com/sorgom/todo/tree/' + branch).txt('view on github').into(db);
+        new Link().class('keep').href('https://github.com/sorgom/todo/tree/' + branch + '/site').txt('view on github').into(db);
         const dc = new Div().class('imprint').into(dg);
-        // new P().into(dc).txt('commit information');
-        new P().into(dc).txt('commit: ' + date);
+        new P().into(dc).txt(date);
         new P().into(dc).txt('branch: ' + branch);
         this.mnu().body();
         this.mnuLink('back',()=>{ window.history.back(); });
