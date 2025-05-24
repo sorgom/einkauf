@@ -1,4 +1,5 @@
 <?php
+//  user data encryption based on open ssl
 declare(strict_types=1);
 require_once('fnc.php');
 

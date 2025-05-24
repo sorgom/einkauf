@@ -11,6 +11,9 @@ file='site/commit.txt';
 echo $branch,$date > $file
 git add $file
 
+# CLOC
+support/cloc.sh
+
 # availabilty of python
 py=$(which py || which python || which python3)
 if [[ -z $py ]]

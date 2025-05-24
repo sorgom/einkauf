@@ -1,4 +1,5 @@
 <?php
+//  tracing facility
 require_once('fnc.php');
 
 class Tracer
@@ -22,5 +23,4 @@ function trace(mixed ...$data)
     static $instance = new Tracer();
     $instance->trace(...$data);
 }
-
 ?>

@@ -1,11 +1,12 @@
 <?php
+//  user login: form or input evaluation
 require_once('usr.php');
-require_once('tracer.php');
 if (!usr()->isValid()) Usr::welcome();
 fnc\clearSession();
+//  data from form
 if ($_POST)
 {
-    trace('encrypted:', usr()->isEncrypted());
+    //  if user has encryption: evaluate data
     if (usr()->isEncrypted())
     {
         if (!(
@@ -21,6 +22,7 @@ if ($_POST)
     }
     usr()->view();
 }
+//  no POST data: display form
 else
 {
     require_once('view.php');

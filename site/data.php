@@ -1,9 +1,9 @@
 <?php
+//  user data
 require_once('usr.php');
 require_once('fnc.php');
-require_once('tracer.php');
 
-
+//  common user data file handling class
 abstract class UsrData
 {
     private string $file;
@@ -17,12 +17,10 @@ abstract class UsrData
     }
     protected function _save(string &$cont)
     {
-        // trace('->', $this->file);
         fnc\save($this->file, $cont);
     }
     protected function _load(&$cont)
     {
-        // trace('<-', $this->file);
         return fnc\load($cont, $this->file);
     }
     protected function data()
@@ -31,6 +29,7 @@ abstract class UsrData
     }
 }
 
+//  user item and chapter states tracker class
 class States extends UsrData
 {
     private array $states = [];
@@ -61,6 +60,7 @@ class States extends UsrData
         return !(empty($this->states));
     }
 
+    //  items states of a chapter
     public function items(int $cnr)
     {
         $rx = "/^$cnr(?:\.\d+)?$/";
@@ -71,6 +71,7 @@ class States extends UsrData
         }
         return $res;
     }
+    //  chapter states
     public function chapters()
     {
         $res = [];
@@ -81,12 +82,15 @@ class States extends UsrData
         return $res;
     }
 
+    //  retrieve current state class of chapter or item
     public function cl(... $ids)
     {
         $id = implode('.', $ids);
         return isset($this->states[$id]) ? $this->states[$id] : '';
     }
 
+
+    //  set current state class of chapter or item
     public function set($val, ...$ids)
     {
         $id = implode('.', $ids);
@@ -100,6 +104,7 @@ class States extends UsrData
         }
     }
 
+    //  reset a complete chapter
     public function reset(int $cnr)
     {
         unset($this->states[$cnr]);
@@ -111,6 +116,7 @@ class States extends UsrData
     }
 }
 
+//  user data class
 class Data extends UsrData
 {
     private array $heads = [];
@@ -124,26 +130,30 @@ class Data extends UsrData
         if ($load) $this->load();
     }
 
+    //  load user data
     public function load()
     {
+        //  if data read
         if ($this->_load($data))
         {
+            //  apply decoding if user has encryption
             if (usr()->isEncrypted())
             {
-                trace('encrypted', usr()->key());
                 require_once('crypter.php');
                 crypter()->decode($data, usr()->key(), $data);
             }
-            trace('data', $data);
             [$this->heads, $this->items, $this->notes] = json_decode($data, true);
         }
+        //  otherwise start with template
         else if (fnc\load($txt, 'template.txt'))
             $this->set($txt);
     }
 
+    //  save user data
     public function save()
     {
         $data = json_encode([$this->heads, $this->items, $this->notes]);
+        //  apply encoding if user has encryption
         if (usr()->isEncrypted())
         {
             require_once('crypter.php');
@@ -152,6 +162,8 @@ class Data extends UsrData
         $this->_save($data);
     }
 
+    //  user data for main menu (list of chapters)
+    //  lists all non empty chapters
     function menuData(&$data)
     {
         $entries = [];
@@ -162,9 +174,11 @@ class Data extends UsrData
                 $entries[] = [ $cnr, $this->heads[$cnr], states()->cl($cnr) ];
             }
         }
+        //  also provides user encrypted information for logout button
         $data = [usr()->isEncrypted(), $entries];
     }
 
+    //  user items data of a chapter
     function ItemData(&$data, int $cnr)
     {
         if ($this->has($cnr))
@@ -186,6 +200,7 @@ class Data extends UsrData
         else $data = [ $cnr, 'NN', '', []];
     }
 
+    //  retrieve text for edit form
     public function txt(&$data)
     {
         $res = [$this->notes, ''];
@@ -213,6 +228,7 @@ class Data extends UsrData
         return !(empty($this->heads));
     }
 
+    //  set user data form editor text (or template)
     public function set(string &$text)
     {
         $this->heads = [$this->ps];
@@ -252,6 +268,8 @@ class Data extends UsrData
         $this->save();
     }
 
+    //  remove a chapter
+    //  and transfer postponed items to "@ ?"
     public function remove(int $cnr)
     {
         if ($this->has($cnr))
@@ -279,6 +297,7 @@ class Data extends UsrData
         return array_values(array_filter($a, 'fnc\isi'));
     }
 
+    //  chapter wise lines parser
     private static function txt2lines(string $txt)
     {
         $lines = fnc\expl($txt);
@@ -308,12 +327,14 @@ class Data extends UsrData
         return $item;
     }
 
+    //  safety handler: chapter within data range
     private function has(int $cnr)
     {
         return ($cnr >= 0) && (count($this->heads) > $cnr);
     }
 
     //  re-assign states to new order
+    //  by string mapping
     private function restate()
     {
         if ($this->data())
