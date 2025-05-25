@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 2217 1920" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:20;">
+<g transform="matrix(1,0,0,1,-2652.95,-859.891)">
+<g transform="matrix(0.975291,0,0,0.856932,65.6039,188.295)">
+<rect x="2655.03" y="786.152" width="2268.07" height="2235.1" style="fill:rgb(242,242,242);stroke:rgb(153,153,153);stroke-width:4.54px;"/>
+</g>
+<rect x="2775.59" y="1000.43" width="1549.4" height="1608.74" style="fill:white;stroke:rgb(153,153,153);stroke-width:4.17px;"/>
+<g transform="matrix(1,0,0,1,0,227.466)">
+<rect x="4431.9" y="1633.38" width="365.923" height="171.423" style="fill:white;stroke:rgb(153,153,153);stroke-width:4.17px;"/>
+</g>
+<g transform="matrix(1,0,0,1,0,243.949)">
+<text x="4534.57px" y="1729.45px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:75px;fill:rgb(89,89,89);">
+down</text>
+</g>
+<g transform="matrix(1,0,0,1.0302,0,-105.363)">
+<rect x="4431.9" y="1633.38" width="365.923" height="171.423" style="fill:white;stroke:rgb(153,153,153);stroke-width:4.1px;"/>
+</g>
+<g transform="matrix(1,0,0,1,0,-39.5593)">
+<text x="4577.29px" y="1732.04px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:75px;fill:rgb(89,89,89);">
+up</text>
+</g>
+<rect x="2775.59" y="1692.72" width="1549.4" height="115.381" style="fill:rgb(230,230,230);stroke:rgb(153,153,153);stroke-width:4.17px;"/>
+<g transform="matrix(1,0,0,1,-291.52,16.483)">
+<text x="3109.97px" y="1064.01px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:62.5px;fill:rgb(128,128,128);">
+C:\apps\python\Scripts\</text>
+</g>
+<g transform="matrix(1,0,0,1,-291.52,131.864)">
+<text x="3109.97px" y="1064.01px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:62.5px;fill:rgb(128,128,128);">
+C:\apps\python\</text>
+</g>
+<g transform="matrix(1,0,0,1,-291.52,247.245)">
+<text x="3109.97px" y="1064.01px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:62.5px;fill:rgb(128,128,128);">
+%USERPROFILE%\AppData\Local\Microsoft\W<tspan x="4245.65px 4259.9px " y="1064.01px 1064.01px ">
+in</tspan>
+dowsApps</text>
+</g>
+<g transform="matrix(1,0,0,1,-291.52,362.627)">
+<text x="3109.97px" y="1064.01px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:62.5px;fill:rgb(128,128,128);">
+C:\apps\vscode\bin</text>
+</g>
+<g transform="matrix(1,0,0,1,-291.52,820.855)">
+<text x="3109.97px" y="1064.01px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:62.5px;fill:rgb(89,89,89);">
+C:\tools\php-8.3.20-nts-W<tspan x="3727.4px 3741.65px " y="1064.01px 1064.01px ">
+in</tspan>
+32-vs16-x64</text>
+</g>
+<g transform="matrix(1,0,0,1,-291.52,593.389)">
+<text x="3109.97px" y="1064.01px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:62.5px;fill:rgb(89,89,89);">
+C:\tools\php-8.4.6-W<tspan x="3604.96px 3619.21px " y="1064.01px 1064.01px ">
+in</tspan>
+32-vs17-x64</text>
+</g>
+<g transform="matrix(1,0,0,1,-291.52,478.008)">
+<text x="3109.97px" y="1064.01px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:62.5px;fill:rgb(89,89,89);">
+C:\tools\</text>
+</g>
+<path d="M2775.59,1115.81L4324.99,1115.81" style="fill:none;stroke:rgb(153,153,153);stroke-width:4.17px;"/>
+<g transform="matrix(1,0,0,1,0,804.372)">
+<path d="M2775.59,1115.81L4324.99,1115.81" style="fill:none;stroke:rgb(153,153,153);stroke-width:4.17px;"/>
+</g>
+<g transform="matrix(1,0,0,1,-4.54747e-13,115.381)">
+<path d="M2775.59,1115.81L4324.99,1115.81" style="fill:none;stroke:rgb(153,153,153);stroke-width:4.17px;"/>
+</g>
+<g transform="matrix(1,0,0,1,0,230.762)">
+<path d="M2775.59,1115.81L4324.99,1115.81" style="fill:none;stroke:rgb(153,153,153);stroke-width:4.17px;"/>
+</g>
+<g transform="matrix(1,0,0,1,-4.54747e-13,346.144)">
+<path d="M2775.59,1115.81L4324.99,1115.81" style="fill:none;stroke:rgb(153,153,153);stroke-width:4.17px;"/>
+</g>
+<g transform="matrix(1,0,0,1,-4.54747e-13,576.906)">
+<path d="M2775.59,1115.81L4324.99,1115.81" style="fill:none;stroke:rgb(153,153,153);stroke-width:4.17px;"/>
+</g>
+<g transform="matrix(1,0,0,1,-4.54747e-13,692.287)">
+<path d="M2775.59,1115.81L4324.99,1115.81" style="fill:none;stroke:rgb(153,153,153);stroke-width:4.17px;"/>
+</g>
+<g transform="matrix(1,0,0,1,-4.54747e-13,461.525)">
+<path d="M2775.59,1115.81L4324.99,1115.81" style="fill:none;stroke:rgb(153,153,153);stroke-width:4.17px;"/>
+</g>
+<g transform="matrix(1,0,0,1,-291.52,708.77)">
+<text x="3109.97px" y="1064.01px" style="font-family:'ArialNarrow-Bold', 'Arial', sans-serif;font-weight:700;font-stretch:condensed;font-size:62.5px;fill:rgb(89,89,89);">
+C:\tools\php-8.2.28-nts-W<tspan x="3727.4px 3741.65px " y="1064.01px 1064.01px ">
+in</tspan>
+32-vs16-x64</text>
+</g>
+<g transform="matrix(5.45817e-17,0.891386,-1,6.12323e-17,6145.76,-1778.08)">
+<path d="M3873.93,2089.54L3873.93,2128.59L3806.52,2068.51L3873.93,2008.42L3873.93,2047.47L4042.93,2047.47L4042.93,2008.42L4110.34,2068.51L4042.93,2128.59L4042.93,2089.54L3873.93,2089.54Z" style="fill:white;stroke:rgb(153,153,153);stroke-width:4.4px;"/>
+</g>
+</g>
+</svg>

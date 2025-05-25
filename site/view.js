@@ -447,10 +447,10 @@ class WelcomeForm extends View
         const dcn = new Div().class('center').into(dgr);
         const din = new Div().into(dcn);
         const dpw = new Div().class('form pwd').into(din);
-        new Input('password', 'pwd1').class('frm pwd').autofocus().into(dpw);
-        new Input('password', 'pwd2').class('frm pwd spc').into(dpw);
+        new Input('password', 'pwd1').class('pwd').autofocus().into(dpw);
+        new Input('password', 'pwd2').class('pwd').into(dpw);
         const dem = new Div().class('form mail').into(din);
-        new Input('email', 'em').class('frm').into(dem);
+        new Input('email', 'em').class('mail').into(dem);
         new Input('submit').class('i enter').into(din);
         this.mnu().body();
         this.imprint();

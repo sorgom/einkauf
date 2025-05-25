@@ -259,15 +259,13 @@ div.ico {
     background-image: url('img/ico_go.svg');
 }
 
-input.frm {
+input.pwd, input.mail {
     display: block;
     font-size: inherit;
     margin: 0.1em;
     padding: 0.1em;
     text-align: center;
     margin-bottom: 0.5em;
-}
-.frm.pwd {
     border-radius: 0.3em;
 }
 
@@ -276,10 +274,8 @@ input.i {
     font-size: inherit;
     margin-top: 0.5em;
     width: 100%;
-    /* border: none; */
     border: 1px solid var(--tc);
     background-color: transparent;
-
     border-radius: 0.3em;
 }
 
