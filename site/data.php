@@ -1,46 +1,41 @@
 <?php
-
+//  user data
 require_once('usr.php');
+require_once('fnc.php');
 
-class Fnc
-{
-    protected static function isl(string $c) { return !(empty($c) || $c[0] == '#'); }
-    protected static function impl($a) { return implode("\n", $a); }
-}
-
-abstract class DataObject extends Fnc
+//  common user data file handling class
+abstract class UsrData
 {
     private string $file;
-    private static string $dir = 'data';
     public function __construct(string $ext)
     {
-        global $uid;
-        $this->file = self::$dir . '/' . usr()->uid() . ".$ext";
+        $this->file = 'data/' . usr()->uid() . ".$ext";
     }
     public function _delete()
     {
         if (file_exists($this->file)) unlink($this->file);
     }
-    protected function _save(mixed $cont)
+    protected function _save(string &$cont)
     {
-        if (!is_dir(self::$dir)) mkdir(self::$dir);
-        file_put_contents($this->file, $cont);
+        fnc\save($this->file, $cont);
     }
     protected function _load(&$cont)
     {
-        $ok = file_exists($this->file);
-        if ($ok) $cont = file_get_contents($this->file);
-        return $ok;
+        return fnc\load($cont, $this->file);
     }
-
+    protected function data()
+    {
+        return file_exists($this->file);
+    }
 }
 
-class States extends DataObject
+//  user item and chapter states tracker class
+class States extends UsrData
 {
     private array $states = [];
     public function __construct(bool $load=false)
     {
-        parent::__construct('log.json');
+        parent::__construct('log');
         if ($load) $this->load();
     }
     public function load()
@@ -56,8 +51,8 @@ class States extends DataObject
     }
     public function save()
     {
-        if (empty($this->states)) $this->_delete();
-        else $this->_save(json_encode($this->states));
+        $js = json_encode($this->states);
+        $this->_save($js);
     }
 
     public function given()
@@ -65,6 +60,7 @@ class States extends DataObject
         return !(empty($this->states));
     }
 
+    //  items states of a chapter
     public function items(int $cnr)
     {
         $rx = "/^$cnr(?:\.\d+)?$/";
@@ -75,6 +71,7 @@ class States extends DataObject
         }
         return $res;
     }
+    //  chapter states
     public function chapters()
     {
         $res = [];
@@ -85,23 +82,15 @@ class States extends DataObject
         return $res;
     }
 
+    //  retrieve current state class of chapter or item
     public function cl(... $ids)
     {
         $id = implode('.', $ids);
-        $cl = '';
-        if (isset($this->states[$id]))
-        {
-            // this is compatibility
-            // former state was 1 for done
-            // now it's:
-            // x for done
-            // y for postponed
-            $v = $this->states[$id];
-            $cl = $v == 1 ? 'x' : $v;
-        }
-        return $cl;
+        return isset($this->states[$id]) ? $this->states[$id] : '';
     }
 
+
+    //  set current state class of chapter or item
     public function set($val, ...$ids)
     {
         $id = implode('.', $ids);
@@ -115,6 +104,7 @@ class States extends DataObject
         }
     }
 
+    //  reset a complete chapter
     public function reset(int $cnr)
     {
         unset($this->states[$cnr]);
@@ -126,7 +116,8 @@ class States extends DataObject
     }
 }
 
-class Data extends DataObject
+//  user data class
+class Data extends UsrData
 {
     private array $heads = [];
     private array $items = [];
@@ -135,41 +126,59 @@ class Data extends DataObject
 
     public function __construct(bool $load=false)
     {
-        parent::__construct('data.json');
+        parent::__construct('data');
         if ($load) $this->load();
     }
 
+    //  load user data
     public function load()
     {
-        $this->heads = [];
-        $this->items = [];
-        $this->notes = '';
+        //  if data read
         if ($this->_load($data))
         {
-            // compatibility
-            // was: heads, items
-            // now: heads, items, notes
-            [$this->heads, $this->items, $this->notes] = [... json_decode($data, true), ''];
+            //  apply decoding if user has encryption
+            if (usr()->isEncrypted())
+            {
+                require_once('crypter.php');
+                crypter()->decode($data, usr()->key(), $data);
+            }
+            [$this->heads, $this->items, $this->notes] = json_decode($data, true);
         }
+        //  otherwise start with template
+        else if (fnc\load($txt, 'template.txt'))
+            $this->set($txt);
     }
 
+    //  save user data
     public function save()
     {
-        $this->_save(json_encode([$this->heads, $this->items, $this->notes]));
+        $data = json_encode([$this->heads, $this->items, $this->notes]);
+        //  apply encoding if user has encryption
+        if (usr()->isEncrypted())
+        {
+            require_once('crypter.php');
+            crypter()->encode($data, usr()->key(), $data);
+        }
+        $this->_save($data);
     }
 
+    //  user data for main menu (list of chapters)
+    //  lists all non empty chapters
     function menuData(&$data)
     {
-        $data = [];
+        $entries = [];
         foreach($this->items as $cnr => $i)
         {
             if (!empty($i))
             {
-                $data[] = [ $cnr, $this->heads[$cnr], states()->cl($cnr) ];
+                $entries[] = [ $cnr, $this->heads[$cnr], states()->cl($cnr) ];
             }
         }
+        //  also provides user encrypted information for logout button
+        $data = [usr()->isEncrypted(), $entries];
     }
 
+    //  user items data of a chapter
     function ItemData(&$data, int $cnr)
     {
         if ($this->has($cnr))
@@ -191,16 +200,17 @@ class Data extends DataObject
         else $data = [ $cnr, 'NN', '', []];
     }
 
+    //  retrieve text for edit form
     public function txt(&$data)
     {
         $res = [$this->notes, ''];
         foreach ($this->heads as $cnr => $head)
         {
             $res[] = "@ $head";
-            $res[] = Fnc::impl($this->items[$cnr]);
+            $res[] = fnc\impl($this->items[$cnr]);
             $res[] = '';
         }
-        $data = trim(Fnc::impl($res)) . "\n";
+        $data = trim(fnc\impl($res)) . "\n";
     }
 
     public function heads()
@@ -208,14 +218,9 @@ class Data extends DataObject
         return $this->heads;
     }
 
-    public function lines(int $cnr)
-    {
-        return $this->has($cnr) ? $this->items[$cnr] : [];
-    }
-
     public function items(int $cnr)
     {
-        return $this->has($cnr) ? self::toItems($this->items[$cnr], 'Fnc::isl') : [];
+        return $this->has($cnr) ? self::toItems($this->items[$cnr], 'fnc\isi') : [];
     }
 
     public function given()
@@ -223,13 +228,14 @@ class Data extends DataObject
         return !(empty($this->heads));
     }
 
+    //  set user data form editor text (or template)
     public function set(string &$text)
     {
         $this->heads = [$this->ps];
         $this->items = [[]];
         $this->notes = '';
 
-        $txt = self::clean($text);
+        fnc\clean($txt, $text);
 
         $rx = '/^@ *(.+)\n?/m';
 
@@ -241,7 +247,7 @@ class Data extends DataObject
             $this->notes = array_shift($data);
             foreach ($data as $cnr => $txt)
             {
-                $item = self::txt2item($txt);
+                $item = self::txt2lines($txt);
                 $ttl  = $ttls[$cnr];
                 if ($ttl == $this->ps)
                 {
@@ -262,6 +268,8 @@ class Data extends DataObject
         $this->save();
     }
 
+    //  remove a chapter
+    //  and transfer postponed items to "@ ?"
     public function remove(int $cnr)
     {
         if ($this->has($cnr))
@@ -286,12 +294,13 @@ class Data extends DataObject
 
     private static function toItems($a)
     {
-        return array_values(array_filter($a, 'Fnc::isl'));
+        return array_values(array_filter($a, 'fnc\isi'));
     }
 
-    private static function txt2item(string $txt)
+    //  chapter wise lines parser
+    private static function txt2lines(string $txt)
     {
-        $lines = explode("\n", $txt);
+        $lines = fnc\expl($txt);
         $lSet = false;
         $lOk  = false;
         $item = [];
@@ -318,53 +327,53 @@ class Data extends DataObject
         return $item;
     }
 
+    //  safety handler: chapter within data range
     private function has(int $cnr)
     {
         return ($cnr >= 0) && (count($this->heads) > $cnr);
     }
 
-    private static function clean(string &$text)
-    {
-        return trim(preg_replace('/^ *| *$/m', '', preg_replace('/\r\n|\r/', "\n", str_replace("\t", ' ', $text))));
-    }
-
     //  re-assign states to new order
+    //  by string mapping
     private function restate()
     {
-        $oData   = new Data(true);
-        $oStates = states();
-        $nStates = new States();
-        if ($oStates->given() && $oData->given())
+        if ($this->data())
         {
-            $map = new States();
-            foreach ($oData->heads() as $cnr => $head)
+            $oData   = new Data(true);
+            $oStates = states();
+            $nStates = new States();
+            if ($oStates->given() && $oData->given())
             {
-                if ($cnr == 0) continue;
-                foreach ($oData->items($cnr) as $inr => $line)
+                $map = new States();
+                foreach ($oData->heads() as $cnr => $head)
                 {
-                    $map->set($oStates->cl($cnr, $inr), $head, $line);
-                }
-            }
-            foreach ($this->heads as $cnr => $head)
-            {
-                if ($cnr == 0) continue;
-                $items = $this->items($cnr);
-                if (!empty($items))
-                {
-                    $all = true;
-                    $cst = 'x';
-                    foreach ($items as $inr => $line)
+                    if ($cnr == 0) continue;
+                    foreach ($oData->items($cnr) as $inr => $line)
                     {
-                        $c = $map->cl($head, $line);
-                        if ($all && $c) $cst = $c == 'y' ? 'y' : $cst;
-                        else $all = false;
-                        $nStates->set($map->cl($head, $line), $cnr, $inr);
+                        $map->set($oStates->cl($cnr, $inr), $head, $line);
                     }
-                    if ($all) $nStates->set($cst, $cnr);
+                }
+                foreach ($this->heads as $cnr => $head)
+                {
+                    if ($cnr == 0) continue;
+                    $items = $this->items($cnr);
+                    if (!empty($items))
+                    {
+                        $all = true;
+                        $cst = 'x';
+                        foreach ($items as $inr => $line)
+                        {
+                            $c = $map->cl($head, $line);
+                            if ($all && $c) $cst = $c == 'y' ? 'y' : $cst;
+                            else $all = false;
+                            $nStates->set($map->cl($head, $line), $cnr, $inr);
+                        }
+                        if ($all) $nStates->set($cst, $cnr);
+                    }
                 }
             }
+            $nStates->save();
         }
-        $nStates->save();
     }
 }
 

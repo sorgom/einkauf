@@ -1,10 +1,12 @@
 <?php
+//  user register and current user instance
+require_once('fnc.php');
+require_once('tracer.php');
 
+//  user register
 class Register
 {
-    private static string $dir  = 'data';
     private static string $file = 'data/reg.json';
-    private static string $log  = 'data/.log';
     private array $uids = [];
 
     public function __construct(bool $load=false)
@@ -13,14 +15,14 @@ class Register
     }
     public function save()
     {
-        self::check();
-        file_put_contents(self::$file, json_encode($this->uids));
+        $json = json_encode($this->uids);
+        fnc\save(self::$file, $json);
     }
     public function load()
     {
-        $ok = file_exists(self::$file);
-        if ($ok) $this->uids = json_decode(file_get_contents(self::$file), true);
-        return $ok;
+        if (fnc\load($json, self::$file))
+            $this->uids = json_decode($json, true);
+        else $this->uids = [];
     }
 
     public function has(string $uid)
@@ -28,51 +30,55 @@ class Register
         return isset($this->uids[$uid]);
     }
 
-    public function add(string $uid)
+    public function retrieve(string $uid, mixed &$hash)
     {
-        return $this->uids[$uid] = 1;
+        $ret = false;
+        $hash = NULL;
+        if (isset($this->uids[$uid]))
+        {
+            $ret = true;
+            $val = $this->uids[$uid];
+            if (gettype($val) == 'string') $hash = $val;
+        }
+        return $ret;
+    }
+
+    public function add(string $uid, string $pwd='')
+    {
+        $val = 1;
+        if ($pwd) $val = password_hash($pwd, PASSWORD_BCRYPT);
+        $this->uids[$uid] = $val;
+        // trace(['add', $uid, $val]);
     }
 
     public function remove(string &$uid)
     {
         unset($this->uids[$uid]);
     }
-
-    public static function instance()
-    {
-        static $instance = new Register(true);
-        return $instance;
-    }
-    private static function check()
-    {
-        if (!is_dir(self::$dir)) mkdir(self::$dir);
-    }
-    public static function log(mixed $message)
-    {
-        self::check();
-        error_log(serialize($message) . "\n", 3, self::$log);
-    }
 }
 
+//  representation of current user
 class Usr
 {
     private string $uid = '';
-    private bool $valid = false;
     private array $params = [];
     private static string $sep = '-';
-
-    public static function instance()
-    {
-        static $instance = new Usr();
-        return $instance;
-    }
+    private mixed $hash = NULL;
+    private string $key = '';
+    private bool $valid = false;
 
     public function set(string $uid)
     {
         $this->uid = $uid;
+        $this->valid = reg()->retrieve($this->uid, $this->hash);
     }
 
-    public function valid()
+    public function isEncrypted()
+    {
+        return !is_null($this->hash);
+    }
+
+    public function isValid() : bool
     {
         return $this->valid;
     }
@@ -82,31 +88,80 @@ class Usr
         return $this->uid;
     }
 
+    public function key()
+    {
+        return $this->key;
+    }
+
     public function check()
     {
-        if (!$this->valid) header('Location: hello.php');
+        if (!$this->valid) self::welcome();
+        if ($this->isEncrypted())
+        {
+            session_start();
+            if (!(
+                isset($_SESSION['uid']) &&
+                isset($_SESSION['key']) &&
+                $_SESSION['uid'] == $this->uid
+            )) $this->login();
+            $this->key = $_SESSION['key'];
+        }
+    }
+
+    public function ok()
+    {
+        $ok = $this->valid;
+        if ($ok && $this->isEncrypted())
+        {
+            session_start();
+            $ok = (
+                isset($_SESSION['uid']) &&
+                $_SESSION['uid'] == $this->uid
+            );
+        }
+        return $ok;
+    }
+
+    public function checkPwd(string $pwd)
+    {
+        if (!(is_null($this->hash)
+            || hash_equals($this->hash, crypt($pwd, $this->hash))
+        )) $this->login();
+    }
+
+    public static function welcome()
+    {
+        header('Location: welcome.php');
+        exit;
+    }
+
+    public function login()
+    {
+        $this->go('login');
     }
 
     public function go(string $php)
     {
         header("Location: $php.php?" . $this->uid);
+        exit;
     }
     public function view(... $params)
     {
         header("Location: /?" . implode(self::$sep, [ $this->uid, ...$params]));
+        exit;
     }
 
-    function param(int $n=0)
+    public function param(int $n=0)
     {
         return count($this->params) > $n ? $this->params[$n] : NULL;
     }
 
-    function params()
+    public function params()
     {
         return $this->params;
     }
 
-    private function __construct()
+    public function __construct()
     {
         if ($_POST)
         {
@@ -122,18 +177,19 @@ class Usr
             }
         }
         if ($this->uid)
-        {
-            $this->valid = reg()->has($this->uid);
-        }
+            $this->valid = reg()->retrieve($this->uid, $this->hash);
     }
 }
 
 function usr()
 {
-    return Usr::instance();
+    static $instance = new Usr();
+    return $instance;
 }
+
 function reg()
 {
-    return Register::instance();
+    static $instance = new Register(true);
+    return $instance;
 }
 ?>

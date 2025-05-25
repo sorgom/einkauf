@@ -1,31 +1,28 @@
 # TODO
+## pre-commit
+- save branch and date
+- imprint
 ## bugs
-- links remain highlighted
-
+- form textarea jumps to end
+    - solved by order
 ## css selectors
-- class based
-- get rid of where placed selectors
-    - look at remove confirmation
 
-## Data
-- do not transfer states of postponed
-    - after edit - set(txt)
-    - after delete
-- provide shortcuts
-    - save without re-scan
-## States
-provide shortcuts
-- remove
-- insert
-
-## support
-- test text generator py
-    - every entry must be unique and understandable
-
+## logics
+- reset confirm if something to reset
+- wait for request return before class change
 ## layout / css
-- confirm remove:
-    - center vertically (appears below bottom on device)
-    - find out why width does not work
+### bottom menu
+- centered
+- elements
+    - fixed with
+    - flex-grow: 0
+
+### confirm
+### new buttons
+- buttons menu right when landscape?
+- home button is not intuitive: go back to _back_ and _up_
+## js
+- Form.clear()
 
 ### good links
 - themes
@@ -34,8 +31,28 @@ provide shortcuts
     - [CSS dark mode invert](https://www.rechnerhaus.de/blog/css-dark-mode-mit-zwei-zeilen-code)
 
 ## data
-- get rid of concatenations?
 
-### rename
+## new login concept
 
-### remove
+## general
+- shell export function
+
+## encryption
+### sign in new user
+- start session after sign in
+    - $uid
+    - $pwd
+
+### regular page
+- check if password required
+``usr()->isEncrypted()?``
+- if so
+    - session_start
+    - $_SESSION['uid'] must match
+    - $_SESSION['key'] must exist
+    - OK
+        - usr()->setPwd()
+    - NOK
+        - -> login
+
+## login php
