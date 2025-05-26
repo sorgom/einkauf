@@ -8,6 +8,7 @@
 <meta charset='UTF-8'>
 <link rel=stylesheet href=view.css>
 <link rel=icon type='image/svg' href='img/check_icon.svg'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head><body>
 <script src=view.js></script>
 

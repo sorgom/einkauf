@@ -15,6 +15,16 @@ class Elem
         this.elem.className = cl;
         return this;
     }
+    id(id)
+    {
+        this.elem.id = id;
+        return this;
+    }
+    title(ttl)
+    {
+        this.elem.title = ttl;
+        return this;
+    }
     into(par)
     {
         par.elem.appendChild(this.elem);
@@ -156,9 +166,16 @@ class Input extends Elem
     {
         super('input');
         this.elem.type = type;
-        this.elem.name = name;
         this.elem.value = val;
-        this.elem.autocomplete = 'on';
+        if (name)
+        {
+            this.elem.name = name;
+            if (type != 'hidden')
+            {
+                this.elem.autocomplete = 'on';
+                this.elem.id = name;
+            }
+        }
         return this;
     }
     required()
@@ -166,7 +183,23 @@ class Input extends Elem
         this.elem.required = true;
         return this;
     }
+    pattern(ptn)
+    {
+        this.elem.pattern = ptn;
+        return this;
+    }
 }
+
+class Label extends Elem
+{
+    constructor() { super('label'); }
+    for(f)
+    {
+        this.elem.for = f;
+        return this;
+    }
+}
+
 
 class View
 {
@@ -442,17 +475,18 @@ class WelcomeForm extends View
     constructor()
     {
         super('');
-        const frm = new Form('start.php').body();
-        const dgr = new Div().class('grow_up').into(frm);
-        const dcn = new Div().class('center').into(dgr);
-        const din = new Div().into(dcn);
-        const dpw = new Div().class('form pwd').into(din);
-        new Input('password', 'pwd1').class('pwd').autofocus().into(dpw);
-        new Input('password', 'pwd2').class('pwd').into(dpw);
-        const dem = new Div().class('form mail').into(din);
-        new Input('email', 'em').class('mail').into(dem);
-        new Input('submit').class('i enter').into(din);
+        const dgr = new Div().class('grow_up').body();
+        const dcn = new Div().class('container').into(dgr);
+        const frm = new Form('start.php').into(dcn);
+        new Label().for('em').txt('E-Mail *').into(frm);
+        new Input('email', 'em').required().autofocus().into(frm);
+        new Label().for('pwd1').txt('Passwort **').into(frm);
+        new Input('password', 'pwd1').required().into(frm);
+        new Label().for('pwd2').txt('Passwort Wiederholung').into(frm);
+        new Input('password', 'pwd2').required().into(frm);
+        new Input('submit', '', 'OK').into(frm);
         this.mnu().body();
+        this.mnuLink('explain', ()=>{ window.location.assign('explain.php'); });
         this.imprint();
     }
 }
@@ -478,13 +512,23 @@ class LoginForm extends View
     constructor(uid, _)
     {
         super(uid);
-        const frm = new Form('login.php').body();
+        const dgr = new Div().class('grow_up').body();
+        const dcn = new Div().class('container').into(dgr);
+        const frm = new Form('login.php').into(dcn);
+        new Label().for('pwd').txt('Passwort').into(frm);
+        new Input('password', 'pwd').autofocus().required().into(frm);
+        new Input('submit', '', 'OK').into(frm);
         new Input('hidden', 'uid', this.uid).into(frm);
-        const dgr = new Div().class('grow_up').into(frm);
-        const dcn = new Div().class('center').into(dgr);
-        const dpw = new Div().class('form pwd').into(dcn);
-        new Input('password', 'pwd').required().autofocus().class('frm pwd').into(dpw);
-        new Input('submit').class('i forward').into(dpw);
+        this.mnu().body();S
+        this.imprint();
+
+
+        // const frm = new Form('login.php').body();
+        // const dgr = new Div().class('grow_up').into(frm);
+        // const dcn = new Div().class('center').into(dgr);
+        // const dpw = new Div().class('form pwd').into(dcn);
+        // new Input('password', 'pwd').required().autofocus().class('frm pwd').into(dpw);
+        // new Input('submit').class('i forward').into(dpw);
     }
 }
 
@@ -502,6 +546,18 @@ class Imprint extends View
         const dc = new Div().class('imprint').into(dg);
         new P().into(dc).txt(date);
         new P().into(dc).txt('branch: ' + branch);
+        this.mnu().body();
+        this.mnuLink('back',()=>{ window.history.back(); });
+    }
+}
+
+class Explain extends View
+{
+    constructor(uid, txt)
+    {
+        super(uid);
+        const dg = new Div().class('grow_up').body();
+        new Div().class('imprint').txt(txt).into(dg);
         this.mnu().body();
         this.mnuLink('back',()=>{ window.history.back(); });
     }

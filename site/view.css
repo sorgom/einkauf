@@ -17,6 +17,7 @@
     --tc-link: blue;
     --bg: white;
     --bg-button: #EEE;
+    --bg-submit: #04AA6D;
 
 }
 html {
@@ -41,6 +42,7 @@ html {
         --tc-done: rgb(80, 146, 80);
         --tc-out: coral;
         --bg-button: #DDD;
+        --bg-submit: #FB5592;
     }
 }
 
@@ -49,14 +51,18 @@ html {
     padding: 0;
     font-family: sans-serif;
     color: var(--tc);
+    box-sizing: border-box;
 }
 
+body { font-size: 2em; }
 @media (orientation: landscape) {
-    body { font-size: 3em; }
+    .container {
+        width: 50%;
+    }
 }
 
 @media (orientation: portrait) {
-    body { font-size: 4.5em; }
+    /* body { font-size: 4.5em; } */
     * { font-stretch: condensed; }
 }
 body {
@@ -180,6 +186,7 @@ a.i {
 .i.clear    { background-image: url('img/clear.svg'); }
 .i.edit     { background-image: url('img/pen.svg'); }
 .i.enter    { background-image: url('img/enter.svg'); }
+.i.explain  { background-image: url('img/asteric.svg'); }
 .i.forward  { background-image: url('img/forward.svg'); }
 .i.home     { background-image: url('img/list.svg'); }
 .i.imprint  { background-image: url('img/paragraph.svg'); }
@@ -259,39 +266,30 @@ div.ico {
     background-image: url('img/ico_go.svg');
 }
 
-input.pwd, input.mail {
-    display: block;
-    font-size: inherit;
-    margin: 0.1em;
-    padding: 0.1em;
-    text-align: center;
-    margin-bottom: 0.5em;
-    border-radius: 0.3em;
+.container {
+    /* background-color: #f1f1f1; */
+    padding: 20px;
 }
 
-input.i {
+label {
+    font-size: 75%;
+    padding-left: 0.5em;
+}
+
+input {
     display: block;
-    font-size: inherit;
-    margin-top: 0.5em;
     width: 100%;
-    border: 1px solid var(--tc);
-    background-color: transparent;
-    border-radius: 0.3em;
+    font-size: inherit;
+    padding: 0.1em;
+    padding-left: 0.5em;
+    margin-bottom: 0.5em;
+    border-radius: 5px;
 }
 
-div.form {
-    background-repeat: no-repeat;
-    background-position: top center;
-    background-size: 1.5em;
-    padding-top: 1.5em;
-    margin-bottom: 1em;
-}
-
-.form.mail {
-    background-image: url('img/mail.svg');
-}
-.form.pwd {
-    background-image: url('img/passwd.svg');
+input[type=submit] {
+    margin-top: 1em;
+    background-color: var(--bg-submit);
+    color: white;
 }
 
 div.imprint {
@@ -300,5 +298,5 @@ div.imprint {
     white-space: pre-wrap;
 }
 div.imprint, div.imprint > * {
-    font-family: 'Courier New', Courier, monospace;
+    /* font-family: 'Courier New', Courier, monospace; */
 }
