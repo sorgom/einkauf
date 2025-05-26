@@ -237,6 +237,9 @@ class Data extends UsrData
 
         fnc\clean($txt, $text);
 
+        // remove orphaned @s
+        $txt = preg_replace('/^@(?:\n+|$)/m', '', $txt);
+
         $rx = '/^@ *(.+)\n?/m';
 
         if (preg_match_all($rx, $txt, $m))

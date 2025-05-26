@@ -26,6 +26,9 @@ html {
     -moz-text-size-adjust: none;
     -webkit-text-size-adjust: none;
 }
+.bottom {
+    width: 100%;
+}
 
 /* for grayscale testing */
 /* body {
@@ -54,21 +57,22 @@ html {
     box-sizing: border-box;
 }
 
-body { font-size: 2em; }
+body {
+    font-size: 2em;
+    background-color: var(--bg);
+    padding-bottom: 2em;
+}
+
 @media (orientation: landscape) {
-    .container {
-        width: 50%;
+    body, .bottom {
+        width: 75%;
     }
 }
 
 @media (orientation: portrait) {
-    /* body { font-size: 4.5em; } */
     * { font-stretch: condensed; }
 }
-body {
-    background-color: var(--bg);
-    padding-bottom: 2em;
-}
+
 ::selection {
     color: white;
     background-color: #888;
@@ -126,7 +130,6 @@ a.item {
     position: fixed;
     left: 0;
     bottom: 0;
-    width: 100%;
     z-index: 1;
 }
 
@@ -147,7 +150,7 @@ div.listing, div.grow_up {
     display: flex;
     flex-direction: column;
     justify-content: end;
-    min-height: 80vh;
+    min-height: 70vh;
 }
 
 div.center
@@ -164,7 +167,6 @@ div.mn {
     display: flex;
     flex-direction: row;
     justify-content: left;
-    width: 100%;
     z-index: 1;
     background-color: var(--bg);
     border-style: solid none solid none;
@@ -197,7 +199,7 @@ a.i {
 .i.view     { background-image: url('img/eye.svg'); }
 
 textarea.txt {
-    width: 95%;
+    width: 100%;
     height: 90%;
     font-family: serif;
     font-size: 1em;
@@ -267,7 +269,6 @@ div.ico {
 }
 
 .container {
-    /* background-color: #f1f1f1; */
     padding: 20px;
 }
 
@@ -296,7 +297,4 @@ div.imprint {
     padding: 1em;
     font-size: 60%;
     white-space: pre-wrap;
-}
-div.imprint, div.imprint > * {
-    /* font-family: 'Courier New', Courier, monospace; */
 }
