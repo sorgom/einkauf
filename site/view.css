@@ -310,6 +310,9 @@ div.imprint {
 .spc_top {
     margin-top: 2em;
 }
+.spc_bottom {
+    margin-bottom: 2em;
+}
 
 button {
     display: block;

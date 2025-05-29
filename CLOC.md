@@ -4,10 +4,10 @@
 ## site
 Language|files|blank|comment|code
 :-------|-------:|-------:|-------:|-------:
-PHP|20|104|106|823
-JavaScript|2|39|7|586
-CSS|1|37|8|276
-SUM:|23|180|121|1685
+PHP|19|104|104|816
+JavaScript|2|45|7|591
+CSS|1|37|8|279
+SUM:|22|186|119|1686
 
 ## img
 Language|files|blank|comment|code

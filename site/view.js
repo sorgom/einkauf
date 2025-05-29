@@ -514,6 +514,7 @@ class WelcomeForm extends View
         const _this = this;
         const dgr = new Div().class('grow_up').body();
         const dcn = new Div().class('container').into(dgr);
+        new Div().class('txt spc_bottom').txt(lit.intro.replace('##SRV', lit.srv)).into(dcn);
         const frm = new Form('start.php').into(dcn);
         new Label().for('pwd1').txt(lit.pwd).into(frm);
         const pwd1 = new Input('password', 'pwd1').required().autofocus().into(frm);
@@ -523,7 +524,6 @@ class WelcomeForm extends View
         new Label().for('em').txt(lit.mail).into(frm);
         new Input('email', 'em').into(frm);
         new Input('submit', '', lit.register).into(frm);
-        new Div().class('txt spc_top').txt(lit.explain).into(dcn);
         this.mnu().body();
         this.imprint();
         this.toggle = new PwdToggle(tgl, pwd1, pwd2);
@@ -539,7 +539,7 @@ class StartInfo extends View
         const [ok, addr, link] = data;
         const dgr = new Div().class('grow_up').body();
         const dcn = new Div().class('container').into(dgr);
-        new Div().class('txt').txt(lit.yourLink).into(dcn);
+        new Div().class('txt spc_bottom').txt(lit.yourLink).into(dcn);
         new Link().class('keep').txt(link).into(dcn).click(()=>{ _this.view(); });
     }
 }
@@ -572,12 +572,11 @@ class Imprint extends View
         const [txt, branch, date] = data;
         const dg = new Div().class('grow_up').body();
         new Div().class('imprint').txt(txt).into(dg);
-        const db = new Div().class('imprint').into(dg);
-        new P().into(db).txt('this is open source');
-        new Link().class('keep').href('https://github.com/sorgom/todo/tree/' + branch + '/site').txt('view on github').into(db);
         const dc = new Div().class('imprint').into(dg);
         new P().into(dc).txt(date);
         new P().into(dc).txt('branch: ' + branch);
+        const link = 'https://github.com/sorgom/todo/tree/' + branch + '/site';
+        new Link().class('keep').href(link).txt(link).into(dc);
         this.mnu().body();
         this.mnuLink('back',()=>{ window.history.back(); });
     }
