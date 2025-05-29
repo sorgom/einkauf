@@ -10,6 +10,10 @@
 <link rel=icon type='image/svg' href='img/check_icon.svg'>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head><body>
+<script src=literals.js></script>
+<script>
+    lit.setSrv('<?php echo $_SERVER['SERVER_NAME']; ?>');
+</script>
 <script src=view.js></script>
 
 <?php

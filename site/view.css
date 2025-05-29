@@ -58,14 +58,16 @@ html {
 }
 
 body {
-    font-size: 2em;
+    font-size: 16pt;
     background-color: var(--bg);
-    padding-bottom: 2em;
+    padding-bottom: 2.1em;
 }
 
 @media (orientation: landscape) {
-    body, .bottom {
-        width: 75%;
+    body, .bottom, .center  {
+        /* width: 70%; */
+        margin-left: 15%;
+        max-width: 30em;
     }
 }
 
@@ -200,12 +202,11 @@ a.i {
 
 textarea.txt {
     width: 100%;
-    height: 90%;
     font-family: serif;
-    font-size: 1em;
-    padding: 1em 0 2em 1em;
+    font-size: 16pt;
+    line-height: 24pt;
+    padding: 1em 0.5em 2em 1em;
     resize: none;
-    overflow-x: clip;
     animation: 1s blink step-end infinite;
 }
 
@@ -215,6 +216,7 @@ div.conf_main {
 div.conf_main.v {
     visibility: visible;
 }
+
 div.conf_bg {
     position: fixed;
     top: 0;
@@ -270,6 +272,7 @@ div.ico {
 
 .container {
     padding: 20px;
+    max-width: 20em;
 }
 
 label {
@@ -295,6 +298,24 @@ input[type=submit] {
 
 div.imprint {
     padding: 1em;
-    font-size: 60%;
+    font-size: 12pt;
     white-space: pre-wrap;
+}
+
+.txt {
+    font-size: 12pt;
+    white-space: pre-wrap;
+}
+
+.spc_top {
+    margin-top: 2em;
+}
+
+button {
+    display: block;
+    width: 100%;
+    margin-bottom: 2em;
+    padding: 0.5em;
+    border: none;
+    border-radius: 5px;
 }

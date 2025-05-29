@@ -95,10 +95,17 @@ class Link extends Elem {
         return this;
     }
 }
-class P    extends Elem { constructor() { return super('p'); } }
-class Div  extends Elem { constructor() { return super('div'); } }
-class HR   extends Elem { constructor() { return super('hr'); } }
-class H2   extends Elem { constructor() { return super('h2'); } }
+class P         extends Elem { constructor() { return super('p'); } }
+class Div       extends Elem { constructor() { return super('div'); } }
+class HR        extends Elem { constructor() { return super('hr'); } }
+class H2        extends Elem { constructor() { return super('h2'); } }
+class Button    extends Elem
+{
+    constructor() {
+        super('button');
+        this.elem.type = 'button';
+    }
+}
 
 class TxtLink extends Link
 {
@@ -459,7 +466,7 @@ class InputForm extends View
         console.log('InputForm 7');
         const frm = new Form('save.php').body();
 
-        const txa = new TextArea('txt', 50).class('txt').val(txt).into(frm).autofocus();
+        const txa = new TextArea('txt', 50).class('txt').val(txt).into(frm).autofocus().focus();
 
         new Input('hidden', 'uid', this.uid).into(frm);
 
@@ -470,24 +477,56 @@ class InputForm extends View
     }
 }
 
+class PwdToggle
+{
+    button;
+    inputs;
+    constructor(button, ...inputs)
+    {
+        console.log(inputs);
+        const _this = this;
+        this.button = button;
+        this.inputs = inputs;
+        this.button.txt(lit.pwdView).click(()=>{ _this.toggle();});
+    }
+    toggle()
+    {
+        const first = this.inputs[0];
+        const getsTxt = first.elem.type == 'password';
+        const newType = getsTxt ? 'text' : 'password';
+        this.button.txt(getsTxt ? lit.pwdHide : lit.pwdView);
+        for (const i of this.inputs)
+        {
+            i.elem.type = newType;
+            //  supported by some browsers
+            if (getsTxt) i.elem.setAttribute('writingsuggestions', 'false');
+        }
+        first.focus();
+    }
+}
+
 class WelcomeForm extends View
 {
+    toggle;
     constructor()
     {
         super('');
+        const _this = this;
         const dgr = new Div().class('grow_up').body();
         const dcn = new Div().class('container').into(dgr);
         const frm = new Form('start.php').into(dcn);
-        new Label().for('em').txt('E-Mail *').into(frm);
-        new Input('email', 'em').required().autofocus().into(frm);
-        new Label().for('pwd1').txt('Passwort **').into(frm);
-        new Input('password', 'pwd1').required().into(frm);
-        new Label().for('pwd2').txt('Passwort Wiederholung').into(frm);
-        new Input('password', 'pwd2').required().into(frm);
-        new Input('submit', '', 'OK').into(frm);
+        new Label().for('pwd1').txt(lit.pwd).into(frm);
+        const pwd1 = new Input('password', 'pwd1').required().autofocus().into(frm);
+        new Label().for('pwd2').txt(lit.pwd2).into(frm);
+        const pwd2 = new Input('password', 'pwd2').required().into(frm);
+        const tgl = new Button().into(frm);
+        new Label().for('em').txt(lit.mail).into(frm);
+        new Input('email', 'em').into(frm);
+        new Input('submit', '', lit.register).into(frm);
+        new Div().class('txt spc_top').txt(lit.explain).into(dcn);
         this.mnu().body();
-        this.mnuLink('explain', ()=>{ window.location.assign('explain.php'); });
         this.imprint();
+        this.toggle = new PwdToggle(tgl, pwd1, pwd2);
     }
 }
 
@@ -498,37 +537,30 @@ class StartInfo extends View
         super(uid);
         const _this = this;
         const [ok, addr, link] = data;
-        const dgr = new Div().class('grow_up itxt').body();
-        if (addr) new Div().class('ico ' + (ok ? 'ok' : 'nok')).txt(addr).into(dgr);
-        const dgo = new Div().class('ico go').into(dgr);
-        new Link().class('keep').txt(link).into(dgo).click(()=>{ _this.view(); });
-        this.mnu().body();
-        this.imprint();
+        const dgr = new Div().class('grow_up').body();
+        const dcn = new Div().class('container').into(dgr);
+        new Div().class('txt').txt(lit.yourLink).into(dcn);
+        new Link().class('keep').txt(link).into(dcn).click(()=>{ _this.view(); });
     }
 }
 
 class LoginForm extends View
 {
-    constructor(uid, _)
+   toggle;
+   constructor(uid, _)
     {
         super(uid);
         const dgr = new Div().class('grow_up').body();
         const dcn = new Div().class('container').into(dgr);
         const frm = new Form('login.php').into(dcn);
         new Label().for('pwd').txt('Passwort').into(frm);
-        new Input('password', 'pwd').autofocus().required().into(frm);
+        const pwd = new Input('password', 'pwd').autofocus().required().into(frm);
+        const tgl = new Button().into(frm);
         new Input('submit', '', 'OK').into(frm);
         new Input('hidden', 'uid', this.uid).into(frm);
-        this.mnu().body();S
+        this.mnu().body();
         this.imprint();
-
-
-        // const frm = new Form('login.php').body();
-        // const dgr = new Div().class('grow_up').into(frm);
-        // const dcn = new Div().class('center').into(dgr);
-        // const dpw = new Div().class('form pwd').into(dcn);
-        // new Input('password', 'pwd').required().autofocus().class('frm pwd').into(dpw);
-        // new Input('submit').class('i forward').into(dpw);
+        this.toggle = new PwdToggle(tgl, pwd);
     }
 }
 

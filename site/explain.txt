@@ -1,10 +1,10 @@
-* E-Mail
-Die E-Mail-Adresse wird einmalig verwendet, um dir den Zugangs-Link zu senden.
-Damit kannst du auch später noch ein Lesezeichen einrichten.
-Die Adresse wird nirgends gespeichert.
-
-** Passwort
+* Passwort
 Deine Daten werden verschlüsselt abgelegt.
 Nur mit deinem Passwort können sie abgerufen werden.
 Das Passwort selbst wird nicht gespeichert.
 Es gibt deshalb auch keine Möglichkeit, deine Daten wieder herzustellen, solltest du dein Passwort vergessen haben.
+
+** E-Mail
+Gib eine E-Mail-Adresse an, wenn du den Zugangs-Link per Mail erhalten möchtest.
+Damit kannst du auch später noch ein Lesezeichen einrichten.
+Die Adresse wird icht gespeichert.

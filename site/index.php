@@ -7,19 +7,19 @@ require_once('view.php');
 require_once('data.php');
 $x = usr()->param();
 $data = NULL;
-switch ($x)
+switch (true)
 {
-    //  no parameters: user chapters menu
-    case NULL:
-        data()->menuData($data);
-        $class = 'Menu';
-        break;
     //  parameter 'e': user text input
-    case 'e':
+    case $x === 'e':
         data()->txt($data);
         $class = 'InputForm';
         break;
-    //  other parameter: chapter number, display items of chapter
+    //  NULL or non integer
+    case is_null($x) || !ctype_digit($x):
+        data()->menuData($data);
+        $class = 'Menu';
+        break;
+    //  otherwise: chapter number, display items of chapter
     default:
         data()->ItemData($data, $x);
         $class = 'Items';
