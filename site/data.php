@@ -206,6 +206,7 @@ class Data extends UsrData
         $res = [$this->notes, ''];
         foreach ($this->heads as $cnr => $head)
         {
+            if ($head == '?' && empty($this->items[$cnr])) continue;
             $res[] = "@ $head";
             $res[] = fnc\impl($this->items[$cnr]);
             $res[] = '';
@@ -250,7 +251,7 @@ class Data extends UsrData
             $this->notes = array_shift($data);
             foreach ($data as $cnr => $txt)
             {
-                $item = self::txt2lines($txt);
+                $item = self::txt2items($txt);
                 $ttl  = $ttls[$cnr];
                 if ($ttl == $this->ps)
                 {
@@ -301,7 +302,7 @@ class Data extends UsrData
     }
 
     //  chapter wise lines parser
-    private static function txt2lines(string $txt)
+    private static function txt2items(string $txt)
     {
         $lines = fnc\expl($txt);
         $lSet = false;

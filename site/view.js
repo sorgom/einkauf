@@ -285,7 +285,7 @@ class Confirm
         // darken layer
         new Div().class('conf_bg').into(dc).click(()=>{_this.hide(); });
         // vertical layer
-        const d1 = new Div().class('conf_fg grow_up').into(dc).click(()=>{_this.hide(); });
+        const d1 = new Div().class('conf_fg middle').into(dc).click(()=>{_this.hide(); });
         // horizontal center
         const d2 = new Div().class('center').into(d1);
         // image button
@@ -313,10 +313,10 @@ class Menu extends View
         const _this = this;
         let done = [];
         let post = [];
-        const dl = new Div().class('listing').body();
+        const dl = new Div().class('middle').body();
         for (const [cnr, ttl, cl] of entries)
         {
-            const a = new TxtLink(ttl).class('p').add(cl).click(()=>{ _this.view(cnr); })
+            const a = new TxtLink(ttl).class('m').add(cl).click(()=>{ _this.view(cnr); })
             if      (cl == 'y') post.push(a);
             else if (cl == 'x') done.push(a);
             else a.into(dl);
@@ -378,7 +378,7 @@ class Item
         this.ctrl = ctrl;
         this.inr = inr;
         const [ttl, cl ] = data;
-        const a = new TxtLink(ttl).class('p item').into(par);
+        const a = new TxtLink(ttl).class('p').into(par);
         this.tgl = new Toggle(a, cl);
         a.click(()=>{
             _this.tgl.click();
@@ -407,9 +407,9 @@ class Items extends View
         const _this = this;
         this.cnr = cnr;
 
-        const dl = new Div().class('listing').body();
+        const dl = new Div().class('middle').body();
 
-        const a = new TxtLink(hl).class('p items top').into(dl).click(()=>{ _this.view(); });
+        const a = new TxtLink(hl).class('m top').into(dl).click(()=>{ _this.view(); });
         this.top = new Toggle(a, cl);
 
         let inr = 0;
@@ -512,7 +512,7 @@ class WelcomeForm extends View
     {
         super('');
         const _this = this;
-        const dgr = new Div().class('grow_up').body();
+        const dgr = new Div().class('middle').body();
         const dcn = new Div().class('container').into(dgr);
         new Div().class('txt spc_bottom').txt(lit.intro.replace('##SRV', lit.srv)).into(dcn);
         const frm = new Form('start.php').into(dcn);
@@ -532,12 +532,12 @@ class WelcomeForm extends View
 
 class StartInfo extends View
 {
-    constructor(uid, data)
+    constructor(uid, link)
     {
         super(uid);
         const _this = this;
-        const [ok, addr, link] = data;
-        const dgr = new Div().class('grow_up').body();
+        // const [ok, addr, link] = data;
+        const dgr = new Div().class('middle').body();
         const dcn = new Div().class('container').into(dgr);
         new Div().class('txt spc_bottom').txt(lit.yourLink).into(dcn);
         new Link().class('keep').txt(link).into(dcn).click(()=>{ _this.view(); });
@@ -550,7 +550,7 @@ class LoginForm extends View
    constructor(uid, _)
     {
         super(uid);
-        const dgr = new Div().class('grow_up').body();
+        const dgr = new Div().class('middle').body();
         const dcn = new Div().class('container').into(dgr);
         const frm = new Form('login.php').into(dcn);
         new Label().for('pwd').txt('Passwort').into(frm);
@@ -570,13 +570,13 @@ class Imprint extends View
     {
         super(uid);
         const [txt, branch, date] = data;
-        const dg = new Div().class('grow_up').body();
+        const dg = new Div().class('middle').body();
         new Div().class('imprint').txt(txt).into(dg);
         const dc = new Div().class('imprint').into(dg);
-        new P().into(dc).txt(date);
-        new P().into(dc).txt('branch: ' + branch);
         const link = 'https://github.com/sorgom/todo/tree/' + branch + '/site';
-        new Link().class('keep').href(link).txt(link).into(dc);
+        new Link().class('keep').href(link).txt('view on github').into(dc);
+        new P().into(dc).txt('branch: ' + branch);
+        new P().into(dc).txt('commit: ' + date);
         this.mnu().body();
         this.mnuLink('back',()=>{ window.history.back(); });
     }
@@ -587,7 +587,7 @@ class Explain extends View
     constructor(uid, txt)
     {
         super(uid);
-        const dg = new Div().class('grow_up').body();
+        const dg = new Div().class('middle').body();
         new Div().class('imprint').txt(txt).into(dg);
         this.mnu().body();
         this.mnuLink('back',()=>{ window.history.back(); });

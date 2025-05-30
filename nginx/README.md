@@ -11,9 +11,11 @@ containing
     - php8ts.dll or php8.dll
     - ext/php_openssl.dll
 
-### php.ini
+### adapt php.ini
 - enable openssl:
 ``extension=./ext/php_openssl.dll``
+- set session save path, e.g:
+``session.save_path = "N;C:/PHP_SESSIONS"``
 
 ## start, state, stop
 than in this ngnix folder

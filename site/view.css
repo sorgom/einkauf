@@ -19,6 +19,10 @@
     --bg-button: #EEE;
     --bg-submit: #04AA6D;
 
+    --fs-main: 20pt;
+    --fs-medium: 16pt;
+    --fs-small: 12pt;
+    --lh-input: 24pt;
 }
 html {
     /* fixes chrome on android text size */
@@ -26,14 +30,7 @@ html {
     -moz-text-size-adjust: none;
     -webkit-text-size-adjust: none;
 }
-.bottom {
-    width: 100%;
-}
 
-/* for grayscale testing */
-/* body {
-    filter: grayscale(100%);
-} */
 
 @media (prefers-color-scheme: dark) {
     html { filter: invert(100%); }
@@ -58,14 +55,15 @@ html {
 }
 
 body {
-    font-size: 16pt;
+    font-size: var(--fs-main);
     background-color: var(--bg);
     padding-bottom: 2.1em;
+    /* for grayscale testing */
+    /* filter: grayscale(100%); */
 }
 
 @media (orientation: landscape) {
     body, .bottom, .center  {
-        /* width: 70%; */
         margin-left: 15%;
         max-width: 30em;
     }
@@ -90,16 +88,16 @@ a > p {
     overflow-x: clip;
 }
 
-a.p, a.a1 {
+a.p, a.m {
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-height: var(--minh);
     padding: 0.05em var(--pd-a) 0.05em var(--pd-a);
-}
-a.p {
-    background-color: var(--bg-button);
     margin-bottom: 0.2em;
+}
+a.m {
+    background-color: var(--bg-button);
 }
 
 .x > p {
@@ -111,11 +109,6 @@ a.p {
     text-decoration: underline;
     color: var(--tc-out);
     opacity: 0.6;
-}
-
-a.item {
-    background-color: transparent;
-    margin-bottom: 0.5em;
 }
 
 .top {
@@ -133,8 +126,8 @@ a.item {
     left: 0;
     bottom: 0;
     z-index: 1;
+    width: 100%;
 }
-
 h2 {
     padding-left: var(--pd-hd);
     font-size: 100%;
@@ -148,7 +141,7 @@ hr {
     margin: 0 1em 0.5em 1em;
 }
 
-div.listing, div.grow_up {
+div.middle {
     display: flex;
     flex-direction: column;
     justify-content: end;
@@ -203,8 +196,8 @@ a.i {
 textarea.txt {
     width: 100%;
     font-family: serif;
-    font-size: 16pt;
-    line-height: 24pt;
+    font-size: var(--fs-main);
+    line-height: var(--lh-input);
     padding: 1em 0.5em 2em 1em;
     resize: none;
     animation: 1s blink step-end infinite;
@@ -243,47 +236,24 @@ div.conf_fg a {
     border-radius: 0.5em;
 }
 
-.itxt {
-    margin: 0 10% 0 10%;
-}
-.itxt * {
-    font-size: inherit;
-}
-
 a.keep {
     color: var(--tc-link);
 }
-div.ico {
-    padding: 0 0 1em 1.4em;
-    background-position: top left;
-    background-repeat: no-repeat;
-    background-image: url('img/checked.svg');
-    background-size: 1em;
-}
-.ico.ok {
-    background-image: url('img/ico_ok.svg');
-}
-.ico.nok {
-    background-image: url('img/ico_nok.svg');
-}
-.ico.go {
-    background-image: url('img/ico_go.svg');
-}
 
 .container {
-    padding: 20px;
+    padding: 1em;
     max-width: 20em;
 }
 
 label {
-    font-size: 75%;
+    font-size: var(--fs-small);
     padding-left: 0.5em;
 }
 
 input {
     display: block;
     width: 100%;
-    font-size: inherit;
+    font-size: var(--fs-medium);
     padding: 0.1em;
     padding-left: 0.5em;
     margin-bottom: 0.5em;
@@ -291,6 +261,7 @@ input {
 }
 
 input[type=submit] {
+    font-size: var(--fs-medium);
     margin-top: 1em;
     background-color: var(--bg-submit);
     color: white;
@@ -298,27 +269,28 @@ input[type=submit] {
 
 div.imprint {
     padding: 1em;
-    font-size: 12pt;
+    font-size: var(--fs-small);
     white-space: pre-wrap;
 }
 
 .txt {
-    font-size: 12pt;
+    font-size: var(--fs-small);
     white-space: pre-wrap;
 }
 
 .spc_top {
-    margin-top: 2em;
+    margin-top: 1em;
 }
 .spc_bottom {
-    margin-bottom: 2em;
+    margin-bottom: 1em;
 }
 
 button {
     display: block;
+    font-size: var(--fs-small);
     width: 100%;
-    margin-bottom: 2em;
     padding: 0.5em;
     border: none;
+    background-color: var(--bg-button);
     border-radius: 5px;
 }

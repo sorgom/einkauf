@@ -1,13 +1,13 @@
 # CLOC
-2025-05-29
+2025-05-30
 
 ## site
 Language|files|blank|comment|code
 :-------|-------:|-------:|-------:|-------:
-PHP|19|104|104|816
-JavaScript|2|45|7|591
-CSS|1|37|8|279
-SUM:|22|186|119|1686
+PHP|19|105|105|831
+JavaScript|2|43|8|581
+CSS|1|34|5|257
+SUM:|22|182|118|1669
 
 ## img
 Language|files|blank|comment|code
