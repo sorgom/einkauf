@@ -37,18 +37,14 @@ class Register
         if (isset($this->uids[$uid]))
         {
             $ret = true;
-            $val = $this->uids[$uid];
-            if (gettype($val) == 'string') $hash = $val;
+            $hash = $this->uids[$uid];
         }
         return $ret;
     }
 
-    public function add(string $uid, string $pwd='')
+    public function add(string $uid, string $pwd)
     {
-        $val = 1;
-        if ($pwd) $val = password_hash($pwd, PASSWORD_BCRYPT);
-        $this->uids[$uid] = $val;
-        // trace(['add', $uid, $val]);
+        $this->uids[$uid] = password_hash($pwd, PASSWORD_BCRYPT);
     }
 
     public function remove(string &$uid)
@@ -63,7 +59,7 @@ class Usr
     private string $uid = '';
     private array $params = [];
     private static string $sep = '-';
-    private mixed $hash = NULL;
+    private string $hash = '';
     private string $key = '';
     private bool $valid = false;
 
@@ -71,11 +67,6 @@ class Usr
     {
         $this->uid = $uid;
         $this->valid = reg()->retrieve($this->uid, $this->hash);
-    }
-
-    public function isEncrypted()
-    {
-        return !is_null($this->hash);
     }
 
     public function isValid() : bool
@@ -96,22 +87,19 @@ class Usr
     public function check()
     {
         if (!$this->valid) self::welcome();
-        if ($this->isEncrypted())
-        {
-            session_start();
-            if (!(
-                isset($_SESSION['uid']) &&
-                isset($_SESSION['key']) &&
-                $_SESSION['uid'] == $this->uid
-            )) $this->login();
-            $this->key = $_SESSION['key'];
-        }
+        session_start();
+        if (!(
+            isset($_SESSION['uid']) &&
+            isset($_SESSION['key']) &&
+            $_SESSION['uid'] == $this->uid
+        )) $this->login();
+        $this->key = $_SESSION['key'];
     }
 
     public function ok()
     {
         $ok = $this->valid;
-        if ($ok && $this->isEncrypted())
+        if ($ok)
         {
             session_start();
             $ok = (
@@ -124,9 +112,7 @@ class Usr
 
     public function checkPwd(string $pwd)
     {
-        if (!(is_null($this->hash)
-            || hash_equals($this->hash, crypt($pwd, $this->hash))
-        )) $this->login();
+        if (!hash_equals($this->hash, crypt($pwd, $this->hash))) $this->login();
     }
 
     public static function welcome()

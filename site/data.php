@@ -127,6 +127,7 @@ class Data extends UsrData
     public function __construct(bool $load=false)
     {
         parent::__construct('data');
+        require_once('crypter.php');
         if ($load) $this->load();
     }
 
@@ -136,12 +137,7 @@ class Data extends UsrData
         //  if data read
         if ($this->_load($data))
         {
-            //  apply decoding if user has encryption
-            if (usr()->isEncrypted())
-            {
-                require_once('crypter.php');
-                crypter()->decode($data, usr()->key(), $data);
-            }
+            crypter()->decode($data, usr()->key(), $data);
             [$this->heads, $this->items, $this->notes] = json_decode($data, true);
         }
         //  otherwise start with template
@@ -153,18 +149,13 @@ class Data extends UsrData
     public function save()
     {
         $data = json_encode([$this->heads, $this->items, $this->notes]);
-        //  apply encoding if user has encryption
-        if (usr()->isEncrypted())
-        {
-            require_once('crypter.php');
-            crypter()->encode($data, usr()->key(), $data);
-        }
+        crypter()->encode($data, usr()->key(), $data);
         $this->_save($data);
     }
 
     //  user data for main menu (list of chapters)
     //  lists all non empty chapters
-    function menuData(&$data)
+    function menuData(mixed &$entries)
     {
         $entries = [];
         foreach($this->items as $cnr => $i)
@@ -174,8 +165,6 @@ class Data extends UsrData
                 $entries[] = [ $cnr, $this->heads[$cnr], states()->cl($cnr) ];
             }
         }
-        //  also provides user encrypted information for logout button
-        $data = [usr()->isEncrypted(), $entries];
     }
 
     //  user items data of a chapter
@@ -206,7 +195,7 @@ class Data extends UsrData
         $res = [$this->notes, ''];
         foreach ($this->heads as $cnr => $head)
         {
-            if ($head == '?' && empty($this->items[$cnr])) continue;
+            if ($head == $this->ps && empty($this->items[$cnr])) continue;
             $res[] = "@ $head";
             $res[] = fnc\impl($this->items[$cnr]);
             $res[] = '';

@@ -306,10 +306,9 @@ class Confirm
 
 class Menu extends View
 {
-    constructor(uid, data)
+    constructor(uid, entries)
     {
         super(uid);
-        const [encr, entries] = data;
         const _this = this;
         let done = [];
         let post = [];
@@ -326,7 +325,7 @@ class Menu extends View
         this.mnu().into(dl);
         this.imprint();
         this.mnuLink('edit',()=>{ _this.view('e'); });
-        if (encr) this.confirmLink('logout', ()=>{ _this.go('logout.php'); });
+        this.confirmLink('logout', ()=>{ _this.go('logout.php'); });
     }
 }
 
