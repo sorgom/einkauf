@@ -16,13 +16,13 @@ switch (true)
         break;
     //  NULL or non integer
     case is_null($x) || !ctype_digit($x):
-        data()->menuData($data);
-        $class = 'Menu';
+        data()->overview($data);
+        $class = 'Overview';
         break;
-    //  otherwise: chapter number, display items of chapter
+    //  otherwise: todo list number, display items of todo list
     default:
-        data()->ItemData($data, $x);
-        $class = 'Items';
+        data()->todoList($data, $x);
+        $class = 'TodoList';
 }
 jsView($class, usr()->uid(), $data);
 ?>

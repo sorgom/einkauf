@@ -33,7 +33,7 @@ class Register
     public function retrieve(string $uid, mixed &$hash)
     {
         $ret = false;
-        $hash = NULL;
+        $hash = '';
         if (isset($this->uids[$uid]))
         {
             $ret = true;

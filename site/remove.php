@@ -1,8 +1,8 @@
 <?php
-//  remove a user chapter
+//  remove a user todo list
 require_once('data.php');
 usr()->check();
-$cnr = usr()->param();
-if (!is_null($cnr)) data()->remove($cnr);
+$lnr = usr()->param();
+if (!is_null($lnr)) data()->remove($lnr);
 usr()->view();
 ?>

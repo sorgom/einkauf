@@ -304,7 +304,7 @@ class Confirm
     }
 }
 
-class Menu extends View
+class Overview extends View
 {
     constructor(uid, entries)
     {
@@ -313,9 +313,9 @@ class Menu extends View
         let done = [];
         let post = [];
         const dl = new Div().class('middle').body();
-        for (const [cnr, ttl, cl] of entries)
+        for (const [lnr, ttl, cl] of entries)
         {
-            const a = new TxtLink(ttl).class('m').add(cl).click(()=>{ _this.view(cnr); })
+            const a = new TxtLink(ttl).class('m').add(cl).click(()=>{ _this.view(lnr); })
             if      (cl == 'y') post.push(a);
             else if (cl == 'x') done.push(a);
             else a.into(dl);
@@ -394,17 +394,17 @@ class Item
     }
 }
 
-class Items extends View
+class TodoList extends View
 {
-    cnr;
+    lnr;
     top;
     items = [];
     constructor(uid, data)
     {
         super(uid);
-        const [ cnr, hl, cl, entries ] = data;
+        const [ lnr, hl, cl, entries ] = data;
         const _this = this;
-        this.cnr = cnr;
+        this.lnr = lnr;
 
         const dl = new Div().class('middle').body();
 
@@ -442,17 +442,17 @@ class Items extends View
             this.top.set(cln);
         }
         else this.top.clear();
-        this.sendX('state', [this.cnr, inr, cln, cl]);
+        this.sendX('state', [this.lnr, inr, cln, cl]);
     }
     remove()
     {
-        this.go('remove.php', this.cnr);
+        this.go('remove.php', this.lnr);
     }
     reset()
     {
         this.top.clear();
         for (const i of this.items) i.clear();
-        this.sendX('reset', this.cnr);
+        this.sendX('reset', this.lnr);
     }
 }
 

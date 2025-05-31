@@ -9,18 +9,18 @@ if (usr()->ok())
     require_once('data.php');
     switch ($task)
     {
-        //  reset of chapter call
+        //  reset of todo list call
         case 'reset':
-            $cnr = $data;
-            states()->reset($cnr);
+            $lnr = $data;
+            states()->reset($lnr);
             states()->save();
             $res = 'OK';
             break;
         //  item click state change call
         case 'state':
-            [ $cnr, $inr, $cc, $ci ] = $data;
-            states()->set($cc, $cnr);
-            states()->set($ci, $cnr, $inr);
+            [ $lnr, $inr, $cc, $ci ] = $data;
+            states()->set($cc, $lnr);
+            states()->set($ci, $lnr, $inr);
             states()->save();
             $res = 'OK';
             break;
