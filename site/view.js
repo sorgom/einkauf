@@ -77,15 +77,6 @@ class Elem
     }
 }
 
-class T_Elem extends Elem
-{
-    constructor(what, txt)
-    {
-        super(what);
-        this.elem.innerText = txt;
-        return this;
-    }
-}
 
 class Link extends Elem {
     constructor() { return super('a'); }
@@ -98,7 +89,11 @@ class Link extends Elem {
 class P         extends Elem { constructor() { return super('p'); } }
 class Div       extends Elem { constructor() { return super('div'); } }
 class HR        extends Elem { constructor() { return super('hr'); } }
+class H1        extends Elem { constructor() { return super('h1'); } }
 class H2        extends Elem { constructor() { return super('h2'); } }
+
+
+
 class Button    extends Elem
 {
     constructor() {
@@ -204,6 +199,16 @@ class Label extends Elem
     {
         this.elem.for = f;
         return this;
+    }
+}
+
+class IntroImg extends Elem
+{
+    constructor(name)
+    {
+        super('img');
+        this.elem.src = 'img/intro_' + name + '.svg';
+        this.elem.alt = name;
     }
 }
 
@@ -581,14 +586,59 @@ class Imprint extends View
     }
 }
 
-class Explain extends View
+// class Explain extends View
+// {
+//     constructor(uid, txt)
+//     {
+//         super(uid);
+//         const dg = new Div().class('middle').body();
+//         new Div().class('imprint').txt(txt).into(dg);
+//         this.mnu().body();
+//         this.mnuLink('back',()=>{ window.history.back(); });
+//     }
+// }
+
+class Intro extends View
 {
-    constructor(uid, txt)
+    constructor(uid)
     {
         super(uid);
-        const dg = new Div().class('middle').body();
-        new Div().class('imprint').txt(txt).into(dg);
-        this.mnu().body();
-        this.mnuLink('back',()=>{ window.history.back(); });
+        const dcn = new Div().class('intro').body();
+        new H1().txt(intro.heading_overview).into(dcn);
+        new P().txt(intro.overview_start).into(dcn);
+        new IntroImg('overview_start').into(dcn);
+        new H1().txt(intro.heading_edit).into(dcn);
+        new P().txt(intro.edit_first_write).into(dcn);
+        new IntroImg('edit_first_write').into(dcn);
+        new P().txt(intro.edit_first_write_laptop).into(dcn);
+        new IntroImg('edit_first_write_laptop').into(dcn);
+        new H1().txt(intro.heading_overview).into(dcn);
+        new P().txt(intro.overview_written).into(dcn);
+        new IntroImg('overview_written').into(dcn);
+        new H1().txt(intro.heading_list).into(dcn);
+        new P().txt(intro.todo_list_aldi).into(dcn);
+        new IntroImg('todo_list_aldi').into(dcn);
+        new IntroImg('todo_list_aldi_clicked').into(dcn);
+        new P().txt(intro.todo_list_aldi_clicked).into(dcn);
+        new H1().txt(intro.heading_overview).into(dcn);
+        new IntroImg('overview_after_aldi_go_rewe').into(dcn);
+        new P().txt(intro.overview_after_aldi_go_rewe).into(dcn);
+        new H1().txt(intro.heading_list).into(dcn);
+        new P().txt(intro.todo_list_rewe).into(dcn);
+        new IntroImg('todo_list_rewe').into(dcn);
+        new IntroImg('todo_list_rewe_clicked').into(dcn);
+        new P().txt(intro.todo_list_rewe_clicked).into(dcn);
+        new H1().txt(intro.heading_overview).into(dcn);
+        new IntroImg('overview_after_rewe_go_rewe').into(dcn);
+        new P().txt(intro.overview_after_rewe_go_rewe).into(dcn);
+        new H1().txt(intro.heading_list).into(dcn);
+        new IntroImg('todo_list_rewe_delete').into(dcn);
+        new P().txt(intro.todo_list_rewe_delete).into(dcn);
+        new H1().txt(intro.heading_overview).into(dcn);
+        new IntroImg('overview_with_not_found').into(dcn);
+        new P().txt(intro.overview_with_not_found).into(dcn);
+        new H1().txt(intro.heading_edit).into(dcn);
+        new IntroImg('edit_not_found').into(dcn);
+        new P().txt(intro.edit_not_found).into(dcn);
     }
 }

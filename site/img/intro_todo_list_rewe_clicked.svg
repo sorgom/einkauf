@@ -36,15 +36,18 @@
 </g>
 </g>
 <g transform="matrix(1,0,0,1,-16.8678,547.771)">
-<text x="3306.44px" y="801.643px" style="font-family:'ArialNarrow', 'Arial', sans-serif;font-stretch:condensed;font-size:83.333px;fill:rgb(77,77,77);">
+<text x="3306.44px" y="801.643px" style="font-family:'ArialNarrow', 'Arial', sans-serif;font-stretch:condensed;font-size:83.333px;fill:rgb(89,89,89);">
 Gurke -,79</text>
-<rect x="3306.44" y="780.077" width="322.876" height="4.15" style="fill:rgb(77,77,77);"/>
-<text x="3306.44px" y="905.809px" style="font-family:'ArialNarrow', 'Arial', sans-serif;font-stretch:condensed;font-size:83.333px;fill:rgb(77,77,77);">
-Eier</text>
-<rect x="3306.44" y="914.639" width="121.501" height="6.104" style="fill:rgb(77,77,77);"/>
-<text x="3306.44px" y="1009.98px" style="font-family:'ArialNarrow', 'Arial', sans-serif;font-stretch:condensed;font-size:83.333px;fill:rgb(77,77,77);">
+<rect x="3306.44" y="780.077" width="322.876" height="4.15" style="fill:rgb(89,89,89);"/>
+<text x="3306.44px" y="918.309px" style="font-family:'ArialNarrow', 'Arial', sans-serif;font-stretch:condensed;font-size:83.333px;fill:rgb(89,89,89);">
+Eier aus</text>
+<rect x="3306.44" y="927.139" width="250.692" height="6.104" style="fill:rgb(89,89,89);"/>
+<text x="3306.44px" y="984.976px" style="font-family:'ArialNarrow', 'Arial', sans-serif;font-stretch:condensed;font-size:83.333px;fill:rgb(89,89,89);">
+Freilandhaltung</text>
+<rect x="3306.44" y="993.806" width="471.069" height="6.104" style="fill:rgb(89,89,89);"/>
+<text x="3306.44px" y="1097.48px" style="font-family:'ArialNarrow', 'Arial', sans-serif;font-stretch:condensed;font-size:83.333px;fill:rgb(89,89,89);">
 Kekse</text>
-<rect x="3306.44" y="988.41" width="189.941" height="4.15" style="fill:rgb(77,77,77);"/>
+<rect x="3306.44" y="1075.91" width="189.941" height="4.15" style="fill:rgb(89,89,89);"/>
 </g>
 <g transform="matrix(0.0665293,-0.0214613,0.0214613,0.0665293,3170.23,2196.15)">
 <g transform="matrix(-0.604203,-0.79683,0.61706,-0.467891,8024.05,2448.96)">
@@ -87,10 +90,10 @@ REWE</text>
 <path d="M708.48,2649.1L1319.48,2449.4" style="fill:none;stroke:rgb(35,31,32);stroke-width:4.17px;"/>
 </g>
 <g transform="matrix(0.999495,-0.0317846,0.0317846,0.999495,2879.13,-1601.8)">
-<path d="M691.649,3178.34L1287.56,3453.21" style="fill:none;stroke:rgb(35,31,32);stroke-width:4.17px;"/>
+<path d="M660.6,3230.13L1287.56,3453.21" style="fill:none;stroke:rgb(35,31,32);stroke-width:4.17px;"/>
 </g>
-<g transform="matrix(1,0,0,1,3464.34,-958.315)">
-<path d="M595.363,2525.02L207.112,2404.12" style="fill:none;stroke:rgb(35,31,32);stroke-width:4.17px;"/>
+<g transform="matrix(0.679227,-0.0998817,-0.0998817,0.968899,3907.52,-820.318)">
+<path d="M595.363,2525.02L222.98,2427.53" style="fill:none;stroke:rgb(35,31,32);stroke-width:5.64px;"/>
 </g>
 <g transform="matrix(1,0,0,1,3736.17,-419.016)">
 <circle cx="539.629" cy="1725.92" r="107.14" style="fill:rgb(204,204,204);"/>

@@ -294,3 +294,20 @@ button {
     background-color: var(--bg-button);
     border-radius: 5px;
 }
+
+div.intro {
+    padding: 1em;
+    font-size: var(--fs-medium);
+    white-space: pre-wrap;
+}
+div.intro > img, div.intro > p {
+    max-width: 20em;
+    height: auto;
+    margin-bottom: 1em;
+}
+
+div.intro > h1 {
+    font-size: 150%;
+    font-style: italic;
+    color: var(--tc-heading);
+}
