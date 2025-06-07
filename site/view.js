@@ -586,18 +586,6 @@ class Imprint extends View
     }
 }
 
-// class Explain extends View
-// {
-//     constructor(uid, txt)
-//     {
-//         super(uid);
-//         const dg = new Div().class('middle').body();
-//         new Div().class('imprint').txt(txt).into(dg);
-//         this.mnu().body();
-//         this.mnuLink('back',()=>{ window.history.back(); });
-//     }
-// }
-
 class Intro extends View
 {
     constructor(uid)
@@ -640,5 +628,7 @@ class Intro extends View
         new H1().txt(intro.heading_edit).into(dcn);
         new IntroImg('edit_not_found').into(dcn);
         new P().txt(intro.edit_not_found).into(dcn);
-    }
+        this.mnu().body();
+        this.mnuLink('back',()=>{ window.history.back(); });
+  }
 }
