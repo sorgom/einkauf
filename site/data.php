@@ -117,9 +117,12 @@ class Data extends UsrData
             crypter()->decode($data, usr()->key(), $data);
             [$this->heads, $this->items, $this->notes] = json_decode($data, true);
         }
-        //  otherwise start with template
-        else if (fnc\load($txt, 'template.txt'))
-            $this->set($txt);
+        //  otherwise start with nothing
+        else
+            [$this->heads, $this->items, $this->notes] = [[], [], ''];
+        // //  otherwise start with template
+        // else if (fnc\load($txt, 'template.txt'))
+        //     $this->set($txt);
     }
 
     //  save user data

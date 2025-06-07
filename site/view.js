@@ -529,6 +529,7 @@ class WelcomeForm extends View
         new Input('email', 'em').into(frm);
         new Input('submit', '', lit.register).into(frm);
         this.mnu().body();
+        this.mnuLink('look', ()=>{ _this.go('intro.php'); });
         this.imprint();
         this.toggle = new PwdToggle(tgl, pwd1, pwd2);
     }
@@ -592,6 +593,8 @@ class Intro extends View
     {
         super(uid);
         const dcn = new Div().class('intro').body();
+        new H1().txt(intro.heading_about).into(dcn);
+        new P().txt(intro.what_about).into(dcn);
         new H1().txt(intro.heading_overview).into(dcn);
         new P().txt(intro.overview_start).into(dcn);
         new IntroImg('overview_start').into(dcn);

@@ -11,6 +11,10 @@ class Literals
     intro =
 `Willkommen bei ##SRV.
 
+Klicke unten links auf das Blick-Symbol, um eine Idee von den Möglichkeiten zu bekommen.
+
+Wenn dich das überzeugt:
+
 Lege dein Passwort fest.
 Damit werden deine Daten verschlüsselt.
 Je komplexer, desto besser.
@@ -41,13 +45,16 @@ class IntroLiterals
 heading_overview = 'Übersicht';
 heading_edit = 'Text-Eingabe';
 heading_list = 'Todo-Liste';
-heading_about = `Worum geht's?`;
+heading_about = `Gehen wir einkaufen`;
 what_about =
-``;
+`Im folgenden siehst du, wie du
+- Einkaufslisten auf dem Laptop oder Smartphone schreibst
+- beim Einkauf auf dem Smartphone deine Listen abhakst
+- und den Überblick hast, welche Listen abgehakt sind
+- und wie.`;
+
 overview_start =
-`Wie einfach ist das?
-Nutzen wir Todo-Listen zum Einkaufen!
-Die Übersicht ist anfangs noch leer.
+`Die Übersicht ist anfangs noch leer.
 (1) Klicke auf das Schreiben-Symbol. Damit geht's zur Text-Eingabe ..`;
 
 edit_first_write =
