@@ -161,6 +161,10 @@ class TextArea extends Elem
         this.elem.value = v;
         return this;
     }
+    value()
+    {
+        return this.elem.value;
+    }
 }
 class Input extends Elem
 {
@@ -260,6 +264,16 @@ class View
     {
         if (this._mnu === undefined) this._mnu = new Div().class('mn bottom');
         return this._mnu;
+    }
+
+    confirm(icl, func, needed = true)
+    {
+        if (needed)
+        {
+            if (this._cnf === undefined) this._cnf = new Confirm();
+            this._cnf.show(icl, func);
+        }
+        else func();
     }
 
     confirmLink(icl, func)
@@ -413,7 +427,7 @@ class TodoList extends View
 
         const dl = new Div().class('middle').body();
 
-        const a = new TxtLink(hl).class('m top').into(dl).click(()=>{ _this.view(); });
+        const a = new TxtLink(hl).class('m top').into(dl).click(()=>{ _this.postpone(); });
         this.top = new Toggle(a, cl);
 
         let inr = 0;
@@ -430,7 +444,7 @@ class TodoList extends View
         this.mnu().into(dl);
         this.confirmLink('remove',()=>{ _this.remove(); });
         this.confirmLink('reset',()=>{ _this.reset();  });
-        this.mnuLink('home',()=>{ _this.view(); });
+        this.mnuLink('home',()=>{ _this.postpone(); });
     }
 
     note(inr, cl)
@@ -453,6 +467,10 @@ class TodoList extends View
     {
         this.go('remove.php', this.lnr);
     }
+    postpone()
+    {
+        this.go('postpone.php', this.lnr);
+    }
     reset()
     {
         this.top.clear();
@@ -463,21 +481,35 @@ class TodoList extends View
 
 class InputForm extends View
 {
+    oldTxt;
+    txa;
+    frm;
     constructor(uid, txt)
     {
         super(uid);
+        this.oldTxt = txt;
         const _this = this;
         console.log('InputForm 7');
-        const frm = new Form('save.php').body();
+        this.frm = new Form('save.php').body();
 
-        const txa = new TextArea('txt', 50).class('txt').val(txt).into(frm).autofocus().focus();
+        this.txa = new TextArea('txt', 50).class('txt').val(txt).into(this.frm).autofocus().focus();
 
-        new Input('hidden', 'uid', this.uid).into(frm);
+        new Input('hidden', 'uid', this.uid).into(this.frm);
 
         this.mnu().body();
-        this.confirmLink('clear',()=>{ txa.val('').focus(); });
-        this.mnuLink('home',()=>{ _this.view(); });
-        this.mnuLink('save',()=>{ frm.submit(); });
+        this.confirmLink('clear',()=>{ _this.txa.val('').focus(); });
+        this.mnuLink('home',()=>{ _this.home(); });
+        this.mnuLink('save',()=>{ _this.save(); });
+    }
+    home()
+    {
+        this.confirm('home', ()=>{ this.view(); }, this.txa.value() != this.oldTxt);
+    }
+    save()
+    {
+        if (!this.txa.value()) this.confirm('save', ()=>{ this.frm.submit(); });
+        else if (this.txa.value() != this.oldTxt) this.frm.submit();
+        else this.view();
     }
 }
 
@@ -633,5 +665,5 @@ class Intro extends View
         new P().txt(intro.edit_not_found).into(dcn);
         this.mnu().body();
         this.mnuLink('back',()=>{ window.history.back(); });
-  }
+    }
 }
