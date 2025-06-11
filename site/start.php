@@ -36,11 +36,10 @@
 
     $srv = $_SERVER['SERVER_NAME'];
     $req = $_SERVER['HTTP_HOST'];
-    $prt = $_SERVER['REQUEST_SCHEME'];
+    $prt = fnc\protocol();
 
     //  the link
     $link = "$prt://$req?$uid";
-    $ok = false;
 
     //  if email provided: try send
     if ($mail)
@@ -55,7 +54,7 @@
         function ignore_errors(... $params) {}
         set_error_handler('ignore_errors');
 
-        $ok = @mail($mail, $subject, $link, $header);
+        @mail($mail, $subject, $link, $header);
     }
     //  start view
     // $data = [$ok, $mail, $link];
