@@ -2,6 +2,7 @@
 //  user data
 require_once('usr.php');
 require_once('fnc.php');
+require_once('tracer.php');
 
 //  common user data file handling class
 abstract class UsrData
@@ -29,7 +30,7 @@ abstract class UsrData
     }
 }
 
-//  user item and chapter states tracker class
+//  user item and todo list states tracker class
 class States extends UsrData
 {
     private array $states = [];
@@ -60,37 +61,14 @@ class States extends UsrData
         return !(empty($this->states));
     }
 
-    //  items states of a chapter
-    public function items(int $cnr)
-    {
-        $rx = "/^$cnr(?:\.\d+)?$/";
-        $res = ['X' => 1];
-        foreach($this->states as $k => $v)
-        {
-            if (preg_match($rx, $k)) $res[$k] = $v;
-        }
-        return $res;
-    }
-    //  chapter states
-    public function chapters()
-    {
-        $res = [];
-        foreach($this->states as $k => $v)
-        {
-            if (preg_match('/^\d+$/', $k)) $res[$k] = $v;
-        }
-        return $res;
-    }
-
-    //  retrieve current state class of chapter or item
+    //  retrieve current state class of todo list or item
     public function cl(... $ids)
     {
         $id = implode('.', $ids);
         return isset($this->states[$id]) ? $this->states[$id] : '';
     }
 
-
-    //  set current state class of chapter or item
+    //  set current state class of todo list or item
     public function set($val, ...$ids)
     {
         $id = implode('.', $ids);
@@ -104,11 +82,11 @@ class States extends UsrData
         }
     }
 
-    //  reset a complete chapter
-    public function reset(int $cnr)
+    //  reset a complete todo list
+    public function reset(int $lnr)
     {
-        unset($this->states[$cnr]);
-        $rx = "/^$cnr\.\d+$/";
+        unset($this->states[$lnr]);
+        $rx = "/^$lnr\.\d+$/";
         foreach (array_keys($this->states) as $k)
         {
             if (preg_match($rx, $k)) unset($this->states[$k]);
@@ -127,6 +105,7 @@ class Data extends UsrData
     public function __construct(bool $load=false)
     {
         parent::__construct('data');
+        require_once('crypter.php');
         if ($load) $this->load();
     }
 
@@ -136,78 +115,71 @@ class Data extends UsrData
         //  if data read
         if ($this->_load($data))
         {
-            //  apply decoding if user has encryption
-            if (usr()->isEncrypted())
-            {
-                require_once('crypter.php');
-                crypter()->decode($data, usr()->key(), $data);
-            }
+            crypter()->decode($data, usr()->key(), $data);
             [$this->heads, $this->items, $this->notes] = json_decode($data, true);
         }
-        //  otherwise start with template
-        else if (fnc\load($txt, 'template.txt'))
-            $this->set($txt);
+        //  otherwise start with nothing
+        else
+            [$this->heads, $this->items, $this->notes] = [[], [], ''];
+        // //  otherwise start with template
+        // else if (fnc\load($txt, 'template.txt'))
+        //     $this->set($txt);
     }
 
     //  save user data
     public function save()
     {
         $data = json_encode([$this->heads, $this->items, $this->notes]);
-        //  apply encoding if user has encryption
-        if (usr()->isEncrypted())
-        {
-            require_once('crypter.php');
-            crypter()->encode($data, usr()->key(), $data);
-        }
+        crypter()->encode($data, usr()->key(), $data);
         $this->_save($data);
     }
 
-    //  user data for main menu (list of chapters)
-    //  lists all non empty chapters
-    function menuData(&$data)
+    //  user data overview
+    //  lists all non empty todo lists
+    function overview(mixed &$entries)
     {
         $entries = [];
-        foreach($this->items as $cnr => $i)
+        foreach($this->items as $lnr => $i)
         {
             if (!empty($i))
             {
-                $entries[] = [ $cnr, $this->heads[$cnr], states()->cl($cnr) ];
+                $entries[] = [ $lnr, $this->heads[$lnr], states()->cl($lnr) ];
             }
         }
-        //  also provides user encrypted information for logout button
-        $data = [usr()->isEncrypted(), $entries];
     }
 
-    //  user items data of a chapter
-    function ItemData(&$data, int $cnr)
+    //  user todo list
+    function todoList(&$data, int $lnr)
     {
-        if ($this->has($cnr))
+        if ($this->has($lnr))
         {
             $res = [];
             $inr = 0;
-            foreach ($this->items[$cnr] as $i)
+            foreach ($this->items[$lnr] as $i)
             {
                 if (empty($i)) $e = '';
                 else if ($i[0] == '#') $e = substr($i, 2);
                 else {
-                    $e = [$i, states()->cl($cnr, $inr)];
+                    $e = [$i, states()->cl($lnr, $inr)];
                     ++$inr;
                 }
                 $res[] = $e;
             }
-            $data = [ $cnr, $this->heads[$cnr], states()->cl($cnr), $res];
+            $data = [ $lnr, $this->heads[$lnr], states()->cl($lnr), $res];
         }
-        else $data = [ $cnr, 'NN', '', []];
+        else $data = [ $lnr, 'NN', '', []];
     }
 
     //  retrieve text for edit form
     public function txt(&$data)
     {
         $res = [$this->notes, ''];
-        foreach ($this->heads as $cnr => $head)
+        foreach ($this->heads as $lnr => $head)
         {
+            //  skip "postponed" list if empty
+            if ($head == $this->ps && empty($this->items[$lnr])) continue;
             $res[] = "@ $head";
-            $res[] = fnc\impl($this->items[$cnr]);
+            $res[] = fnc\impl($this->items[$lnr]);
             $res[] = '';
         }
         $data = trim(fnc\impl($res)) . "\n";
@@ -218,9 +190,9 @@ class Data extends UsrData
         return $this->heads;
     }
 
-    public function items(int $cnr)
+    public function items(int $lnr)
     {
-        return $this->has($cnr) ? self::toItems($this->items[$cnr], 'fnc\isi') : [];
+        return $this->has($lnr) ? self::toItems($this->items[$lnr], 'fnc\isi') : [];
     }
 
     public function given()
@@ -237,6 +209,9 @@ class Data extends UsrData
 
         fnc\clean($txt, $text);
 
+        // remove orphaned @s
+        $txt = preg_replace('/^@(?:\n+|$)/m', '', $txt);
+
         $rx = '/^@ *(.+)\n?/m';
 
         if (preg_match_all($rx, $txt, $m))
@@ -245,10 +220,10 @@ class Data extends UsrData
             $ttls = $m[1];
             $data = array_map('trim', preg_split($rx, $txt));
             $this->notes = array_shift($data);
-            foreach ($data as $cnr => $txt)
+            foreach ($data as $lnr => $txt)
             {
-                $item = self::txt2lines($txt);
-                $ttl  = $ttls[$cnr];
+                $item = self::txt2list($txt);
+                $ttl  = $ttls[$lnr];
                 if ($ttl == $this->ps)
                 {
                     $post[] = $item;
@@ -261,6 +236,7 @@ class Data extends UsrData
             }
             if (!empty($post))
                 $this->items[0] = self::toItems(array_unique(array_merge(... $post)));
+                natcasesort($this->items[0]);
         }
         else $this->notes = $txt;
 
@@ -268,37 +244,86 @@ class Data extends UsrData
         $this->save();
     }
 
-    //  remove a chapter
-    //  and transfer postponed items to "@ ?"
-    public function remove(int $cnr)
+    //  remove a todo list
+    //  and transfer postponed items
+    public function remove(int $lnr)
     {
-        if ($this->has($cnr))
+        if ($this->has($lnr))
         {
             $post = [];
             $states = states();
-            $items = $this->items($cnr);
+            $items = $this->items($lnr);
             foreach ($items as $inr => $i)
             {
-                if ($states->cl($cnr, $inr) == 'y') $post[] = $i;
+                if ($states->cl($lnr, $inr) == 'y') $post[] = $i;
             }
-            $this->items[$cnr] = [];
+            $this->items[$lnr] = [];
+            states()->reset($lnr);
             if (!empty($post))
+            {
                 $this->items[0] = array_unique(array_merge($post, $this->items[0]));
-
-            states()->reset($cnr);
-            if ($cnr != 0) states()->reset(0);
+                natcasesort($this->items[0]);
+                states()->reset(0);
+            }
             states()->save();
             $this->save();
         }
     }
 
+    //  transfer postponed items of a todo list
+    public function postpone(int $lnr)
+    {
+        if ($lnr > 0 && $this->has($lnr))
+        {
+            $post = [];
+            $done = [];
+            $states = states();
+            $items0 = array_values($this->items[0]);
+            foreach ($this->items($lnr) as $inr => $i)
+            {
+                $cl = $states->cl($lnr, $inr);
+                if ($cl == 'y') $post[] = $i;
+                else $done[] = $i;
+            }
+            if (!empty($post))
+            {
+                $items0 = array_unique(array_merge($post, $items0));
+                natcasesort($items0);
+            }
+
+            foreach ($done as $i)
+            {
+                $index = array_search($i, $items0);
+                if ($index !== false) unset($items0[$index]);
+            }
+
+            if (array_values($items0) != array_values($this->items[0]))
+            {
+                $map = [];
+                foreach ($this->items(0) as $inr => $i)
+                {
+                    $map[$i] = $states->cl(0, $inr);
+                }
+                $this->items[0] = array_values($items0);
+                $states->reset(0);
+                foreach ($this->items(0) as $inr => $i)
+                {
+                    if (isset($map[$i])) $states->set($map[$i], 0, $inr);
+                }
+                $states->save();
+                $this->save();
+            }
+        }
+    }
+
+    //  filter items only
     private static function toItems($a)
     {
         return array_values(array_filter($a, 'fnc\isi'));
     }
 
-    //  chapter wise lines parser
-    private static function txt2lines(string $txt)
+    //  todo list wise lines parser
+    private static function txt2list(string $txt)
     {
         $lines = fnc\expl($txt);
         $lSet = false;
@@ -327,10 +352,10 @@ class Data extends UsrData
         return $item;
     }
 
-    //  safety handler: chapter within data range
-    private function has(int $cnr)
+    //  safety handler: todo list within data range
+    private function has(int $lnr)
     {
-        return ($cnr >= 0) && (count($this->heads) > $cnr);
+        return ($lnr >= 0) && (count($this->heads) > $lnr);
     }
 
     //  re-assign states to new order
@@ -345,30 +370,30 @@ class Data extends UsrData
             if ($oStates->given() && $oData->given())
             {
                 $map = new States();
-                foreach ($oData->heads() as $cnr => $head)
+                foreach ($oData->heads() as $lnr => $head)
                 {
-                    if ($cnr == 0) continue;
-                    foreach ($oData->items($cnr) as $inr => $line)
+                    if ($lnr == 0) continue;
+                    foreach ($oData->items($lnr) as $inr => $item)
                     {
-                        $map->set($oStates->cl($cnr, $inr), $head, $line);
+                        $map->set($oStates->cl($lnr, $inr), $head, $item);
                     }
                 }
-                foreach ($this->heads as $cnr => $head)
+                foreach ($this->heads as $lnr => $head)
                 {
-                    if ($cnr == 0) continue;
-                    $items = $this->items($cnr);
+                    if ($lnr == 0) continue;
+                    $items = $this->items($lnr);
                     if (!empty($items))
                     {
                         $all = true;
                         $cst = 'x';
-                        foreach ($items as $inr => $line)
+                        foreach ($items as $inr => $item)
                         {
-                            $c = $map->cl($head, $line);
+                            $c = $map->cl($head, $item);
                             if ($all && $c) $cst = $c == 'y' ? 'y' : $cst;
                             else $all = false;
-                            $nStates->set($map->cl($head, $line), $cnr, $inr);
+                            $nStates->set($map->cl($head, $item), $lnr, $inr);
                         }
-                        if ($all) $nStates->set($cst, $cnr);
+                        if ($all) $nStates->set($cst, $lnr);
                     }
                 }
             }

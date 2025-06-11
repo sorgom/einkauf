@@ -1,4 +1,4 @@
-# todo - a simple shopping list / todo list site
+# a simple shopping list / todo list site
 
 ## run your own
 - Copy content of _site_ folder to your web space.
@@ -8,3 +8,6 @@
 
 ## run locally
 - see [nginx folder](nginx/README.md)
+
+## current lines of code
+- see [CLOC information](CLOC.md)

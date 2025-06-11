@@ -15,6 +15,16 @@ class Elem
         this.elem.className = cl;
         return this;
     }
+    id(id)
+    {
+        this.elem.id = id;
+        return this;
+    }
+    title(ttl)
+    {
+        this.elem.title = ttl;
+        return this;
+    }
     into(par)
     {
         par.elem.appendChild(this.elem);
@@ -67,15 +77,6 @@ class Elem
     }
 }
 
-class T_Elem extends Elem
-{
-    constructor(what, txt)
-    {
-        super(what);
-        this.elem.innerText = txt;
-        return this;
-    }
-}
 
 class Link extends Elem {
     constructor() { return super('a'); }
@@ -85,10 +86,21 @@ class Link extends Elem {
         return this;
     }
 }
-class P    extends Elem { constructor() { return super('p'); } }
-class Div  extends Elem { constructor() { return super('div'); } }
-class HR   extends Elem { constructor() { return super('hr'); } }
-class H2   extends Elem { constructor() { return super('h2'); } }
+class P         extends Elem { constructor() { return super('p'); } }
+class Div       extends Elem { constructor() { return super('div'); } }
+class HR        extends Elem { constructor() { return super('hr'); } }
+class H1        extends Elem { constructor() { return super('h1'); } }
+class H2        extends Elem { constructor() { return super('h2'); } }
+
+
+
+class Button    extends Elem
+{
+    constructor() {
+        super('button');
+        this.elem.type = 'button';
+    }
+}
 
 class TxtLink extends Link
 {
@@ -149,6 +161,10 @@ class TextArea extends Elem
         this.elem.value = v;
         return this;
     }
+    value()
+    {
+        return this.elem.value;
+    }
 }
 class Input extends Elem
 {
@@ -156,9 +172,16 @@ class Input extends Elem
     {
         super('input');
         this.elem.type = type;
-        this.elem.name = name;
         this.elem.value = val;
-        this.elem.autocomplete = 'on';
+        if (name)
+        {
+            this.elem.name = name;
+            if (type != 'hidden')
+            {
+                this.elem.autocomplete = 'on';
+                this.elem.id = name;
+            }
+        }
         return this;
     }
     required()
@@ -166,7 +189,33 @@ class Input extends Elem
         this.elem.required = true;
         return this;
     }
+    pattern(ptn)
+    {
+        this.elem.pattern = ptn;
+        return this;
+    }
 }
+
+class Label extends Elem
+{
+    constructor() { super('label'); }
+    for(f)
+    {
+        this.elem.for = f;
+        return this;
+    }
+}
+
+class IntroImg extends Elem
+{
+    constructor(name)
+    {
+        super('img');
+        this.elem.src = 'img/intro_' + name + '.svg';
+        this.elem.alt = name;
+    }
+}
+
 
 class View
 {
@@ -217,6 +266,16 @@ class View
         return this._mnu;
     }
 
+    confirm(icl, func, needed = true)
+    {
+        if (needed)
+        {
+            if (this._cnf === undefined) this._cnf = new Confirm();
+            this._cnf.show(icl, func);
+        }
+        else func();
+    }
+
     confirmLink(icl, func)
     {
         if (this._cnf === undefined) this._cnf = new Confirm();
@@ -245,7 +304,7 @@ class Confirm
         // darken layer
         new Div().class('conf_bg').into(dc).click(()=>{_this.hide(); });
         // vertical layer
-        const d1 = new Div().class('conf_fg grow_up').into(dc).click(()=>{_this.hide(); });
+        const d1 = new Div().class('conf_fg middle').into(dc).click(()=>{_this.hide(); });
         // horizontal center
         const d2 = new Div().class('center').into(d1);
         // image button
@@ -264,19 +323,18 @@ class Confirm
     }
 }
 
-class Menu extends View
+class Overview extends View
 {
-    constructor(uid, data)
+    constructor(uid, entries)
     {
         super(uid);
-        const [encr, entries] = data;
         const _this = this;
         let done = [];
         let post = [];
-        const dl = new Div().class('listing').body();
-        for (const [cnr, ttl, cl] of entries)
+        const dl = new Div().class('middle').body();
+        for (const [lnr, ttl, cl] of entries)
         {
-            const a = new TxtLink(ttl).class('p').add(cl).click(()=>{ _this.view(cnr); })
+            const a = new TxtLink(ttl).class('m').add(cl).click(()=>{ _this.view(lnr); })
             if      (cl == 'y') post.push(a);
             else if (cl == 'x') done.push(a);
             else a.into(dl);
@@ -286,7 +344,7 @@ class Menu extends View
         this.mnu().into(dl);
         this.imprint();
         this.mnuLink('edit',()=>{ _this.view('e'); });
-        if (encr) this.confirmLink('logout', ()=>{ _this.go('logout.php'); });
+        this.confirmLink('logout', ()=>{ _this.go('logout.php'); });
     }
 }
 
@@ -338,7 +396,7 @@ class Item
         this.ctrl = ctrl;
         this.inr = inr;
         const [ttl, cl ] = data;
-        const a = new TxtLink(ttl).class('p item').into(par);
+        const a = new TxtLink(ttl).class('p').into(par);
         this.tgl = new Toggle(a, cl);
         a.click(()=>{
             _this.tgl.click();
@@ -355,21 +413,21 @@ class Item
     }
 }
 
-class Items extends View
+class TodoList extends View
 {
-    cnr;
+    lnr;
     top;
     items = [];
     constructor(uid, data)
     {
         super(uid);
-        const [ cnr, hl, cl, entries ] = data;
+        const [ lnr, hl, cl, entries ] = data;
         const _this = this;
-        this.cnr = cnr;
+        this.lnr = lnr;
 
-        const dl = new Div().class('listing').body();
+        const dl = new Div().class('middle').body();
 
-        const a = new TxtLink(hl).class('p items top').into(dl).click(()=>{ _this.view(); });
+        const a = new TxtLink(hl).class('m top').into(dl).click(()=>{ _this.postpone(); });
         this.top = new Toggle(a, cl);
 
         let inr = 0;
@@ -386,7 +444,7 @@ class Items extends View
         this.mnu().into(dl);
         this.confirmLink('remove',()=>{ _this.remove(); });
         this.confirmLink('reset',()=>{ _this.reset();  });
-        this.mnuLink('home',()=>{ _this.view(); });
+        this.mnuLink('home',()=>{ _this.postpone(); });
     }
 
     note(inr, cl)
@@ -403,88 +461,143 @@ class Items extends View
             this.top.set(cln);
         }
         else this.top.clear();
-        this.sendX('state', [this.cnr, inr, cln, cl]);
+        this.sendX('state', [this.lnr, inr, cln, cl]);
     }
     remove()
     {
-        this.go('remove.php', this.cnr);
+        this.go('remove.php', this.lnr);
+    }
+    postpone()
+    {
+        this.go('postpone.php', this.lnr);
     }
     reset()
     {
         this.top.clear();
         for (const i of this.items) i.clear();
-        this.sendX('reset', this.cnr);
+        this.sendX('reset', this.lnr);
     }
 }
 
 class InputForm extends View
 {
+    oldTxt;
+    txa;
+    frm;
     constructor(uid, txt)
     {
         super(uid);
+        this.oldTxt = txt;
         const _this = this;
         console.log('InputForm 7');
-        const frm = new Form('save.php').body();
+        this.frm = new Form('save.php').body();
 
-        const txa = new TextArea('txt', 50).class('txt').val(txt).into(frm).autofocus();
+        this.txa = new TextArea('txt', 50).class('txt').val(txt).into(this.frm).autofocus().focus();
 
-        new Input('hidden', 'uid', this.uid).into(frm);
+        new Input('hidden', 'uid', this.uid).into(this.frm);
 
         this.mnu().body();
-        this.confirmLink('clear',()=>{ txa.val('').focus(); });
-        this.mnuLink('home',()=>{ _this.view(); });
-        this.mnuLink('save',()=>{ frm.submit(); });
+        this.confirmLink('clear',()=>{ _this.txa.val('').focus(); });
+        this.mnuLink('home',()=>{ _this.home(); });
+        this.mnuLink('save',()=>{ _this.save(); });
+    }
+    home()
+    {
+        this.confirm('home', ()=>{ this.view(); }, this.txa.value() != this.oldTxt);
+    }
+    save()
+    {
+        if (!this.txa.value()) this.confirm('save', ()=>{ this.frm.submit(); });
+        else if (this.txa.value() != this.oldTxt) this.frm.submit();
+        else this.view();
+    }
+}
+
+class PwdToggle
+{
+    button;
+    inputs;
+    constructor(button, ...inputs)
+    {
+        console.log(inputs);
+        const _this = this;
+        this.button = button;
+        this.inputs = inputs;
+        this.button.txt(lit.pwdView).click(()=>{ _this.toggle();});
+    }
+    toggle()
+    {
+        const first = this.inputs[0];
+        const getsTxt = first.elem.type == 'password';
+        const newType = getsTxt ? 'text' : 'password';
+        this.button.txt(getsTxt ? lit.pwdHide : lit.pwdView);
+        for (const i of this.inputs)
+        {
+            i.elem.type = newType;
+            //  supported by some browsers
+            if (getsTxt) i.elem.setAttribute('writingsuggestions', 'false');
+        }
+        first.focus();
     }
 }
 
 class WelcomeForm extends View
 {
+    toggle;
     constructor()
     {
         super('');
-        const frm = new Form('start.php').body();
-        const dgr = new Div().class('grow_up').into(frm);
-        const dcn = new Div().class('center').into(dgr);
-        const din = new Div().into(dcn);
-        const dpw = new Div().class('form pwd').into(din);
-        new Input('password', 'pwd1').class('pwd').autofocus().into(dpw);
-        new Input('password', 'pwd2').class('pwd').into(dpw);
-        const dem = new Div().class('form mail').into(din);
-        new Input('email', 'em').class('mail').into(dem);
-        new Input('submit').class('i enter').into(din);
+        const _this = this;
+        const dgr = new Div().class('middle').body();
+        const dcn = new Div().class('container').into(dgr);
+        new Div().class('txt spc_bottom').txt(lit.intro.replace('##SRV', lit.srv)).into(dcn);
+        const frm = new Form('start.php').into(dcn);
+        new Label().for('pwd1').txt(lit.pwd).into(frm);
+        const pwd1 = new Input('password', 'pwd1').required().autofocus().into(frm);
+        new Label().for('pwd2').txt(lit.pwd2).into(frm);
+        const pwd2 = new Input('password', 'pwd2').required().into(frm);
+        const tgl = new Button().into(frm);
+        new Label().for('em').txt(lit.mail).into(frm);
+        new Input('email', 'em').into(frm);
+        new Input('submit', '', lit.register).into(frm);
         this.mnu().body();
+        this.mnuLink('look', ()=>{ _this.go('intro.php'); });
         this.imprint();
+        this.toggle = new PwdToggle(tgl, pwd1, pwd2);
     }
 }
 
 class StartInfo extends View
 {
-    constructor(uid, data)
+    constructor(uid, link)
     {
         super(uid);
         const _this = this;
-        const [ok, addr, link] = data;
-        const dgr = new Div().class('grow_up itxt').body();
-        if (addr) new Div().class('ico ' + (ok ? 'ok' : 'nok')).txt(addr).into(dgr);
-        const dgo = new Div().class('ico go').into(dgr);
-        new Link().class('keep').txt(link).into(dgo).click(()=>{ _this.view(); });
-        this.mnu().body();
-        this.imprint();
+        // const [ok, addr, link] = data;
+        const dgr = new Div().class('middle').body();
+        const dcn = new Div().class('container').into(dgr);
+        new Div().class('txt spc_bottom').txt(lit.yourLink).into(dcn);
+        new Link().class('keep').txt(link).into(dcn).click(()=>{ _this.view(); });
     }
 }
 
 class LoginForm extends View
 {
-    constructor(uid, _)
+   toggle;
+   constructor(uid, _)
     {
         super(uid);
-        const frm = new Form('login.php').body();
+        const dgr = new Div().class('middle').body();
+        const dcn = new Div().class('container').into(dgr);
+        const frm = new Form('login.php').into(dcn);
+        new Label().for('pwd').txt('Passwort').into(frm);
+        const pwd = new Input('password', 'pwd').autofocus().required().into(frm);
+        const tgl = new Button().into(frm);
+        new Input('submit', '', 'OK').into(frm);
         new Input('hidden', 'uid', this.uid).into(frm);
-        const dgr = new Div().class('grow_up').into(frm);
-        const dcn = new Div().class('center').into(dgr);
-        const dpw = new Div().class('form pwd').into(dcn);
-        new Input('password', 'pwd').required().autofocus().class('frm pwd').into(dpw);
-        new Input('submit').class('i forward').into(dpw);
+        this.mnu().body();
+        this.imprint();
+        this.toggle = new PwdToggle(tgl, pwd);
     }
 }
 
@@ -494,14 +607,62 @@ class Imprint extends View
     {
         super(uid);
         const [txt, branch, date] = data;
-        const dg = new Div().class('grow_up').body();
+        const dg = new Div().class('middle').body();
         new Div().class('imprint').txt(txt).into(dg);
-        const db = new Div().class('imprint').into(dg);
-        new P().into(db).txt('this is open source');
-        new Link().class('keep').href('https://github.com/sorgom/todo/tree/' + branch + '/site').txt('view on github').into(db);
         const dc = new Div().class('imprint').into(dg);
-        new P().into(dc).txt(date);
+        const link = 'https://github.com/sorgom/todo/tree/' + branch + '/site';
+        new Link().class('keep').href(link).txt('view on github').into(dc);
         new P().into(dc).txt('branch: ' + branch);
+        new P().into(dc).txt('commit: ' + date);
+        this.mnu().body();
+        this.mnuLink('back',()=>{ window.history.back(); });
+    }
+}
+
+class Intro extends View
+{
+    constructor(uid)
+    {
+        super(uid);
+        const dcn = new Div().class('intro').body();
+        new H1().txt(intro.heading_about).into(dcn);
+        new P().txt(intro.what_about).into(dcn);
+        new H1().txt(intro.heading_overview).into(dcn);
+        new P().txt(intro.overview_start).into(dcn);
+        new IntroImg('overview_start').into(dcn);
+        new H1().txt(intro.heading_edit).into(dcn);
+        new P().txt(intro.edit_first_write).into(dcn);
+        new IntroImg('edit_first_write').into(dcn);
+        new P().txt(intro.edit_first_write_laptop).into(dcn);
+        new IntroImg('edit_first_write_laptop').into(dcn);
+        new H1().txt(intro.heading_overview).into(dcn);
+        new P().txt(intro.overview_written).into(dcn);
+        new IntroImg('overview_written').into(dcn);
+        new H1().txt(intro.heading_list).into(dcn);
+        new P().txt(intro.todo_list_aldi).into(dcn);
+        new IntroImg('todo_list_aldi').into(dcn);
+        new IntroImg('todo_list_aldi_clicked').into(dcn);
+        new P().txt(intro.todo_list_aldi_clicked).into(dcn);
+        new H1().txt(intro.heading_overview).into(dcn);
+        new IntroImg('overview_after_aldi_go_rewe').into(dcn);
+        new P().txt(intro.overview_after_aldi_go_rewe).into(dcn);
+        new H1().txt(intro.heading_list).into(dcn);
+        new P().txt(intro.todo_list_rewe).into(dcn);
+        new IntroImg('todo_list_rewe').into(dcn);
+        new IntroImg('todo_list_rewe_clicked').into(dcn);
+        new P().txt(intro.todo_list_rewe_clicked).into(dcn);
+        new H1().txt(intro.heading_overview).into(dcn);
+        new IntroImg('overview_after_rewe_go_rewe').into(dcn);
+        new P().txt(intro.overview_after_rewe_go_rewe).into(dcn);
+        new H1().txt(intro.heading_list).into(dcn);
+        new IntroImg('todo_list_rewe_delete').into(dcn);
+        new P().txt(intro.todo_list_rewe_delete).into(dcn);
+        new H1().txt(intro.heading_overview).into(dcn);
+        new IntroImg('overview_with_not_found').into(dcn);
+        new P().txt(intro.overview_with_not_found).into(dcn);
+        new H1().txt(intro.heading_edit).into(dcn);
+        new IntroImg('edit_not_found').into(dcn);
+        new P().txt(intro.edit_not_found).into(dcn);
         this.mnu().body();
         this.mnuLink('back',()=>{ window.history.back(); });
     }

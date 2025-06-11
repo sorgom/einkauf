@@ -17,7 +17,12 @@
     --tc-link: blue;
     --bg: white;
     --bg-button: #EEE;
+    --bg-submit: #04AA6D;
 
+    --fs-main: 20pt;
+    --fs-medium: 16pt;
+    --fs-small: 12pt;
+    --lh-input: 24pt;
 }
 html {
     /* fixes chrome on android text size */
@@ -26,10 +31,6 @@ html {
     -webkit-text-size-adjust: none;
 }
 
-/* for grayscale testing */
-/* body {
-    filter: grayscale(100%);
-} */
 
 @media (prefers-color-scheme: dark) {
     html { filter: invert(100%); }
@@ -41,6 +42,7 @@ html {
         --tc-done: rgb(80, 146, 80);
         --tc-out: coral;
         --bg-button: #DDD;
+        --bg-submit: #FB5592;
     }
 }
 
@@ -49,20 +51,28 @@ html {
     padding: 0;
     font-family: sans-serif;
     color: var(--tc);
+    box-sizing: border-box;
+}
+
+body {
+    font-size: var(--fs-main);
+    background-color: var(--bg);
+    padding-bottom: 2.1em;
+    /* for grayscale testing */
+    /* filter: grayscale(100%); */
 }
 
 @media (orientation: landscape) {
-    body { font-size: 3em; }
+    body, .bottom, .center  {
+        margin-left: 15%;
+        max-width: 30em;
+    }
 }
 
 @media (orientation: portrait) {
-    body { font-size: 4.5em; }
     * { font-stretch: condensed; }
 }
-body {
-    background-color: var(--bg);
-    padding-bottom: 2em;
-}
+
 ::selection {
     color: white;
     background-color: #888;
@@ -78,16 +88,16 @@ a > p {
     overflow-x: clip;
 }
 
-a.p, a.a1 {
+a.p, a.m {
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-height: var(--minh);
     padding: 0.05em var(--pd-a) 0.05em var(--pd-a);
-}
-a.p {
-    background-color: var(--bg-button);
     margin-bottom: 0.2em;
+}
+a.m {
+    background-color: var(--bg-button);
 }
 
 .x > p {
@@ -99,11 +109,6 @@ a.p {
     text-decoration: underline;
     color: var(--tc-out);
     opacity: 0.6;
-}
-
-a.item {
-    background-color: transparent;
-    margin-bottom: 0.5em;
 }
 
 .top {
@@ -120,10 +125,9 @@ a.item {
     position: fixed;
     left: 0;
     bottom: 0;
-    width: 100%;
     z-index: 1;
+    width: 100%;
 }
-
 h2 {
     padding-left: var(--pd-hd);
     font-size: 100%;
@@ -137,11 +141,11 @@ hr {
     margin: 0 1em 0.5em 1em;
 }
 
-div.listing, div.grow_up {
+div.middle {
     display: flex;
     flex-direction: column;
     justify-content: end;
-    min-height: 80vh;
+    min-height: 70vh;
 }
 
 div.center
@@ -158,7 +162,6 @@ div.mn {
     display: flex;
     flex-direction: row;
     justify-content: left;
-    width: 100%;
     z-index: 1;
     background-color: var(--bg);
     border-style: solid none solid none;
@@ -180,23 +183,24 @@ a.i {
 .i.clear    { background-image: url('img/clear.svg'); }
 .i.edit     { background-image: url('img/pen.svg'); }
 .i.enter    { background-image: url('img/enter.svg'); }
+.i.explain  { background-image: url('img/asteric.svg'); }
 .i.forward  { background-image: url('img/forward.svg'); }
 .i.home     { background-image: url('img/list.svg'); }
 .i.imprint  { background-image: url('img/paragraph.svg'); }
 .i.logout   { background-image: url('img/logout.svg'); }
+.i.look     { background-image: url('img/eye.svg'); }
 .i.remove   { background-image: url('img/trash.svg'); }
 .i.reset    { background-image: url('img/reset.svg'); }
 .i.save     { background-image: url('img/save.svg'); }
 .i.view     { background-image: url('img/eye.svg'); }
 
 textarea.txt {
-    width: 95%;
-    height: 90%;
+    width: 100%;
     font-family: serif;
-    font-size: 1em;
-    padding: 1em 0 2em 1em;
+    font-size: var(--fs-main);
+    line-height: var(--lh-input);
+    padding: 1em 0.5em 2em 1em;
     resize: none;
-    overflow-x: clip;
     animation: 1s blink step-end infinite;
 }
 
@@ -206,6 +210,7 @@ div.conf_main {
 div.conf_main.v {
     visibility: visible;
 }
+
 div.conf_bg {
     position: fixed;
     top: 0;
@@ -232,73 +237,78 @@ div.conf_fg a {
     border-radius: 0.5em;
 }
 
-.itxt {
-    margin: 0 10% 0 10%;
-}
-.itxt * {
-    font-size: inherit;
-}
-
 a.keep {
     color: var(--tc-link);
 }
-div.ico {
-    padding: 0 0 1em 1.4em;
-    background-position: top left;
-    background-repeat: no-repeat;
-    background-image: url('img/checked.svg');
-    background-size: 1em;
-}
-.ico.ok {
-    background-image: url('img/ico_ok.svg');
-}
-.ico.nok {
-    background-image: url('img/ico_nok.svg');
-}
-.ico.go {
-    background-image: url('img/ico_go.svg');
+
+.container {
+    padding: 1em;
+    max-width: 20em;
 }
 
-input.pwd, input.mail {
-    display: block;
-    font-size: inherit;
-    margin: 0.1em;
-    padding: 0.1em;
-    text-align: center;
-    margin-bottom: 0.5em;
-    border-radius: 0.3em;
+label {
+    font-size: var(--fs-small);
+    padding-left: 0.5em;
 }
 
-input.i {
+input {
     display: block;
-    font-size: inherit;
-    margin-top: 0.5em;
     width: 100%;
-    border: 1px solid var(--tc);
-    background-color: transparent;
-    border-radius: 0.3em;
+    font-size: var(--fs-medium);
+    padding: 0.1em;
+    padding-left: 0.5em;
+    margin-bottom: 0.5em;
+    border-radius: 5px;
 }
 
-div.form {
-    background-repeat: no-repeat;
-    background-position: top center;
-    background-size: 1.5em;
-    padding-top: 1.5em;
-    margin-bottom: 1em;
-}
-
-.form.mail {
-    background-image: url('img/mail.svg');
-}
-.form.pwd {
-    background-image: url('img/passwd.svg');
+input[type=submit] {
+    font-size: var(--fs-medium);
+    margin-top: 1em;
+    background-color: var(--bg-submit);
+    color: white;
 }
 
 div.imprint {
     padding: 1em;
-    font-size: 60%;
+    font-size: var(--fs-small);
     white-space: pre-wrap;
 }
-div.imprint, div.imprint > * {
-    font-family: 'Courier New', Courier, monospace;
+
+.txt {
+    font-size: var(--fs-small);
+    white-space: pre-wrap;
+}
+
+.spc_top {
+    margin-top: 1em;
+}
+.spc_bottom {
+    margin-bottom: 1em;
+}
+
+button {
+    display: block;
+    font-size: var(--fs-small);
+    width: 100%;
+    padding: 0.5em;
+    border: none;
+    background-color: var(--bg-button);
+    border-radius: 5px;
+}
+
+div.intro {
+    padding: 1em;
+    font-size: var(--fs-medium);
+    white-space: pre-wrap;
+}
+div.intro > img, div.intro > p {
+    max-width: 20em;
+    height: auto;
+    margin-bottom: 1em;
+}
+
+div.intro > h1 {
+    font-size: 150%;
+    font-style: italic;
+    color: var(--tc-heading);
 }

@@ -3,6 +3,6 @@
 require_once('data.php');
 usr()->check();
 $lnr = usr()->param();
-if (!is_null($lnr)) data()->remove($lnr);
+if (!is_null($lnr)) data()->postpone($lnr);
 usr()->view();
 ?>

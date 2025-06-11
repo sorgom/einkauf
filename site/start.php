@@ -36,18 +36,17 @@
 
     $srv = $_SERVER['SERVER_NAME'];
     $req = $_SERVER['HTTP_HOST'];
-    $prt = $_SERVER['REQUEST_SCHEME'];
+    $prt = fnc\protocol();
 
     //  the link
     $link = "$prt://$req?$uid";
-    $ok = false;
 
     //  if email provided: try send
     if ($mail)
     {
         $subject = $srv;
         $header = array(
-            'From' => "Wellcome <welcome@$srv>",
+            'From' => "login-service@$srv",
             'Reply-To' => "no-reply@$srv",
             'X-Mailer' => 'PHP/' . phpversion()
         );
@@ -55,10 +54,10 @@
         function ignore_errors(... $params) {}
         set_error_handler('ignore_errors');
 
-        $ok = @mail($mail, $subject, $link, $header);
+        @mail($mail, $subject, $link, $header);
     }
     //  start view
-    $data = [$ok, $mail, $link];
+    // $data = [$ok, $mail, $link];
     require_once('view.php');
-    jsView('StartInfo', $uid, $data);
+    jsView('StartInfo', $uid, $link);
 ?>
