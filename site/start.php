@@ -46,7 +46,7 @@
     {
         $subject = $srv;
         $header = array(
-            'From' => "login-service@$srv",
+            'From' => "sign-up@$srv",
             'Reply-To' => "no-reply@$srv",
             'X-Mailer' => 'PHP/' . phpversion()
         );
