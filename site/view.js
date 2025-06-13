@@ -284,7 +284,7 @@ class View
     }
     mnuLink(icl, func, conf=false)
     {
-        new ImgLink(icl).into(this.mnu()).click(func);
+        return new ImgLink(icl).into(this.mnu()).click(func);
     }
 
     imprint()
@@ -418,6 +418,8 @@ class TodoList extends View
     lnr;
     top;
     items = [];
+    clicked = false;
+    homeLink;
     constructor(uid, data)
     {
         super(uid);
@@ -427,7 +429,7 @@ class TodoList extends View
 
         const dl = new Div().class('middle').body();
 
-        const a = new TxtLink(hl).class('m top').into(dl).click(()=>{ _this.postpone(); });
+        const a = new TxtLink(hl).class('m top').into(dl).click(()=>{ _this.save(); });
         this.top = new Toggle(a, cl);
 
         let inr = 0;
@@ -444,11 +446,12 @@ class TodoList extends View
         this.mnu().into(dl);
         this.confirmLink('remove',()=>{ _this.remove(); });
         this.confirmLink('reset',()=>{ _this.reset();  });
-        this.mnuLink('home',()=>{ _this.postpone(); });
+        this.mnuLink('home',()=>{ _this.save(); });
     }
 
     note(inr, cl)
     {
+        this.clicked = true;
         const clo = this.top.cl();
         let cln = ''
         if (cl)
@@ -467,9 +470,11 @@ class TodoList extends View
     {
         this.go('remove.php', this.lnr);
     }
-    postpone()
+    save()
     {
-        this.go('postpone.php', this.lnr);
+        console.log('save', this.clicked);
+        if (this.clicked) this.go('postpone.php');
+        else this.view();
     }
     reset()
     {

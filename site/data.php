@@ -121,9 +121,6 @@ class Data extends UsrData
         //  otherwise start with nothing
         else
             [$this->heads, $this->items, $this->notes] = [[], [], ''];
-        // //  otherwise start with template
-        // else if (fnc\load($txt, 'template.txt'))
-        //     $this->set($txt);
     }
 
     //  save user data
@@ -250,69 +247,60 @@ class Data extends UsrData
     {
         if ($this->has($lnr))
         {
-            $post = [];
-            $states = states();
-            $items = $this->items($lnr);
-            foreach ($items as $inr => $i)
-            {
-                if ($states->cl($lnr, $inr) == 'y') $post[] = $i;
-            }
+            $this->postpone(false);
             $this->items[$lnr] = [];
             states()->reset($lnr);
-            if (!empty($post))
-            {
-                $this->items[0] = array_unique(array_merge($post, $this->items[0]));
-                natcasesort($this->items[0]);
-                states()->reset(0);
-            }
             states()->save();
             $this->save();
         }
     }
 
-    //  transfer postponed items of a todo list
-    public function postpone(int $lnr)
+    //  transfer postponed items of all todo lists
+    public function postpone(bool $save = true)
     {
-        if ($lnr > 0 && $this->has($lnr))
+        $post = [];
+        $states = states();
+        for ($lnr = 1; $lnr < sizeof($this->items); ++$lnr)
         {
-            $post = [];
-            $done = [];
-            $states = states();
-            $items0 = array_values($this->items[0]);
             foreach ($this->items($lnr) as $inr => $i)
             {
-                $cl = $states->cl($lnr, $inr);
-                if ($cl == 'y') $post[] = $i;
-                else $done[] = $i;
+                if ($states->cl($lnr, $inr) == 'y') $post[] = $i;
             }
-            if (!empty($post))
+        }
+        if (!empty($post))
+        {
+            $map = [];
+            foreach ($this->items(0) as $inr => $i)
             {
-                $items0 = array_unique(array_merge($post, $items0));
-                natcasesort($items0);
+                $val = $states->cl(0, $inr);
+                if ($val) $map[$i] = $val;
             }
-
-            foreach ($done as $i)
+            $states->reset(0);
+            $this->items[0] = array_values(array_unique($post));
+            natcasesort($this->items[0]);
+            $all = true;
+            $finState = NULL;
+            foreach ($this->items(0) as $inr => $i)
             {
-                $index = array_search($i, $items0);
-                if ($index !== false) unset($items0[$index]);
-            }
-
-            if (array_values($items0) != array_values($this->items[0]))
-            {
-                $map = [];
-                foreach ($this->items(0) as $inr => $i)
+                if (isset($map[$i]))
                 {
-                    $map[$i] = $states->cl(0, $inr);
+                    $state = $map[$i];
+                    $states->set($state, 0, $inr);
+                    $finState = max($finState, $state);
                 }
-                $this->items[0] = array_values($items0);
-                $states->reset(0);
-                foreach ($this->items(0) as $inr => $i)
-                {
-                    if (isset($map[$i])) $states->set($map[$i], 0, $inr);
-                }
-                $states->save();
-                $this->save();
+                else $all = false;
             }
+            if ($all) $states->set($finState, 0);
+        }
+        else
+        {
+            $states->reset(0);
+            $this->items[0] = [];
+        }
+        if ($save)
+        {
+            $states->save();
+            $this->save();
         }
     }
 
@@ -328,7 +316,7 @@ class Data extends UsrData
         $lines = fnc\expl($txt);
         $lSet = false;
         $lOk  = false;
-        $item = [];
+        $list = [];
         foreach ($lines as $line)
         {
             if (empty($line))
@@ -338,18 +326,18 @@ class Data extends UsrData
             elseif ($line[0] == '#')
             {
                 preg_match('/^#+ *(.*)/', $line, $m);
-                $item[] = "# $m[1]";
+                $list[] = "# $m[1]";
                 $lOk = false;
             }
             else
             {
-                if ($lOk && $lSet) $item[] = '';
-                $item[] = $line;
+                if ($lOk && $lSet) $list[] = '';
+                $list[] = $line;
                 $lSet = false;
                 $lOk = true;
             }
         }
-        return $item;
+        return $list;
     }
 
     //  safety handler: todo list within data range

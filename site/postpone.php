@@ -1,8 +1,7 @@
 <?php
-//  remove a user todo list
+//  gather postponed items
 require_once('data.php');
 usr()->check();
-$lnr = usr()->param();
-if (!is_null($lnr)) data()->postpone($lnr);
+data()->postpone();
 usr()->view();
 ?>
