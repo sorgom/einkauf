@@ -444,7 +444,7 @@ class TodoList extends View
             else if (e) new H2(e).txt(e).into(dl);
             else new HR().into(dl);
         }
-        this.confirmLink('remove',()=>{ _this.remove(); });
+        if (lnr > 0) this.confirmLink('remove',()=>{ _this.remove(); });
         this.confirmLink('reset',()=>{ _this.reset();  });
         this.mnuLink('home',()=>{ _this.view(); });
     }
