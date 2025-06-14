@@ -34,6 +34,7 @@ abstract class UsrData
 class States extends UsrData
 {
     private array $states = [];
+    private array $shadow = [];
     public function __construct(bool $load=false)
     {
         parent::__construct('log');
@@ -45,24 +46,27 @@ class States extends UsrData
         {
             // bugfix: sometimes strange }"} at end
             // when run on server
-            $data = preg_replace('/\}.*/', '}', $data);
-            $this->states = json_decode($data, true);
+            // $data = preg_replace('/\}.*/', '}', $data);
+            [$this->states, $this->shadow] = json_decode($data, true);
         }
-        else $this->states = [];
+        else {
+            $this->states = [];
+            $this->shadow = [];
+        }
     }
     public function save()
     {
-        $js = json_encode($this->states);
+        $js = json_encode([$this->states, $this->shadow]);
         $this->_save($js);
     }
 
-    public function given()
+    public function given() : bool
     {
         return !(empty($this->states));
     }
 
     //  retrieve current state class of todo list or item
-    public function cl(... $ids)
+    public function cl(... $ids) : string
     {
         $id = implode('.', $ids);
         return isset($this->states[$id]) ? $this->states[$id] : '';
@@ -80,6 +84,23 @@ class States extends UsrData
                 unset($this->states[$m[1]]);
             }
         }
+    }
+
+    public function changed() : bool
+    {
+        return $this->states != $this->shadow;
+    }
+
+    public function sync()
+    {
+        trace('sync');
+        $this->shadow = $this->states;
+        $this->save();
+    }
+
+    public function hasPostponed() : bool
+    {
+        return in_array('y', array_values($this->states));
     }
 
     //  reset a complete todo list
@@ -136,6 +157,12 @@ class Data extends UsrData
     function overview(mixed &$entries)
     {
         $entries = [];
+        $states = states();
+        if ($states->changed())
+        {
+            $this->postpone();
+            $states->sync();
+        }
         foreach($this->items as $lnr => $i)
         {
             if (!empty($i))
@@ -256,15 +283,18 @@ class Data extends UsrData
     }
 
     //  transfer postponed items of all todo lists
-    public function postpone(bool $save = true)
+    private function postpone(bool $save = true)
     {
         $post = [];
         $states = states();
-        for ($lnr = 1; $lnr < sizeof($this->items); ++$lnr)
+        if ($states->hasPostponed())
         {
-            foreach ($this->items($lnr) as $inr => $i)
+            for ($lnr = 1; $lnr < sizeof($this->items); ++$lnr)
             {
-                if ($states->cl($lnr, $inr) == 'y') $post[] = $i;
+                foreach ($this->items($lnr) as $inr => $i)
+                {
+                    if ($states->cl($lnr, $inr) == 'y') $post[] = $i;
+                }
             }
         }
         if (!empty($post))
