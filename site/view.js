@@ -497,10 +497,17 @@ class InputForm extends View
         this.confirmLink('clear',()=>{ _this.txa.val('').focus(); });
         this.mnuLink('home',()=>{ _this.home(); });
         this.mnuLink('save',()=>{ _this.save(); });
+        document.addEventListener('keydown', (e)=>{
+            if ((e.key === 's' || e.key === 'S') && e.ctrlKey)
+            {
+                e.preventDefault();
+                _this.save();
+            }
+        });
     }
     home()
     {
-        this.confirm('home', ()=>{ this.view(); }, this.txa.value() != this.oldTxt);
+        this.confirm('home', ()=>{ this.view(); }, this.txa.value() && this.txa.value() != this.oldTxt);
     }
     save()
     {
