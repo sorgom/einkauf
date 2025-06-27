@@ -503,6 +503,11 @@ class InputForm extends View
                 e.preventDefault();
                 _this.save();
             }
+            else if (e.key == 'Escape')
+            {
+                e.preventDefault();
+                _this.home();
+            }
         });
     }
     home()
@@ -576,7 +581,6 @@ class StartInfo extends View
     {
         super(uid);
         const _this = this;
-        // const [ok, addr, link] = data;
         const dgr = new Div().class('middle').body();
         const dcn = new Div().class('container').into(dgr);
         new Div().class('txt spc_bottom').txt(lit.yourLink).into(dcn);

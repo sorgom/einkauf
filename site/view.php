@@ -1,5 +1,6 @@
 <?php
 //  common html output with server host name as title
+header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
 ?>
 <!DOCTYPE html>
 <html lang=de>
