@@ -446,6 +446,7 @@ class TodoList extends View
         }
         if (lnr > 0) this.confirmLink('remove',()=>{ _this.remove(); });
         this.confirmLink('reset',()=>{ _this.reset();  });
+        this.mnuLink('edit',()=>{ _this.view('e'); });
         this.mnuLink('home',()=>{ _this.view(); });
     }
 
