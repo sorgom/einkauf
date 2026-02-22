@@ -165,7 +165,7 @@ class Data extends UsrData
         }
         foreach($this->items as $lnr => $i)
         {
-            if (!empty($i))
+            if (!empty(self::toItems($i)))
             {
                 $entries[] = [ $lnr, $this->heads[$lnr], states()->cl($lnr) ];
             }
