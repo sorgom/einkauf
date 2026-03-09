@@ -179,15 +179,23 @@ class Data extends UsrData
         {
             $res = [];
             $inr = 0;
+            $hl = NULL;
             foreach ($this->items[$lnr] as $i)
             {
-                if (empty($i)) $e = '';
-                else if ($i[0] == '#') $e = substr($i, 2);
+                if ($i[0] == '#') $hl = substr($i, 2);
                 else {
-                    $e = [$i, states()->cl($lnr, $inr)];
-                    ++$inr;
+                    if (empty($i)) $e = '';
+                    else {
+                        if ($hl)
+                        {
+                            $res[] = $hl;
+                            $hl = NULL;
+                        }
+                        $e = [$i, states()->cl($lnr, $inr)];
+                        ++$inr;
+                    }
+                    $res[] = $e;
                 }
-                $res[] = $e;
             }
             $data = [ $lnr, $this->heads[$lnr], states()->cl($lnr), $res];
         }
