@@ -34,6 +34,7 @@ abstract class UsrData
 class States extends UsrData
 {
     private array $states = [];
+    private array $shadow = [];
     public function __construct(bool $load=false)
     {
         parent::__construct('log');
@@ -45,24 +46,27 @@ class States extends UsrData
         {
             // bugfix: sometimes strange }"} at end
             // when run on server
-            $data = preg_replace('/\}.*/', '}', $data);
-            $this->states = json_decode($data, true);
+            // $data = preg_replace('/\}.*/', '}', $data);
+            [$this->states, $this->shadow] = json_decode($data, true);
         }
-        else $this->states = [];
+        else {
+            $this->states = [];
+            $this->shadow = [];
+        }
     }
     public function save()
     {
-        $js = json_encode($this->states);
+        $js = json_encode([$this->states, $this->shadow]);
         $this->_save($js);
     }
 
-    public function given()
+    public function given() : bool
     {
         return !(empty($this->states));
     }
 
     //  retrieve current state class of todo list or item
-    public function cl(... $ids)
+    public function cl(... $ids) : string
     {
         $id = implode('.', $ids);
         return isset($this->states[$id]) ? $this->states[$id] : '';
@@ -80,6 +84,23 @@ class States extends UsrData
                 unset($this->states[$m[1]]);
             }
         }
+    }
+
+    public function changed() : bool
+    {
+        return $this->states != $this->shadow;
+    }
+
+    public function sync()
+    {
+        trace('sync');
+        $this->shadow = $this->states;
+        $this->save();
+    }
+
+    public function hasPostponed() : bool
+    {
+        return in_array('y', array_values($this->states));
     }
 
     //  reset a complete todo list
@@ -121,9 +142,6 @@ class Data extends UsrData
         //  otherwise start with nothing
         else
             [$this->heads, $this->items, $this->notes] = [[], [], ''];
-        // //  otherwise start with template
-        // else if (fnc\load($txt, 'template.txt'))
-        //     $this->set($txt);
     }
 
     //  save user data
@@ -139,9 +157,15 @@ class Data extends UsrData
     function overview(mixed &$entries)
     {
         $entries = [];
+        $states = states();
+        if ($states->changed())
+        {
+            $this->postpone();
+            $states->sync();
+        }
         foreach($this->items as $lnr => $i)
         {
-            if (!empty($i))
+            if (!empty(self::toItems($i)))
             {
                 $entries[] = [ $lnr, $this->heads[$lnr], states()->cl($lnr) ];
             }
@@ -155,15 +179,23 @@ class Data extends UsrData
         {
             $res = [];
             $inr = 0;
+            $hl = NULL;
             foreach ($this->items[$lnr] as $i)
             {
-                if (empty($i)) $e = '';
-                else if ($i[0] == '#') $e = substr($i, 2);
+                if ($i[0] == '#') $hl = substr($i, 2);
                 else {
-                    $e = [$i, states()->cl($lnr, $inr)];
-                    ++$inr;
+                    if (empty($i)) $e = '';
+                    else {
+                        if ($hl)
+                        {
+                            $res[] = $hl;
+                            $hl = NULL;
+                        }
+                        $e = [$i, states()->cl($lnr, $inr)];
+                        ++$inr;
+                    }
+                    $res[] = $e;
                 }
-                $res[] = $e;
             }
             $data = [ $lnr, $this->heads[$lnr], states()->cl($lnr), $res];
         }
@@ -250,69 +282,63 @@ class Data extends UsrData
     {
         if ($this->has($lnr))
         {
-            $post = [];
-            $states = states();
-            $items = $this->items($lnr);
-            foreach ($items as $inr => $i)
-            {
-                if ($states->cl($lnr, $inr) == 'y') $post[] = $i;
-            }
+            $this->postpone(false);
             $this->items[$lnr] = [];
             states()->reset($lnr);
-            if (!empty($post))
-            {
-                $this->items[0] = array_unique(array_merge($post, $this->items[0]));
-                natcasesort($this->items[0]);
-                states()->reset(0);
-            }
             states()->save();
             $this->save();
         }
     }
 
-    //  transfer postponed items of a todo list
-    public function postpone(int $lnr)
+    //  transfer postponed items of all todo lists
+    private function postpone(bool $save = true)
     {
-        if ($lnr > 0 && $this->has($lnr))
+        $post = [];
+        $states = states();
+        if ($states->hasPostponed())
         {
-            $post = [];
-            $done = [];
-            $states = states();
-            $items0 = array_values($this->items[0]);
-            foreach ($this->items($lnr) as $inr => $i)
+            for ($lnr = 1; $lnr < sizeof($this->items); ++$lnr)
             {
-                $cl = $states->cl($lnr, $inr);
-                if ($cl == 'y') $post[] = $i;
-                else $done[] = $i;
-            }
-            if (!empty($post))
-            {
-                $items0 = array_unique(array_merge($post, $items0));
-                natcasesort($items0);
-            }
-
-            foreach ($done as $i)
-            {
-                $index = array_search($i, $items0);
-                if ($index !== false) unset($items0[$index]);
-            }
-
-            if (array_values($items0) != array_values($this->items[0]))
-            {
-                $map = [];
-                foreach ($this->items(0) as $inr => $i)
+                foreach ($this->items($lnr) as $inr => $i)
                 {
-                    $map[$i] = $states->cl(0, $inr);
+                    if ($states->cl($lnr, $inr) == 'y') $post[] = $i;
                 }
-                $this->items[0] = array_values($items0);
-                $states->reset(0);
-                foreach ($this->items(0) as $inr => $i)
-                {
-                    if (isset($map[$i])) $states->set($map[$i], 0, $inr);
-                }
-                $states->save();
-                $this->save();
             }
+        }
+        if (!empty($post))
+        {
+            $map = [];
+            foreach ($this->items(0) as $inr => $i)
+            {
+                $val = $states->cl(0, $inr);
+                if ($val) $map[$i] = $val;
+            }
+            $states->reset(0);
+            $this->items[0] = array_values(array_unique($post));
+            natcasesort($this->items[0]);
+            $all = true;
+            $finState = NULL;
+            foreach ($this->items(0) as $inr => $i)
+            {
+                if (isset($map[$i]))
+                {
+                    $state = $map[$i];
+                    $states->set($state, 0, $inr);
+                    $finState = max($finState, $state);
+                }
+                else $all = false;
+            }
+            if ($all) $states->set($finState, 0);
+        }
+        else
+        {
+            $states->reset(0);
+            $this->items[0] = [];
+        }
+        if ($save)
+        {
+            $states->save();
+            $this->save();
         }
     }
 
@@ -328,7 +354,7 @@ class Data extends UsrData
         $lines = fnc\expl($txt);
         $lSet = false;
         $lOk  = false;
-        $item = [];
+        $list = [];
         foreach ($lines as $line)
         {
             if (empty($line))
@@ -338,18 +364,18 @@ class Data extends UsrData
             elseif ($line[0] == '#')
             {
                 preg_match('/^#+ *(.*)/', $line, $m);
-                $item[] = "# $m[1]";
+                $list[] = "# $m[1]";
                 $lOk = false;
             }
             else
             {
-                if ($lOk && $lSet) $item[] = '';
-                $item[] = $line;
+                if ($lOk && $lSet) $list[] = '';
+                $list[] = $line;
                 $lSet = false;
                 $lOk = true;
             }
         }
-        return $item;
+        return $list;
     }
 
     //  safety handler: todo list within data range

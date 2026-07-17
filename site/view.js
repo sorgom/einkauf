@@ -262,7 +262,7 @@ class View
 
     mnu()
     {
-        if (this._mnu === undefined) this._mnu = new Div().class('mn bottom');
+        if (this._mnu === undefined) this._mnu = new Div().class('mn bottom').body();
         return this._mnu;
     }
 
@@ -284,12 +284,16 @@ class View
     }
     mnuLink(icl, func, conf=false)
     {
-        new ImgLink(icl).into(this.mnu()).click(func);
+        return new ImgLink(icl).into(this.mnu()).click(func);
     }
 
     imprint()
     {
         this.mnuLink('imprint', ()=>{ window.location.assign('imprint.php'); });
+    }
+    back()
+    {
+        this.mnuLink('back',()=>{ window.history.back(); });
     }
 }
 
@@ -341,10 +345,9 @@ class Overview extends View
         }
         for (const a of post) a.into(dl);
         for (const a of done) a.into(dl);
-        this.mnu().into(dl);
         this.imprint();
         this.mnuLink('edit',()=>{ _this.view('e'); });
-        this.confirmLink('logout', ()=>{ _this.go('logout.php'); });
+        this.confirmLink('logout', ()=>{ _this.go('login.php'); });
     }
 }
 
@@ -427,7 +430,7 @@ class TodoList extends View
 
         const dl = new Div().class('middle').body();
 
-        const a = new TxtLink(hl).class('m top').into(dl).click(()=>{ _this.postpone(); });
+        const a = new TxtLink(hl).class('m top').into(dl).click(()=>{ _this.view(); });
         this.top = new Toggle(a, cl);
 
         let inr = 0;
@@ -441,10 +444,10 @@ class TodoList extends View
             else if (e) new H2(e).txt(e).into(dl);
             else new HR().into(dl);
         }
-        this.mnu().into(dl);
-        this.confirmLink('remove',()=>{ _this.remove(); });
+        if (lnr > 0) this.confirmLink('remove',()=>{ _this.remove(); });
         this.confirmLink('reset',()=>{ _this.reset();  });
-        this.mnuLink('home',()=>{ _this.postpone(); });
+        this.mnuLink('edit',()=>{ _this.view('e'); });
+        this.mnuLink('home',()=>{ _this.view(); });
     }
 
     note(inr, cl)
@@ -466,10 +469,6 @@ class TodoList extends View
     remove()
     {
         this.go('remove.php', this.lnr);
-    }
-    postpone()
-    {
-        this.go('postpone.php', this.lnr);
     }
     reset()
     {
@@ -496,14 +495,25 @@ class InputForm extends View
 
         new Input('hidden', 'uid', this.uid).into(this.frm);
 
-        this.mnu().body();
         this.confirmLink('clear',()=>{ _this.txa.val('').focus(); });
         this.mnuLink('home',()=>{ _this.home(); });
         this.mnuLink('save',()=>{ _this.save(); });
+        document.addEventListener('keydown', (e)=>{
+            if ((e.key === 's' || e.key === 'S') && e.ctrlKey)
+            {
+                e.preventDefault();
+                _this.save();
+            }
+            else if (e.key == 'Escape')
+            {
+                e.preventDefault();
+                _this.home();
+            }
+        });
     }
     home()
     {
-        this.confirm('home', ()=>{ this.view(); }, this.txa.value() != this.oldTxt);
+        this.confirm('home', ()=>{ this.view(); }, this.txa.value() && this.txa.value() != this.oldTxt);
     }
     save()
     {
@@ -560,7 +570,6 @@ class WelcomeForm extends View
         new Label().for('em').txt(lit.mail).into(frm);
         new Input('email', 'em').into(frm);
         new Input('submit', '', lit.register).into(frm);
-        this.mnu().body();
         this.mnuLink('look', ()=>{ _this.go('intro.php'); });
         this.imprint();
         this.toggle = new PwdToggle(tgl, pwd1, pwd2);
@@ -573,7 +582,6 @@ class StartInfo extends View
     {
         super(uid);
         const _this = this;
-        // const [ok, addr, link] = data;
         const dgr = new Div().class('middle').body();
         const dcn = new Div().class('container').into(dgr);
         new Div().class('txt spc_bottom').txt(lit.yourLink).into(dcn);
@@ -595,7 +603,6 @@ class LoginForm extends View
         const tgl = new Button().into(frm);
         new Input('submit', '', 'OK').into(frm);
         new Input('hidden', 'uid', this.uid).into(frm);
-        this.mnu().body();
         this.imprint();
         this.toggle = new PwdToggle(tgl, pwd);
     }
@@ -614,8 +621,7 @@ class Imprint extends View
         new Link().class('keep').href(link).txt('view on github').into(dc);
         new P().into(dc).txt('branch: ' + branch);
         new P().into(dc).txt('commit: ' + date);
-        this.mnu().body();
-        this.mnuLink('back',()=>{ window.history.back(); });
+        this.back();
     }
 }
 
@@ -663,7 +669,6 @@ class Intro extends View
         new H1().txt(intro.heading_edit).into(dcn);
         new IntroImg('edit_not_found').into(dcn);
         new P().txt(intro.edit_not_found).into(dcn);
-        this.mnu().body();
-        this.mnuLink('back',()=>{ window.history.back(); });
+        this.back();
     }
 }
