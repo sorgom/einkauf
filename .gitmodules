@@ -1,3 +1,6 @@
 [submodule "submodules/sompy"]
-	path = submodules/sompy
-	url = git@github.com:sorgom/sompy.git
+    path = submodules/sompy
+    url = git@github.com:sorgom/sompy.git
+[submodule "ngx"]
+    path = ngx
+    url = git@github.com:sorgom/ngx.git
